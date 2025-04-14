@@ -4,11 +4,30 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a18dba85-849b-44ee-9ac4-fa6d7ae81a00" name="Changes" comment="" />
+    <list default="true" id="a18dba85-849b-44ee-9ac4-fa6d7ae81a00" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/app/notes/[noteId]/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/notes/layout.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/notes/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/features/Note/CurrentNote.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/features/Note/NoteForm.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/features/Note/NoteList.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/ui/input-tags.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/cryptoUtils.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/notesDB.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/app/globals.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectColorInfo"><![CDATA[{
   "associatedIndex": 0
@@ -21,11 +40,15 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "prettierjs.PrettierConfiguration.Package": "C:\\Users\\almaz\\Projects\\WEB\\notes\\node_modules\\prettier",
+    "settings.editor.selected.configurable": "settings.javascript.prettier",
+    "ts.external.directory.path": "C:\\Users\\almaz\\Projects\\WEB\\notes\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -44,7 +67,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1744615844571</updated>
-      <workItem from="1744615847426" duration="1401000" />
+      <workItem from="1744615847426" duration="12247000" />
     </task>
     <servers />
   </component>
