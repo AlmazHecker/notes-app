@@ -1,0 +1,12 @@
+---
+import { NoteList } from "@/components/features/Note/NoteList";
+import Layout from "../../layouts/Layout.astro";
+import { CurrentNote } from "@/components/features/Note/CurrentNote";
+---
+
+<Layout>
+  <div class="dark grid grid-cols-2 divide-x h-screen shadow">
+    <NoteList client:load />
+    <CurrentNote client:only />
+  </div>
+</Layout>

@@ -1,0 +1,12 @@
+---
+import { NoteForm } from "@/components/features/Note/NoteForm";
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+  <div
+    class="grid items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20"
+  >
+    <NoteForm client:only />
+  </div>
+</Layout>

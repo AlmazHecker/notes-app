@@ -14,8 +14,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { getNotesDB, Note, noteSchema } from "@/lib/notesDB";
-import { encode, encrypt, getHardcodedKey } from "@/lib/cryptoUtils";
+import { noteSchema } from "@/lib/notesDB";
+import { getFolderHandle } from "@/lib/fileApi";
 
 export function NoteForm() {
   const form = useForm({
@@ -27,28 +27,17 @@ export function NoteForm() {
   });
 
   const onSubmit = async (data: z.infer<typeof noteSchema>) => {
-    const notesDB = await getNotesDB();
-    const key = await getHardcodedKey();
+    const folderHandle = await getFolderHandle();
 
-    const contentPayload = JSON.stringify({
-      label: data.label,
-      content: data.content,
+    const fileHandle = await folderHandle.getFileHandle(`${data.label}.txt`, {
+      create: true,
     });
-
-    const { encrypted, iv } = await encrypt(key, contentPayload);
-
-    const stored = `${encode(iv)}---${encode(encrypted)}`;
-    await notesDB.add("notes", { value: stored });
+    const writable = await fileHandle.createWritable();
+    await writable.write(data.content);
+    await writable.close();
 
     form.reset();
   };
-
-  // const onSubmit = async (data: z.infer<typeof noteSchema>) => {
-  //   const notesDB = await getNotesDB();
-  //   await notesDB.add("notes", data as Note);
-  //
-  //   form.reset();
-  // };
 
   return (
     <Form {...form}>
