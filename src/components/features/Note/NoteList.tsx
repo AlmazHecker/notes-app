@@ -9,25 +9,15 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Link } from "@/components/ui/link";
+import { NoteService } from "@/components/entities/note/api";
 
 export function NoteList() {
   const [notes, setNotes] = useState<Note[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasPermission, setHasPermission] = useState(true);
 
-  const loadNotesFromFolder = async (
-    folderHandle: FileSystemDirectoryHandle
-  ) => {
-    const notes = [];
-
-    for await (const [name, handle] of folderHandle.entries()) {
-      if (handle.kind === "file") {
-        const file = await handle.getFile();
-        const text = await file.text();
-        notes.push({ label: name, content: text, id: Math.random() }); // TEMP ID
-      }
-    }
-
+  const loadNotesFromFolder = async () => {
+    const notes = await NoteService.getAll();
     setNotes(notes);
   };
 
@@ -43,7 +33,7 @@ export function NoteList() {
         return;
       }
 
-      await loadNotesFromFolder(handle);
+      await loadNotesFromFolder();
     } catch (err) {
       console.error("Error loading folder:", err);
       setHasPermission(false);
@@ -63,7 +53,7 @@ export function NoteList() {
       {hasPermission && (
         <Tooltip>
           <TooltipTrigger asChild>
-            <Link href="/" size="icon" variant="outline">
+            <Link href="?noteId=new-note" size="icon" variant="outline">
               <Plus />
             </Link>
           </TooltipTrigger>
@@ -86,7 +76,7 @@ export function NoteList() {
 
   if (isLoading) {
     return (
-      <div className="p-4">
+      <div className="p-4 space-y-4">
         {sharedContent}
         <div className="h-12 w-12 animate-spin rounded-full border-4 border-t-gray-900 border-gray-300" />
         <p className="mt-2 text-gray-500 dark:text-gray-400">Loading...</p>
@@ -114,7 +104,10 @@ export function NoteList() {
             href={`?noteId=${note.label}`}
           >
             <h3 className="font-semibold">{note.label}</h3>
-            <p className="text-sm text-muted-foreground">{note.content}</p>
+            <p
+              className="text-sm text-muted-foreground line-clamp-1"
+              dangerouslySetInnerHTML={{ __html: note.content }}
+            ></p>
           </a>
         ))}
       </div>
