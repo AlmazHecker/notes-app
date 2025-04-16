@@ -104,7 +104,7 @@ export function NoteList() {
   }
 
   return (
-    <div className="space-y-4 p-4">
+    <div className="border space-y-4 p-4">
       {sharedContent}
       <div className="grid gap-4">
         {notes.map((note, i) => (

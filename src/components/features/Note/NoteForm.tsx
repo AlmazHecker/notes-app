@@ -16,8 +16,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { noteSchema } from "@/lib/notesDB";
 import { doesFileExist, getFolderHandle } from "@/lib/fileApi";
+import { Link } from "@/components/ui/link";
+import { TextEditor } from "@/components/ui/text-editor/text-editor";
+import { useRef } from "react";
+import { type Editor } from "@tiptap/react";
 
 export function NoteForm() {
+  const editorRef = useRef<Editor | null>(null);
+
   const form = useForm({
     resolver: zodResolver(noteSchema),
     defaultValues: {
@@ -28,7 +34,6 @@ export function NoteForm() {
 
   const onSubmit = async (data: z.infer<typeof noteSchema>) => {
     const folderHandle = await getFolderHandle();
-
     const exists = await doesFileExist(folderHandle, `${data.label}.txt`);
     if (exists) {
       form.setError("label", {
@@ -42,18 +47,24 @@ export function NoteForm() {
       create: true,
     });
     const writable = await fileHandle.createWritable();
-    await writable.write(data.content);
+    await writable.write(editorRef.current?.getHTML() as string);
     await writable.close();
 
     form.reset();
+    editorRef.current?.commands.clearContent();
   };
 
+  console.log(form.getValues());
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6 min-w-4/5"
+        className="space-y-6 max-w-[800px] w-full"
       >
+        <Link href="/notes" variant="outline">
+          Go Back
+        </Link>
+
         <FormField
           control={form.control}
           name="label"
@@ -75,7 +86,11 @@ export function NoteForm() {
             <FormItem>
               <FormLabel>Note Content</FormLabel>
               <FormControl>
-                <Input placeholder="Content" {...field} />
+                <TextEditor
+                  className="bg-input/30 rounded-md"
+                  {...field}
+                  ref={editorRef}
+                />
               </FormControl>
               <FormDescription>Write something chill.</FormDescription>
               <FormMessage />

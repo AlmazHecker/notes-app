@@ -1,12 +1,52 @@
 ---
-import { NoteForm } from "@/components/features/Note/NoteForm";
+import { NoteList } from "@/components/features/Note/NoteList";
 import Layout from "../layouts/Layout.astro";
+import { CurrentNote } from "@/components/features/Note/CurrentNote";
 ---
 
 <Layout>
-  <div
-    class="grid items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20"
-  >
-    <NoteForm client:only />
+  <div class="dark flex h-screen shadow select-none">
+    <div
+      id="noteList"
+      style="width: 50%;"
+      class="resize-x overflow-auto min-w-[500px] max-w-[80%]"
+    >
+      <NoteList client:load />
+    </div>
+
+    <div
+      id="divider"
+      class="w-1 bg-gray-300 dark:bg-gray-600 cursor-col-resize"
+    >
+    </div>
+
+    <div class="flex-1 overflow-auto">
+      <CurrentNote client:only />
+    </div>
   </div>
 </Layout>
+
+<script>
+  const divider = document.getElementById("divider")!;
+  const leftPane = document.getElementById("noteList")!;
+
+  let isDragging = false;
+
+  divider.addEventListener("mousedown", () => {
+    isDragging = true;
+    document.body.style.cursor = "col-resize";
+  });
+
+  document.addEventListener("mouseup", () => {
+    isDragging = false;
+    document.body.style.cursor = "default";
+  });
+
+  document.addEventListener("mousemove", (e) => {
+    if (!isDragging) return;
+    const newWidth = e.clientX;
+    if (newWidth > 150 && newWidth < window.innerWidth * 0.8) {
+      leftPane.style.width = `${newWidth}px`;
+    }
+  });
+</script>
