@@ -10,6 +10,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import ExpandPane from "./ExpandPane";
 
 export function CurrentNote() {
   const editorRef = useRef<Editor | null>(null);
@@ -74,7 +75,7 @@ export function CurrentNote() {
   if (!note) return <div className="p-4">Note not found or loading...</div>;
 
   return (
-    <div className="p-4 space-y-4 shadow relative">
+    <div className="p-4 space-y-4 shadow">
       <div className="flex items-center justify-between">
         {isEditing ? (
           <input
@@ -101,13 +102,7 @@ export function CurrentNote() {
       </div>
       <TextEditor ref={editorRef} value={note.content} editable={isEditing} />
 
-      <Button
-        className="absolute bottom-5 right-5 z-10"
-        variant="outline"
-        size="icon"
-      >
-        <Expand />
-      </Button>
+      {note && <ExpandPane />}
     </div>
   );
 }
