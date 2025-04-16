@@ -2,6 +2,13 @@ import { useEffect, useState } from "react";
 import { type Note } from "@/lib/notesDB";
 import { getFolderHandle, verifyPermission } from "@/lib/fileApi";
 import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Link } from "@/components/ui/link";
 
 export function NoteList() {
   const [notes, setNotes] = useState<Note[]>([]);
@@ -53,6 +60,16 @@ export function NoteList() {
     <div className="flex justify-between items-center">
       <h2 className="text-xl font-bold">Saved Notes</h2>
       {hasPermission || <Button onClick={init}>Select folder</Button>}
+      {hasPermission && (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Link href="/" size="icon" variant="outline">
+              <Plus />
+            </Link>
+          </TooltipTrigger>
+          <TooltipContent>Add new note</TooltipContent>
+        </Tooltip>
+      )}
     </div>
   );
 
@@ -94,7 +111,7 @@ export function NoteList() {
           <a
             key={i}
             className="p-4 rounded-md border"
-            href={`?noteId=${note.id}`}
+            href={`?noteId=${note.label}`}
           >
             <h3 className="font-semibold">{note.label}</h3>
             <p className="text-sm text-muted-foreground">{note.content}</p>

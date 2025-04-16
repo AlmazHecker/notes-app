@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { noteSchema } from "@/lib/notesDB";
-import { getFolderHandle } from "@/lib/fileApi";
+import { doesFileExist, getFolderHandle } from "@/lib/fileApi";
 
 export function NoteForm() {
   const form = useForm({
@@ -28,6 +28,15 @@ export function NoteForm() {
 
   const onSubmit = async (data: z.infer<typeof noteSchema>) => {
     const folderHandle = await getFolderHandle();
+
+    const exists = await doesFileExist(folderHandle, `${data.label}.txt`);
+    if (exists) {
+      form.setError("label", {
+        type: "manual",
+        message: "A note with this label already exists!",
+      });
+      return;
+    }
 
     const fileHandle = await folderHandle.getFileHandle(`${data.label}.txt`, {
       create: true,
