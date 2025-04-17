@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Link } from "@/components/ui/link";
 import { NoteService } from "@/components/entities/note/api";
+import { usePushStateListener } from "@/shared/hooks/usePushStateListener";
 
 export function NoteList() {
   const [notes, setNotes] = useState<Note[]>([]);
@@ -42,6 +43,9 @@ export function NoteList() {
     setIsLoading(false);
   };
 
+  // usePushStateListener(() => {
+  //   init();
+  // });
   useEffect(() => {
     init();
   }, []);
@@ -109,17 +113,19 @@ export function NoteList() {
       {sharedContent}
       <div className="grid gap-4">
         {notes.map((note, i) => (
-          <a
+          <div
             key={i}
             className="p-4 rounded-md border"
-            href={`?noteId=${note.id}`}
+            onClick={() =>
+              window.history.pushState({}, "", `?noteId=${note.id}`)
+            }
           >
             <h3 className="font-semibold">{note.label}</h3>
             <p
               className="text-sm text-muted-foreground line-clamp-1"
               dangerouslySetInnerHTML={{ __html: note.content }}
             ></p>
-          </a>
+          </div>
         ))}
       </div>
     </div>

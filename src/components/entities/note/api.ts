@@ -15,14 +15,21 @@ export class NoteService {
     }
   }
 
-  static async update(note: Note) {
+  static async update(updatedNote: Note) {
     const folderHandle = await getFolderHandle();
 
-    const newFileHandle = await folderHandle.getFileHandle(note.label, {
+    const note: Note = {
+      ...updatedNote,
+      isEncrypted: false,
+      tags: [],
+      updatedAt: new Date().getTime(),
+    };
+
+    const newFileHandle = await folderHandle.getFileHandle(note.id, {
       create: true,
     });
     const writable = await newFileHandle.createWritable();
-    await writable.write(note.content);
+    await writable.write(JSON.stringify(note));
     await writable.close();
 
     return note;
@@ -41,6 +48,7 @@ export class NoteService {
     for await (const [name, handle] of folderHandle.entries()) {
       if (handle.kind === "file") {
         const file = await handle.getFile();
+
         const fileData = JSON.parse(await file.text());
 
         notes.push(fileData); // TEMP ID
@@ -50,14 +58,11 @@ export class NoteService {
     return notes;
   }
 
-  static async create(newNote: Omit<Note, "id" | "createdAt" | "updatedAt">) {
+  static async create(newNote: Omit<Note, "createdAt" | "updatedAt">) {
     const folderHandle = await getFolderHandle();
-
-    const id = crypto.randomUUID();
 
     const note: Note = {
       ...newNote,
-      id,
       isEncrypted: false,
       tags: [],
       createdAt: new Date().getTime(),

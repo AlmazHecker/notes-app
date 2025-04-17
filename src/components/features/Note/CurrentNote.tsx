@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import type { Note } from "@/lib/notesDB";
 import { TextEditor } from "@/components/ui/text-editor/text-editor";
 import { EditIcon, SaveIcon, Trash } from "lucide-react";
@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/tooltip";
 import ExpandPane from "./ExpandPane";
 import { NoteService } from "@/components/entities/note/api";
+import { usePushStateListener } from "@/shared/hooks/usePushStateListener";
 
 export function CurrentNote() {
   const editorRef = useRef<Editor | null>(null);
@@ -54,25 +55,24 @@ export function CurrentNote() {
   const saveNote = async () => {
     if (!note) return;
 
-    const updatedNote: Omit<Note, "id"> = {
+    const updatedNote: Note = {
+      ...note,
       content: editorRef.current?.getHTML() as string,
       label: editableLabel,
     };
 
     if (isNewNote) {
+      updatedNote.id = crypto.randomUUID();
+
       await NoteService.create(updatedNote);
       setIsNewNote(false);
     } else {
       await NoteService.update(updatedNote);
-      if (editableLabel !== note.label) {
-        await NoteService.delete(note.id);
-      }
     }
 
     setNote(updatedNote);
-
     setIsEditing(false);
-    window.history.pushState({}, "", `?noteId=${updatedNote.label}`);
+    window.history.pushState({}, "", `?noteId=${updatedNote.id}`);
   };
 
   const deleteNote = async () => {
@@ -82,14 +82,12 @@ export function CurrentNote() {
     window.location.href = "/";
   };
 
-  useEffect(() => {
+  usePushStateListener(() => {
     const params = new URLSearchParams(window.location.search);
     const noteId = params.get("noteId");
 
-    if (noteId) {
-      getNote(noteId);
-    }
-  }, []);
+    if (noteId) getNote(noteId);
+  });
 
   if (!note) return <div className="p-4">Note not found or loading...</div>;
 

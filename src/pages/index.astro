@@ -2,14 +2,13 @@
 import { NoteList } from "@/components/features/Note/NoteList";
 import Layout from "../layouts/Layout.astro";
 import { CurrentNote } from "@/components/features/Note/CurrentNote";
-import ExpandPane from "@/components/features/Note/ExpandPane";
 ---
 
 <Layout>
   <div class="dark flex h-screen shadow select-none">
     <div
       id="noteList"
-      class="resize-x overflow-auto w-1/2 min-w-[500px] max-w-[80%]"
+      class="resize-x overflow-auto w-1/2 min-w-[200px] max-w-[80%]"
     >
       <NoteList client:load />
     </div>
