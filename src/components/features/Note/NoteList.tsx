@@ -112,7 +112,7 @@ export function NoteList() {
           <a
             key={i}
             className="p-4 rounded-md border"
-            href={`?noteId=${note.label}`}
+            href={`?noteId=${note.id}`}
           >
             <h3 className="font-semibold">{note.label}</h3>
             <p

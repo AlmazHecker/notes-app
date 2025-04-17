@@ -2,15 +2,15 @@ import { getFolderHandle } from "@/lib/fileApi";
 import type { Note } from "@/lib/notesDB";
 
 export class NoteService {
-  static async getByName(filename: string): Promise<Note | null> {
+  static async getByName(noteId: string): Promise<Note | null> {
     try {
       const folderHandle = await getFolderHandle();
-      const fileHandle = await folderHandle.getFileHandle(filename);
+      const fileHandle = await folderHandle.getFileHandle(`${noteId}`);
       const file = await fileHandle.getFile();
-      const content = await file.text();
-      return { content, label: filename };
+      const fileData = JSON.parse(await file.text());
+      return fileData;
     } catch (err) {
-      console.error("File not found:", filename);
+      console.error("File not found:", noteId);
       return null;
     }
   }
@@ -28,9 +28,9 @@ export class NoteService {
     return note;
   }
 
-  static async delete(label: string) {
+  static async delete(noteId: string) {
     const folderHandle = await getFolderHandle();
-    await folderHandle.removeEntry(label);
+    await folderHandle.removeEntry(noteId);
   }
 
   static async getAll() {
@@ -41,22 +41,34 @@ export class NoteService {
     for await (const [name, handle] of folderHandle.entries()) {
       if (handle.kind === "file") {
         const file = await handle.getFile();
-        const text = await file.text();
-        notes.push({ label: name, content: text, id: Math.random() }); // TEMP ID
+        const fileData = JSON.parse(await file.text());
+
+        notes.push(fileData); // TEMP ID
       }
     }
 
     return notes;
   }
 
-  static async create(note: Note) {
+  static async create(newNote: Omit<Note, "id" | "createdAt" | "updatedAt">) {
     const folderHandle = await getFolderHandle();
 
-    const fileHandle = await folderHandle.getFileHandle(note.label, {
+    const id = crypto.randomUUID();
+
+    const note: Note = {
+      ...newNote,
+      id,
+      isEncrypted: false,
+      tags: [],
+      createdAt: new Date().getTime(),
+      updatedAt: new Date().getTime(),
+    };
+
+    const fileHandle = await folderHandle.getFileHandle(note.id, {
       create: true,
     });
     const writable = await fileHandle.createWritable();
-    await writable.write(note.content);
+    await writable.write(JSON.stringify(note));
     await writable.close();
   }
 }

@@ -24,14 +24,14 @@ export function CurrentNote() {
     return setIsEditing(true);
   };
 
-  const getNote = async (filename: string) => {
-    if (filename === "new-note") {
+  const getNote = async (fileId: string) => {
+    if (fileId === "new-note") {
       // Create a temporary new note
-      const tempNote: Note = {
+      const tempNote = {
         content: "",
         label: "New Note",
       };
-      setNote(tempNote);
+      setNote(tempNote as Note);
       setEditableLabel(tempNote.label);
       setIsNewNote(true);
       setIsEditing(true);
@@ -39,14 +39,14 @@ export function CurrentNote() {
     }
 
     try {
-      const note = await NoteService.getByName(filename);
+      const note = await NoteService.getByName(fileId);
       if (!note) return;
 
       setNote(note);
-      setEditableLabel(filename);
+      setEditableLabel(note.label);
       setIsNewNote(false);
     } catch (err) {
-      console.error("File not found:", filename);
+      console.error("File not found:", fileId);
       return null;
     }
   };
@@ -54,7 +54,7 @@ export function CurrentNote() {
   const saveNote = async () => {
     if (!note) return;
 
-    const updatedNote: Note = {
+    const updatedNote: Omit<Note, "id"> = {
       content: editorRef.current?.getHTML() as string,
       label: editableLabel,
     };
@@ -65,7 +65,7 @@ export function CurrentNote() {
     } else {
       await NoteService.update(updatedNote);
       if (editableLabel !== note.label) {
-        await NoteService.delete(note.label);
+        await NoteService.delete(note.id);
       }
     }
 
@@ -78,7 +78,7 @@ export function CurrentNote() {
   const deleteNote = async () => {
     if (!note) return;
 
-    await NoteService.delete(note.label);
+    await NoteService.delete(note.id);
     window.location.href = "/";
   };
 
