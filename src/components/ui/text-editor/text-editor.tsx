@@ -185,15 +185,18 @@ export const TextEditor: FC<TextEditorProps> = ({
   ref,
   className,
 }) => {
-  const editor = useEditor({
-    immediatelyRender: false,
-    extensions,
-    content: value,
-    onUpdate: ({ editor }) => {
-      onChange?.(editor.getText());
+  const editor = useEditor(
+    {
+      immediatelyRender: false,
+      extensions,
+      content: value,
+      onUpdate: ({ editor }) => {
+        onChange?.(editor.getText());
+      },
+      editable,
     },
-    editable,
-  });
+    [editable]
+  );
 
   useImperativeHandle(ref, () => editor!, [editor]);
 

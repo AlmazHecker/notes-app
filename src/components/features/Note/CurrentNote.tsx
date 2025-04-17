@@ -21,8 +21,7 @@ export function CurrentNote() {
   const [isNewNote, setIsNewNote] = useState(false);
 
   const setEditMode = () => {
-    editorRef.current?.setEditable(true);
-    setIsEditing(true);
+    return setIsEditing(true);
   };
 
   const getNote = async (filename: string) => {
@@ -35,7 +34,7 @@ export function CurrentNote() {
       setNote(tempNote);
       setEditableLabel(tempNote.label);
       setIsNewNote(true);
-      setIsEditing(true); // Automatically enable editing for new notes
+      setIsEditing(true);
       return;
     }
 
@@ -63,22 +62,17 @@ export function CurrentNote() {
     if (isNewNote) {
       await NoteService.create(updatedNote);
       setIsNewNote(false);
-      const url = new URL(window.location.href);
-      url.searchParams.set("noteId", updatedNote.label);
-      window.history.pushState({}, "", url);
     } else {
       await NoteService.update(updatedNote);
       if (editableLabel !== note.label) {
         await NoteService.delete(note.label);
-
-        const url = new URL(window.location.href);
-        url.searchParams.set("noteId", updatedNote.label);
-        window.history.pushState({}, "", url);
       }
     }
 
-    getNote(updatedNote.label);
+    setNote(updatedNote);
+
     setIsEditing(false);
+    window.history.pushState({}, "", `?noteId=${updatedNote.label}`);
   };
 
   const deleteNote = async () => {

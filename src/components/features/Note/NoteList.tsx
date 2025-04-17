@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { type Note } from "@/lib/notesDB";
 import { getFolderHandle, verifyPermission } from "@/lib/fileApi";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { EyeIcon, Plus } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -49,16 +49,27 @@ export function NoteList() {
   const sharedContent = (
     <div className="flex justify-between items-center">
       <h2 className="text-xl font-bold">Saved Notes</h2>
-      {hasPermission || <Button onClick={init}>Select folder</Button>}
-      {hasPermission && (
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Link href="?noteId=new-note" size="icon" variant="outline">
-              <Plus />
-            </Link>
-          </TooltipTrigger>
-          <TooltipContent>Add new note</TooltipContent>
-        </Tooltip>
+      {hasPermission ? (
+        <div className="flex gap-3">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link href="?noteId=new-note" size="icon" variant="outline">
+                <Plus />
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent>Add new note</TooltipContent>
+          </Tooltip>
+          {/* <Tooltip>
+            <TooltipTrigger asChild>
+              <Button size="icon" variant="outline">
+                <EyeIcon />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>View hidden notes</TooltipContent>
+          </Tooltip> */}
+        </div>
+      ) : (
+        <Button onClick={init}>Select folder</Button>
       )}
     </div>
   );
