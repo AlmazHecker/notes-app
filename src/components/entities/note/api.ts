@@ -1,79 +1,19 @@
-import { getFolderHandle } from "@/lib/fileApi";
-import type { Note } from "@/lib/notesDB";
+import { create } from "zustand";
+import { Note } from "@/lib/notesDB";
+import { NoteService } from "./service";
 
-export class NoteService {
-  static async getByName(noteId: string): Promise<Note | null> {
-    try {
-      const folderHandle = await getFolderHandle();
-      const fileHandle = await folderHandle.getFileHandle(`${noteId}`);
-      const file = await fileHandle.getFile();
-      const fileData = JSON.parse(await file.text());
-      return fileData;
-    } catch (err) {
-      console.error("File not found:", noteId);
-      return null;
-    }
-  }
-
-  static async update(updatedNote: Note) {
-    const folderHandle = await getFolderHandle();
-
-    const note: Note = {
-      ...updatedNote,
-      isEncrypted: false,
-      tags: [],
-      updatedAt: new Date().getTime(),
-    };
-
-    const newFileHandle = await folderHandle.getFileHandle(note.id, {
-      create: true,
-    });
-    const writable = await newFileHandle.createWritable();
-    await writable.write(JSON.stringify(note));
-    await writable.close();
-
-    return note;
-  }
-
-  static async delete(noteId: string) {
-    const folderHandle = await getFolderHandle();
-    await folderHandle.removeEntry(noteId);
-  }
-
-  static async getAll() {
-    const folderHandle = await getFolderHandle();
-
-    const notes: Note[] = [];
-
-    for await (const [name, handle] of folderHandle.entries()) {
-      if (handle.kind === "file") {
-        const file = await handle.getFile();
-
-        const fileData = JSON.parse(await file.text());
-
-        notes.push(fileData); // TEMP ID
-      }
-    }
-
-    return notes;
-  }
-
-  static async create(newNote: Omit<Note, "createdAt" | "updatedAt">) {
-    const folderHandle = await getFolderHandle();
-
-    const note: Note = {
-      ...newNote,
-      isEncrypted: false,
-      tags: [],
-      createdAt: new Date().getTime(),
-      updatedAt: new Date().getTime(),
-    };
-
-    const fileHandle = await folderHandle.getFileHandle(note.id, {
-      create: true,
-    });
-    const writable = await fileHandle.createWritable();
-    await writable.write(JSON.stringify(note));
-    await writable.close();
-  }
+interface NoteState {
+  notes: Note[];
+  fetchNotes: () => Promise<void>;
 }
+
+export const useNoteStore = create<NoteState>((set, get) => ({
+  notes: [],
+
+  fetchNotes: async () => {
+    const notes = await NoteService.getAll();
+    const sortedNotes = [...notes].sort((a, b) => b.updatedAt - a.updatedAt);
+
+    set({ notes: sortedNotes });
+  },
+}));

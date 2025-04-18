@@ -1,25 +1,27 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { NoteList } from "./components/features/Note/NoteList";
+import { NoteList } from "./components/features/Notes/ui/NoteList";
 import { CurrentNote } from "./components/features/Note/CurrentNote";
+import { LAYOUT_SELECTORS } from "./shared/hooks/useDraggableLayout";
+import { Notes } from "./components/features/Notes/ui/Notes";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <div className="dark flex h-screen shadow select-none">
+    <div className="flex h-screen shadow select-none">
       <div
-        id="noteList"
+        id={LAYOUT_SELECTORS.left}
         className="overflow-auto w-1/2 min-w-[200px] max-w-[80%]"
       >
-        <NoteList />
+        <Notes />
       </div>
 
       <div
-        id="divider"
+        id={LAYOUT_SELECTORS.divider}
         className="w-1 bg-gray-300 dark:bg-border cursor-col-resize"
       ></div>
 
-      <div id="currentNote" className="overflow-auto flex-1">
+      <div id={LAYOUT_SELECTORS.right} className="flex-1">
         <CurrentNote />
       </div>
     </div>

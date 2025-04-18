@@ -18,9 +18,13 @@ function Link({
 
   return (
     <Comp
-      data-slot="button"
+      data-slot="a"
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
+      onClick={(e) => {
+        e.preventDefault();
+        window.history.pushState({}, "", props.href);
+      }}
     />
   );
 }

@@ -10,11 +10,15 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import ExpandPane from "./ExpandPane";
-import { NoteService } from "@/components/entities/note/api";
+import { NoteService } from "@/components/entities/note/service";
 import { usePushStateListener } from "@/shared/hooks/usePushStateListener";
+import { useNoteStore } from "@/components/entities/note/api";
+import useDraggableLayout from "@/shared/hooks/useDraggableLayout";
 
 export function CurrentNote() {
   const editorRef = useRef<Editor | null>(null);
+
+  const getNotes = useNoteStore((state) => state.fetchNotes);
 
   const [note, setNote] = useState<Note | null>(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -74,13 +78,16 @@ export function CurrentNote() {
     setNote(updatedNote);
     setIsEditing(false);
     window.history.pushState({}, "", `?noteId=${updatedNote.id}`);
+    getNotes();
   };
 
   const deleteNote = async () => {
     if (!note) return;
 
     await NoteService.delete(note.id);
-    window.location.href = "/";
+    setNote(null);
+    window.history.pushState({}, "", `/`);
+    return getNotes();
   };
 
   usePushStateListener(() => {
@@ -89,6 +96,8 @@ export function CurrentNote() {
 
     if (noteId) getNote(noteId);
   });
+
+  useDraggableLayout();
 
   if (!note) return <div className="p-4">Note not found or loading...</div>;
 

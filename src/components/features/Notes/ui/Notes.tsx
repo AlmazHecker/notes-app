@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { type Note } from "@/lib/notesDB";
 import { getFolderHandle, verifyPermission } from "@/lib/fileApi";
 import { Button } from "@/components/ui/button";
 import { EyeIcon, Plus } from "lucide-react";
@@ -9,19 +8,17 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Link } from "@/components/ui/link";
-import { NoteService } from "@/components/entities/note/api";
+import { useNoteStore } from "@/components/entities/note/api";
+import { NoteList } from "./NoteList";
 
-export function NoteList() {
+export const Notes = () => {
   const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
 
-  const [notes, setNotes] = useState<Note[]>([]);
+  const notes = useNoteStore((state) => state.notes);
+  const getNotes = useNoteStore((state) => state.fetchNotes);
+
   const [isLoading, setIsLoading] = useState(false);
   const [hasPermission, setHasPermission] = useState(true);
-
-  const loadNotesFromFolder = async () => {
-    const notes = await NoteService.getAll();
-    setNotes(notes);
-  };
 
   const init = async () => {
     setIsLoading(true);
@@ -34,8 +31,7 @@ export function NoteList() {
         setIsLoading(false);
         return;
       }
-
-      await loadNotesFromFolder();
+      await getNotes();
     } catch (err) {
       console.error("Error loading folder:", err);
       setHasPermission(false);
@@ -44,9 +40,6 @@ export function NoteList() {
     setIsLoading(false);
   };
 
-  // usePushStateListener(() => {
-  //   init();
-  // });
   useEffect(() => {
     init();
   }, []);
@@ -58,7 +51,7 @@ export function NoteList() {
         <div className="flex gap-3">
           <Tooltip>
             <TooltipTrigger asChild>
-              <Link href="?noteId=new-note" size="icon" variant="outline">
+              <Link href="/?noteId=new-note" size="icon" variant="outline">
                 <Plus />
               </Link>
             </TooltipTrigger>
@@ -117,22 +110,8 @@ export function NoteList() {
     <div className="space-y-4 p-4">
       {sharedContent}
       <div className="grid gap-4">
-        {notes.map((note, i) => (
-          <div
-            key={i}
-            className="p-4 rounded-md border"
-            onClick={() =>
-              window.history.pushState({}, "", `?noteId=${note.id}`)
-            }
-          >
-            <h3 className="font-semibold">{note.label}</h3>
-            <p
-              className="text-sm text-muted-foreground line-clamp-1"
-              dangerouslySetInnerHTML={{ __html: note.content }}
-            ></p>
-          </div>
-        ))}
+        <NoteList notes={notes} />
       </div>
     </div>
   );
-}
+};
