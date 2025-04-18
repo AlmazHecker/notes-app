@@ -10,9 +10,10 @@ import {
 } from "@/components/ui/tooltip";
 import { Link } from "@/components/ui/link";
 import { NoteService } from "@/components/entities/note/api";
-import { usePushStateListener } from "@/shared/hooks/usePushStateListener";
 
 export function NoteList() {
+  const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
+
   const [notes, setNotes] = useState<Note[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasPermission, setHasPermission] = useState(true);
@@ -63,14 +64,18 @@ export function NoteList() {
             </TooltipTrigger>
             <TooltipContent>Add new note</TooltipContent>
           </Tooltip>
-          {/* <Tooltip>
+          <Tooltip>
             <TooltipTrigger asChild>
-              <Button size="icon" variant="outline">
+              <Button
+                size="icon"
+                variant="outline"
+                onClick={() => setIsPasswordDialogOpen(true)}
+              >
                 <EyeIcon />
               </Button>
             </TooltipTrigger>
             <TooltipContent>View hidden notes</TooltipContent>
-          </Tooltip> */}
+          </Tooltip>
         </div>
       ) : (
         <Button onClick={init}>Select folder</Button>

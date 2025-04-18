@@ -46,6 +46,7 @@ export function CurrentNote() {
       setNote(note);
       setEditableLabel(note.label);
       setIsNewNote(false);
+      setIsEditing(false);
     } catch (err) {
       console.error("File not found:", fileId);
       return null;
