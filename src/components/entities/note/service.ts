@@ -20,7 +20,7 @@ export class NoteService {
 
     const note: Note = {
       ...updatedNote,
-      isEncrypted: false,
+      // isEncrypted: false,
       tags: [],
       updatedAt: new Date().getTime(),
     };
@@ -75,5 +75,15 @@ export class NoteService {
     const writable = await fileHandle.createWritable();
     await writable.write(JSON.stringify(note));
     await writable.close();
+  }
+
+  static async createFolder(folderName: string) {
+    const dirHandle = await window.showDirectoryPicker();
+
+    const newFolderHandle = await dirHandle.getDirectoryHandle(folderName, {
+      create: true,
+    });
+
+    return newFolderHandle;
   }
 }

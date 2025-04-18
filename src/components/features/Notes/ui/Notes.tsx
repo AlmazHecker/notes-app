@@ -48,28 +48,14 @@ export const Notes = () => {
     <div className="flex justify-between items-center">
       <h2 className="text-xl font-bold">Saved Notes</h2>
       {hasPermission ? (
-        <div className="flex gap-3">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Link href="/?noteId=new-note" size="icon" variant="outline">
-                <Plus />
-              </Link>
-            </TooltipTrigger>
-            <TooltipContent>Add new note</TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                size="icon"
-                variant="outline"
-                onClick={() => setIsPasswordDialogOpen(true)}
-              >
-                <EyeIcon />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>View hidden notes</TooltipContent>
-          </Tooltip>
-        </div>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Link href="/?noteId=new-note" size="icon" variant="outline">
+              <Plus />
+            </Link>
+          </TooltipTrigger>
+          <TooltipContent>Add new note</TooltipContent>
+        </Tooltip>
       ) : (
         <Button onClick={init}>Select folder</Button>
       )}

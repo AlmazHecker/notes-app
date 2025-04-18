@@ -195,7 +195,7 @@ export const TextEditor: FC<TextEditorProps> = ({
       },
       editable,
     },
-    [editable]
+    [editable, value]
   );
 
   useImperativeHandle(ref, () => editor!, [editor]);
