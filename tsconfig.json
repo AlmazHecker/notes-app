@@ -1,6 +1,5 @@
 {
-  "extends": "astro/tsconfigs/strict",
-  "include": [".astro/types.d.ts", "**/*"],
+  "include": ["**/*"],
   "exclude": ["dist"],
   "compilerOptions": {
     "baseUrl": ".",
@@ -9,6 +8,9 @@
     },
     "jsx": "react-jsx",
     "jsxImportSource": "react",
-    "types": ["@types/wicg-file-system-access"]
+    "types": ["@types/wicg-file-system-access", "vite/client"],
+    "esModuleInterop": true,
+    "moduleResolution": "Bundler",
+    "module": "ES2022"
   }
 }
