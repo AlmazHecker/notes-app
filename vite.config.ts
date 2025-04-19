@@ -4,7 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 import path from "path";
 
 // https://vitejs.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [react(), tailwindcss()],
   server: {
     port: 3000,
@@ -18,4 +18,5 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-});
+  base: mode === "gh-pages" ? "/notes-app/" : "/",
+}));

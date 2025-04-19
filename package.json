@@ -2,11 +2,13 @@
   "name": "notes",
   "type": "module",
   "version": "0.0.1",
+  "homepage": "https://AlmazHecker.github.io/notes-app",
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
-    "analyze-bundle": "npx vite-bundle-visualizer"
+    "analyze-bundle": "npx vite-bundle-visualizer",
+    "deploy:gh-pages": "vite build --mode gh-pages && npx gh-pages -d dist"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.7",
