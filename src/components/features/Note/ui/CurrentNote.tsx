@@ -1,6 +1,6 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { TextEditor } from "@/components/ui/text-editor/text-editor";
-import { EditIcon, SaveIcon, Trash } from "lucide-react";
+import { ArrowLeft, EditIcon, SaveIcon, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { type Editor } from "@tiptap/react";
 import {
@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/tooltip";
 import { usePushStateListener } from "@/shared/hooks/usePushStateListener";
 import { useNoteStore } from "@/components/entities/note/api";
-import useDraggableLayout from "@/shared/hooks/useDraggableLayout";
 import { EncryptionToggle } from "./EncryptionToggle";
 import ExpandPane from "./ExpandPane";
 import { NoteService } from "@/components/entities/note/service";
@@ -20,6 +19,9 @@ import { useNoteManagement } from "../hooks/useNoteManagement";
 import { SetPasswordModal } from "./SetPasswordModal";
 import { EnterPasswordModal } from "./EnterPasswordModal";
 import { useModalActions } from "@/shared/hooks/useModalStore";
+import DraggableLayout, {
+  LAYOUT_SELECTORS,
+} from "@/components/features/Note/ui/DraggableLayout";
 
 export function CurrentNote() {
   const editorRef = useRef<Editor | null>(null);
@@ -95,10 +97,7 @@ export function CurrentNote() {
       ? (editorRef.current?.getHTML() as string)
       : note.content;
 
-    const updatedNote: Note = {
-      ...note,
-      isEncrypted: true,
-    };
+    const updatedNote: Note = { ...note, isEncrypted: true };
 
     await saveNoteHandler(updatedNote, content, true, password, encryptContent);
     closeSetPasswordModal();
@@ -124,10 +123,7 @@ export function CurrentNote() {
   const handleDecryptNote = async () => {
     if (!note || !note.isEncrypted) return;
 
-    const updatedNote: Note = {
-      ...note,
-      isEncrypted: false,
-    };
+    const updatedNote: Note = { ...note, isEncrypted: false };
 
     await NoteService.update(updatedNote);
     setNote(updatedNote);
@@ -140,33 +136,50 @@ export function CurrentNote() {
     const noteId = params.get("noteId");
 
     if (noteId) {
+      setNote(null);
+
       setPassword("");
       fetchNote(noteId);
     }
   });
 
-  useDraggableLayout();
+  const goToNotes = () => {
+    window.history.pushState({}, "", `/`);
+  };
 
-  if (!note) return <div className="p-4">Note not found or loading...</div>;
+  if (!note) return null;
 
   const displayContent = isEncrypted
     ? "This note is encrypted. Click the lock icon to decrypt."
     : note.content;
 
   return (
-    <div className="p-4 space-y-4 shadow">
+    <div
+      id={LAYOUT_SELECTORS.right}
+      className="flex-1 flex flex-col md:h-screen overflow-y-auto h-full p-4 space-y-4 shadow"
+    >
       <div className="flex items-center justify-between py-1">
-        {isEditing ? (
-          <input
-            className="text-2xl border-none font-bold border outline-none rounded p-0"
-            value={note.label}
-            onChange={(e) => setNote({ ...note, label: e.target.value })}
-            placeholder="Enter note title"
-            autoFocus={isNewNote}
-          />
-        ) : (
-          <h1 className="text-2xl font-bold">{note.label}</h1>
-        )}
+        <div className="flex items-center gap-3">
+          <Button
+            onClick={goToNotes}
+            className="md:hidden flex"
+            variant="outline"
+            size="icon"
+          >
+            <ArrowLeft />
+          </Button>
+          {isEditing ? (
+            <input
+              className="text-2xl border-none font-bold border outline-none rounded p-0"
+              value={note.label}
+              onChange={(e) => setNote({ ...note, label: e.target.value })}
+              placeholder="Enter note title"
+              autoFocus={isNewNote}
+            />
+          ) : (
+            <h1 className="text-2xl font-bold">{note.label}</h1>
+          )}
+        </div>
 
         <div className="flex gap-3 items-center">
           <EncryptionToggle
@@ -215,6 +228,8 @@ export function CurrentNote() {
 
       <SetPasswordModal onSuccess={handleSetPassword} />
       <EnterPasswordModal onSuccess={handleEnterPassword} />
+
+      <DraggableLayout />
     </div>
   );
 }

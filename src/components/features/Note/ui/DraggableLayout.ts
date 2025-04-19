@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useMediaQuery } from "@/shared/hooks/useMediaQuery";
 
 export const LAYOUT_SELECTORS = {
   divider: "divider",
@@ -6,8 +7,12 @@ export const LAYOUT_SELECTORS = {
   right: "currentNote",
 };
 
-export default function useDraggableLayout() {
+export default function DraggableLayout() {
+  const isMobile = useMediaQuery("(max-width: 768px)");
+
   useEffect(() => {
+    if (isMobile) return;
+
     const divider = document.getElementById(LAYOUT_SELECTORS.divider);
     const leftPane = document.getElementById(LAYOUT_SELECTORS.left);
     const rightPane = document.getElementById(LAYOUT_SELECTORS.right);
@@ -69,7 +74,7 @@ export default function useDraggableLayout() {
       document.removeEventListener("mouseup", onMouseUp);
       document.removeEventListener("mousemove", onMouseMove);
     };
-  }, []);
+  }, [isMobile]);
 
   return null;
 }
