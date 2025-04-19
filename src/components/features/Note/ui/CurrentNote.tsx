@@ -105,11 +105,11 @@ export function CurrentNote() {
     getNotes();
   };
 
-  const handleEnterPassword = (password: string) => {
+  const handleEnterPassword = async (password: string) => {
     // this if else shouldn't exist...
     if (!note || !note.isEncrypted) return;
 
-    const decrypted = decryptContent(note.content, password);
+    const decrypted = await decryptContent(note.content, password);
 
     if (decrypted === null) {
       return false;
@@ -139,15 +139,13 @@ export function CurrentNote() {
     const params = new URLSearchParams(window.location.search);
     const noteId = params.get("noteId");
 
-    if (noteId) fetchNote(noteId);
+    if (noteId) {
+      setPassword("");
+      fetchNote(noteId);
+    }
   });
 
   useDraggableLayout();
-  useEffect(() => {
-    if (isEncrypted) {
-      openEnterPasswordModal();
-    }
-  }, [isEncrypted]);
 
   if (!note) return <div className="p-4">Note not found or loading...</div>;
 

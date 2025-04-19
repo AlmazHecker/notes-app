@@ -1,5 +1,6 @@
 import { Note } from "@/lib/notesDB";
 import { useVirtualizer } from "@tanstack/react-virtual";
+import { LockIcon } from "lucide-react";
 import { FC, useRef } from "react";
 
 type NoteListProps = {
@@ -39,10 +40,17 @@ export const NoteList: FC<NoteListProps> = ({ notes }) => {
                 window.history.pushState({}, "", `?noteId=${note.id}`)
               }
             >
-              <h3 className="font-semibold">{note.label}</h3>
+              <div className="flex items-center gap-1">
+                <h3 className="font-semibold">{note.label}</h3>
+                {note.isEncrypted && <LockIcon size="10px" />}
+              </div>
               <p
                 className="text-sm text-muted-foreground line-clamp-1"
-                dangerouslySetInnerHTML={{ __html: note.content }}
+                dangerouslySetInnerHTML={{
+                  __html: note.isEncrypted
+                    ? "This note is encrypted."
+                    : note.content,
+                }}
               ></p>
             </div>
           );

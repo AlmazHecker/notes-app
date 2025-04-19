@@ -17,7 +17,7 @@ import {
 import { usePasswordStore } from "../hooks/usePasswordStore";
 
 type EnterPasswordModalProps = {
-  onSuccess: (password: string) => boolean;
+  onSuccess: (password: string) => Promise<boolean>;
 };
 
 export const EnterPasswordModal = ({ onSuccess }: EnterPasswordModalProps) => {
@@ -26,9 +26,9 @@ export const EnterPasswordModal = ({ onSuccess }: EnterPasswordModalProps) => {
   const isOpen = useEnterPasswordModalOpen();
   const { closeEnterPasswordModal } = useModalActions();
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setPasswordError("");
-    const isPasswordValid = onSuccess(passwordStore.password);
+    const isPasswordValid = await onSuccess(passwordStore.password);
     if (!isPasswordValid) {
       return setPasswordError("WRONG PASSWORD!");
     }

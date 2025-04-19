@@ -1,48 +1,114 @@
-# Astro Starter Kit: Basics
+# Notes App - FileSystem API Based
 
-```sh
-npm create astro@latest -- --template basics
+Simple notes app based on File System API and with encryption feature
+
+## Features
+
+- **Local Storage**: Notes are stored directly on the user's device using the Chrome FileSystem API
+- **Note Encryption**: Secure your sensitive notes with AES-256 encryption
+- **Resizable Panes**: Fully adjustable interface layout
+- **Rich Text Editing**: Powered by Tiptap editor for a great writing experience
+- **Simple Interface**: Clean, intuitive UI for managing notes
+
+## Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/AlmazHecker/notes-app.git
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   cd notes-app
+   npm install
+   ```
+
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+## Usage
+
+1. **First Run**: When you first open the app, you'll be prompted to select a folder where notes will be stored.
+
+2. **Creating Notes**:
+
+   - Click the "+" button to create a new note
+   - Give your note a title and start writing
+   - Click on save icon on the top-right corner
+
+3. **Managing Encrypted Notes**:
+   - Encrypted notes show a lock icon
+   - Clicking an encrypted note prompts for password
+   - Wrong passwords show immediate feedback
+
+## Encryption Details
+
+### Security Implementation
+
+- **AES-GCM 256-bit** encryption via Web Crypto API
+- **PBKDF2** key derivation with 100,000 iterations
+- **Unique initialization vectors** for each encryption
+- **No plaintext storage** of sensitive data
+
+## Technical Details
+
+### File Structure
+
+Notes are stored as individual files in the selected folder with the following structure:
+
+```
+notes-folder/
+  ├── normal-note
+  ├── encrypted-note
+  └── ...
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+Each note file contains JSON data with the following format:
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
+```json
+{
+  "id": "unique-id",
+  "label": "Note Title",
+  "content": "<p>HTML content</p>",
+  "createdAt": 1234567890,
+  "updatedAt": 1234567890,
+  "isEncrypted": false
+}
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+### Dependencies
 
-## 🧞 Commands
+- React
+- TypeScript
+- Tiptap (Text editor)
+- Lucide React (Icons)
+- Vite (Build tool)
+- Zustand (State Management)
 
-All commands are run from the root of the project, from a terminal:
+## Future Features
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+- [ ] Tagging and categorization
+- [ ] Search functionality
+- [ ] Markdown support
+- [ ] Export/import functionality
 
-## 👀 Want to learn more?
+## Browser Support
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+This app requires a modern browser with support for:
+
+- FileSystem Access API (Currently Chrome/Edge)
+- ES Modules
+- TypeScript
+- Web Crypto API
+
+## Contributing
+
+Contributions are welcome! Please open an issue or pull request for any improvements.
+
+## License
+
+MIT

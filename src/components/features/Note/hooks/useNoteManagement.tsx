@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Note } from "@/lib/notesDB";
 import { NoteService } from "@/components/entities/note/service";
+import { useModalActions } from "@/shared/hooks/useModalStore";
 
 export const useNoteManagement = () => {
   const [isEncrypted, setIsEncrypted] = useState(false);
@@ -8,6 +9,8 @@ export const useNoteManagement = () => {
   const [note, setNote] = useState<Note | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isNewNote, setIsNewNote] = useState(false);
+
+  const { openEnterPasswordModal } = useModalActions();
 
   const getNote = async (fileId: string) => {
     if (fileId === "new-note") {
@@ -31,6 +34,10 @@ export const useNoteManagement = () => {
       setIsNewNote(false);
       setIsEditing(false);
       setIsEncrypted(note.isEncrypted);
+      if (note.isEncrypted) {
+        openEnterPasswordModal();
+      }
+
       return note;
     } catch (err) {
       console.error("File not found:", fileId);
@@ -43,12 +50,15 @@ export const useNoteManagement = () => {
     editorContent: string,
     isEncrypted: boolean,
     password: string,
-    encryptContent: (content: string, password: string) => string
+    encryptContent: (
+      content: string,
+      password: string
+    ) => Promise<string | null>
   ) => {
     if (!note) return;
 
     if (isEncrypted) {
-      note.content = encryptContent(editorContent, password);
+      note.content = await encryptContent(editorContent, password);
     } else {
       note.content = editorContent;
     }

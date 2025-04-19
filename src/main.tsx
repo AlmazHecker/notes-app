@@ -7,10 +7,10 @@ import { Notes } from "./components/features/Notes/ui/Notes";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <div className="flex h-screen shadow select-none">
+    <div className="flex h-screen max-h-screen shadow select-none">
       <div
         id={LAYOUT_SELECTORS.left}
-        className="overflow-auto w-1/2 min-w-[200px] max-w-[80%]"
+        className="overflow-auto w-1/2 min-w-[200px] max-w-[80%] h-screen"
       >
         <Notes />
       </div>
@@ -20,8 +20,13 @@ root.render(
         className="w-1 bg-gray-300 dark:bg-border cursor-col-resize"
       ></div>
 
-      <div id={LAYOUT_SELECTORS.right} className="flex-1">
-        <CurrentNote />
+      <div
+        id={LAYOUT_SELECTORS.right}
+        className="flex-1 flex flex-col h-screen overflow-hidden"
+      >
+        <div className="overflow-y-auto h-full">
+          <CurrentNote />
+        </div>
       </div>
     </div>
   </React.StrictMode>

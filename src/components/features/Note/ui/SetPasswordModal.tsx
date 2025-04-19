@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -24,10 +24,24 @@ export const SetPasswordModal = ({ onSuccess }: SetPasswordModalProps) => {
   const passwordStore = usePasswordStore();
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [showWarning, setShowWarning] = useState(false);
   const isOpen = useSetPasswordModalOpen();
   const { closeSetPasswordModal } = useModalActions();
 
+  useEffect(() => {
+    if (
+      passwordStore.password.length > 0 &&
+      passwordStore.password.length < 12
+    ) {
+      setShowWarning(true);
+    } else {
+      setShowWarning(false);
+    }
+  }, [passwordStore.password]);
+
   const handleSubmit = () => {
+    setPasswordError("");
+
     if (passwordStore.password !== confirmPassword) {
       setPasswordError("Passwords do not match");
       return;
@@ -38,7 +52,13 @@ export const SetPasswordModal = ({ onSuccess }: SetPasswordModalProps) => {
       return;
     }
 
-    setPasswordError("");
+    if (passwordStore.password.length < 12) {
+      const isConfirmed = confirm(
+        "Warning: Your password is weak and may be easily cracked. Continue anyway?"
+      );
+      if (!isConfirmed) return;
+    }
+
     onSuccess(passwordStore.password);
   };
 
@@ -85,8 +105,15 @@ export const SetPasswordModal = ({ onSuccess }: SetPasswordModalProps) => {
               className="col-span-3"
             />
           </div>
+
+          {showWarning && (
+            <p className="text-yellow-600 text-sm">
+              ⚠️ For better security, use at least 12 characters
+            </p>
+          )}
+
           {passwordError && (
-            <p className="text-red-500 text-sm text-center">{passwordError}</p>
+            <p className="text-red-500 text-sm">{passwordError}</p>
           )}
         </div>
         <DialogFooter>
