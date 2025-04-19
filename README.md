@@ -1,4 +1,4 @@
-# Notes App - FileSystem API Based
+# Notes App
 
 Simple notes app based on File System API and with encryption feature
 
@@ -38,7 +38,7 @@ Simple notes app based on File System API and with encryption feature
 
    - Click the "+" button to create a new note
    - Give your note a title and start writing
-   - Click on save icon on the top-right corner
+   - Click the save icon in the top-right corner
 
 3. **Managing Encrypted Notes**:
    - Encrypted notes show a lock icon
