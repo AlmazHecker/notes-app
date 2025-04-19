@@ -45,7 +45,7 @@ export const Notes = () => {
   }, []);
 
   const sharedContent = (
-    <div className="flex justify-between items-center">
+    <div className="flex justify-between items-center sticky top-0 py-1 bg-background z-10 ">
       <h2 className="text-xl font-bold">Saved Notes</h2>
       {hasPermission ? (
         <Tooltip>

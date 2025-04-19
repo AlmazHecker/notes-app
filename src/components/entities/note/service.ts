@@ -63,7 +63,6 @@ export class NoteService {
 
     const note: Note = {
       ...newNote,
-      isEncrypted: false,
       tags: [],
       createdAt: new Date().getTime(),
       updatedAt: new Date().getTime(),

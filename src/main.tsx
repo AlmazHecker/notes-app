@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { CurrentNote } from "./components/features/Note/CurrentNote";
+import { CurrentNote } from "./components/features/Note/ui/CurrentNote";
 import { LAYOUT_SELECTORS } from "./shared/hooks/useDraggableLayout";
 import { Notes } from "./components/features/Notes/ui/Notes";
 
