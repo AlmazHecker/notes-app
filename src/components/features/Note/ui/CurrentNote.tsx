@@ -1,8 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TextEditor } from "@/components/ui/text-editor/text-editor";
 import { ArrowLeft, EditIcon, SaveIcon, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { type Editor } from "@tiptap/react";
+import { Range, type Editor } from "@tiptap/react";
 import {
   Tooltip,
   TooltipContent,
@@ -15,13 +15,15 @@ import { NoteService } from "@/components/entities/note/service";
 import { Note } from "@/lib/notesDB";
 import { useNoteEncryption } from "../hooks/useNoteEncryption";
 import { useNoteManagement } from "../hooks/useNoteManagement";
-import { SetPasswordModal } from "./SetPasswordModal";
-import { EnterPasswordModal } from "./EnterPasswordModal";
+import { SetPasswordModal } from "../../NoteEncryption/ui/SetPasswordModal";
+import { EnterPasswordModal } from "../../NoteEncryption/ui/EnterPasswordModal";
 import { useModalActions } from "@/shared/hooks/useModalStore";
 import DraggableLayout, {
   LAYOUT_SELECTORS,
 } from "@/components/features/Note/ui/DraggableLayout";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { Input } from "@/components/ui/input";
+import { NoteActionsDropdown } from "./NoteActionsDropdown";
 
 export function CurrentNote() {
   const editorRef = useRef<Editor | null>(null);
@@ -150,6 +152,39 @@ export function CurrentNote() {
     return navigate("/");
   };
 
+  const updateSearchReplace = (search: string, clearIndex: boolean = false) => {
+    if (!editorRef.current) return;
+    editorRef.current.commands.nextSearchResult();
+
+    if (clearIndex) editorRef.current.commands.resetIndex();
+
+    editorRef.current.commands.setSearchTerm(search);
+    editorRef.current.commands.setCaseSensitive(false);
+
+    goToSelection();
+  };
+
+  const goToSelection = () => {
+    if (!editorRef.current) return;
+
+    const { results, resultIndex } = editorRef.current.storage.searchAndReplace;
+    const position: Range = results[resultIndex];
+
+    if (!position) return;
+
+    editorRef.current.commands.setTextSelection(position as Range);
+
+    const { node } = editorRef.current.view.domAtPos(
+      editorRef.current.state.selection.anchor
+    );
+
+    setTimeout(() => {
+      if (node instanceof HTMLElement) {
+        node.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    }, 0);
+  };
+
   if (!note) return null;
 
   const displayContent = isEncrypted
@@ -161,6 +196,14 @@ export function CurrentNote() {
       id={LAYOUT_SELECTORS.right}
       className="flex-1 flex flex-col md:h-screen overflow-y-auto h-full p-4 space-y-4 shadow"
     >
+      <Input
+        placeholder="Search"
+        onKeyUp={(e) => {
+          if (e.key === "Enter") {
+            updateSearchReplace(e.target.value);
+          }
+        }}
+      />
       <div className="flex items-center justify-between py-1">
         <div className="flex items-center gap-3 w-full">
           <Button
@@ -214,6 +257,7 @@ export function CurrentNote() {
               <TooltipContent>{"Delete"}</TooltipContent>
             </Tooltip>
           )}
+          <NoteActionsDropdown />
         </div>
       </div>
       <TextEditor

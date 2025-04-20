@@ -30,6 +30,7 @@ import {
   Undo,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import SearchAndReplace from "./searchAndReplace";
 
 const extensions = [
   Heading,
@@ -44,6 +45,7 @@ const extensions = [
   Italic,
   Blockquote,
   HorizontalRule,
+  SearchAndReplace.configure(),
 ];
 
 type MenuBarProps = {

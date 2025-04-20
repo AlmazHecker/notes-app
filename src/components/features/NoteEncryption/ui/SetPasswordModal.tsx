@@ -14,7 +14,7 @@ import {
   useModalActions,
   useSetPasswordModalOpen,
 } from "@/shared/hooks/useModalStore";
-import { usePasswordStore } from "../hooks/usePasswordStore";
+import { usePasswordStore } from "../../Note/hooks/usePasswordStore";
 
 type SetPasswordModalProps = {
   onSuccess: (password: string) => void;

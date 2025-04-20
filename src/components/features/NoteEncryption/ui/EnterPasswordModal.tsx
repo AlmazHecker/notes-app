@@ -14,7 +14,7 @@ import {
   useEnterPasswordModalOpen,
   useModalActions,
 } from "@/shared/hooks/useModalStore";
-import { usePasswordStore } from "../hooks/usePasswordStore";
+import { usePasswordStore } from "../../Note/hooks/usePasswordStore";
 
 type EnterPasswordModalProps = {
   onSuccess: (password: string) => Promise<boolean>;

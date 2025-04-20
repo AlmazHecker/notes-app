@@ -1,3 +1,11 @@
+.search-result {
+  background-color: yellow;
+  color: black;
+}
+.search-result-current {
+  background-color: orange;
+}
+
 /* Basic editor styles */
 .tiptap {
   /* padding: 16px; */
