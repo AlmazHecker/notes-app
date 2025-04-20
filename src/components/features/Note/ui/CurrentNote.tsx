@@ -135,9 +135,8 @@ export function CurrentNote() {
     const params = new URLSearchParams(window.location.search);
     const noteId = params.get("noteId");
 
+    setNote(null);
     if (noteId) {
-      setNote(null);
-
       setPassword("");
       fetchNote(noteId);
     }
@@ -159,7 +158,7 @@ export function CurrentNote() {
       className="flex-1 flex flex-col md:h-screen overflow-y-auto h-full p-4 space-y-4 shadow"
     >
       <div className="flex items-center justify-between py-1">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 w-full">
           <Button
             onClick={goToNotes}
             className="md:hidden flex"
@@ -170,7 +169,7 @@ export function CurrentNote() {
           </Button>
           {isEditing ? (
             <input
-              className="text-2xl border-none font-bold border outline-none rounded p-0"
+              className="w-full text-2xl border-none font-bold border outline-none rounded p-0"
               value={note.label}
               onChange={(e) => setNote({ ...note, label: e.target.value })}
               placeholder="Enter note title"
