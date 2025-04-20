@@ -2,6 +2,7 @@ import { Note } from "@/lib/notesDB";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { LockIcon } from "lucide-react";
 import { FC, useRef } from "react";
+import { Link } from "react-router-dom";
 
 type NoteListProps = {
   notes: Note[];
@@ -29,16 +30,14 @@ export const NoteList: FC<NoteListProps> = ({ notes }) => {
           const note = notes[virtualRow.index];
 
           return (
-            <div
+            <Link
+              to={`?noteId=${note.id}`}
               key={virtualRow.index}
               className="absolute w-full p-4 rounded-md border"
               style={{
                 transform: `translateY(${virtualRow.start}px)`,
                 top: 0,
               }}
-              onClick={() =>
-                window.history.pushState({}, "", `?noteId=${note.id}`)
-              }
             >
               <div className="flex items-center gap-1">
                 <h3 className="font-semibold">{note.label}</h3>
@@ -52,7 +51,7 @@ export const NoteList: FC<NoteListProps> = ({ notes }) => {
                     : note.content,
                 }}
               ></p>
-            </div>
+            </Link>
           );
         })}
       </div>

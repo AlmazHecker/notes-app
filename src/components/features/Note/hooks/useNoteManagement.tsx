@@ -80,7 +80,6 @@ export const useNoteManagement = () => {
     if (!note) return;
     await NoteService.delete(note.id);
     setNote(null);
-    window.history.pushState({}, "", `/`);
   };
 
   return {

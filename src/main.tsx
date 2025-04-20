@@ -3,18 +3,21 @@ import ReactDOM from "react-dom/client";
 import { CurrentNote } from "./components/features/Note/ui/CurrentNote";
 import { LAYOUT_SELECTORS } from "./components/features/Note/ui/DraggableLayout";
 import { Notes } from "./components/features/Notes/ui/Notes";
+import { BrowserRouter } from "react-router-dom";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <div className="md:flex md:h-screen md:max-h-screen shadow select-none">
-      <Notes />
+    <BrowserRouter>
+      <div className="md:flex md:h-screen md:max-h-screen shadow select-none">
+        <Notes />
 
-      <div
-        id={LAYOUT_SELECTORS.divider}
-        className="md:block hidden w-1 bg-gray-300 dark:bg-border cursor-col-resize"
-      ></div>
-      <CurrentNote />
-    </div>
+        <div
+          id={LAYOUT_SELECTORS.divider}
+          className="md:block hidden w-1 bg-gray-300 dark:bg-border cursor-col-resize"
+        ></div>
+        <CurrentNote />
+      </div>
+    </BrowserRouter>
   </React.StrictMode>
 );

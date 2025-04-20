@@ -6,8 +6,4 @@ export type Note = {
   updatedAt: number;
   isEncrypted: boolean;
   tags?: string[];
-  // Additional metadata for encrypted notes
-  // encryptionMeta?: {
-  //   requiresPassword?: boolean;
-  // };
 };

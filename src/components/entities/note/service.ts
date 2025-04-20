@@ -20,7 +20,6 @@ export class NoteService {
 
     const note: Note = {
       ...updatedNote,
-      // isEncrypted: false,
       tags: [],
       updatedAt: new Date().getTime(),
     };

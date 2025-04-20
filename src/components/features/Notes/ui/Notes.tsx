@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getFolderHandle, verifyPermission } from "@/lib/fileApi";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Plus, SearchIcon } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -11,15 +11,20 @@ import { Link } from "@/components/ui/link";
 import { useNoteStore } from "@/components/entities/note/api";
 import { NoteList } from "./NoteList";
 import { LAYOUT_SELECTORS } from "@/components/features/Note/ui/DraggableLayout";
-import { usePushStateListener } from "@/shared/hooks/usePushStateListener";
 import { useMediaQuery } from "@/shared/hooks/useMediaQuery";
+import { SearchNotesModal } from "../../SearchNotes/ui/SearchNotesModal";
+import { useSearchParams } from "react-router-dom";
 
 export const Notes = () => {
   const notes = useNoteStore((state) => state.notes);
   const getNotes = useNoteStore((state) => state.fetchNotes);
 
-  const [noteId, setNoteId] = useState(null);
+  const [params] = useSearchParams();
+  const noteId = params.get("noteId");
+
   const isMobile = useMediaQuery("(max-width: 768px)");
+
+  const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
   const [hasPermission, setHasPermission] = useState(true);
@@ -48,27 +53,29 @@ export const Notes = () => {
     init();
   }, []);
 
-  usePushStateListener(() => {
-    const params = new URLSearchParams(window.location.search);
-    const noteId = params.get("noteId");
-
-    setNoteId(noteId);
-  });
-
   const containerClassName = `md:overflow-auto md:w-1/2 min-w-[200px] md:max-w-[80%] md:h-screen space-y-4 p-4 ${noteId && isMobile && "hidden"}`;
 
   const sharedContent = (
-    <div className="flex justify-between items-center sticky top-0 py-1 bg-background z-10 ">
+    <div className="flex justify-between items-center sticky top-0 md:-top-4 py-1 bg-background z-10 ">
       <h2 className="text-xl font-bold">Saved Notes</h2>
       {hasPermission ? (
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Link href="/?noteId=new-note" size="icon" variant="outline">
-              <Plus />
-            </Link>
-          </TooltipTrigger>
-          <TooltipContent>Add new note</TooltipContent>
-        </Tooltip>
+        <div className="flex items-center gap-3">
+          <Button
+            size="icon"
+            variant="outline"
+            onClick={() => setIsSearchModalOpen(true)}
+          >
+            <SearchIcon />
+          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link to="/?noteId=new-note" size="icon" variant="outline">
+                <Plus />
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent>Add new note</TooltipContent>
+          </Tooltip>
+        </div>
       ) : (
         <Button onClick={init}>Select folder</Button>
       )}
@@ -111,6 +118,13 @@ export const Notes = () => {
       <div className="grid gap-4">
         <NoteList notes={notes} />
       </div>
+
+      {isSearchModalOpen && (
+        <SearchNotesModal
+          open={isSearchModalOpen}
+          setOpen={setIsSearchModalOpen}
+        />
+      )}
     </div>
   );
 };

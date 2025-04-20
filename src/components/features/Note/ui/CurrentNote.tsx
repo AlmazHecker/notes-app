@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { TextEditor } from "@/components/ui/text-editor/text-editor";
 import { ArrowLeft, EditIcon, SaveIcon, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { usePushStateListener } from "@/shared/hooks/usePushStateListener";
 import { useNoteStore } from "@/components/entities/note/api";
 import { EncryptionToggle } from "./EncryptionToggle";
 import ExpandPane from "./ExpandPane";
@@ -22,10 +21,13 @@ import { useModalActions } from "@/shared/hooks/useModalStore";
 import DraggableLayout, {
   LAYOUT_SELECTORS,
 } from "@/components/features/Note/ui/DraggableLayout";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 export function CurrentNote() {
   const editorRef = useRef<Editor | null>(null);
   const getNotes = useNoteStore((state) => state.fetchNotes);
+
+  const navigate = useNavigate();
 
   const {
     openSetPasswordModal,
@@ -80,13 +82,15 @@ export function CurrentNote() {
     );
     getNotes();
     if (isNewNote) {
-      window.history.pushState({}, "", `?noteId=${updatedNote.id}`);
+      navigate(`?noteId=${updatedNote.id}`);
     }
   };
 
   const deleteNote = async () => {
     if (isEncrypted) return openEnterPasswordModal();
     await deleteNoteHandler(note);
+
+    navigate("/");
     getNotes();
   };
 
@@ -131,19 +135,19 @@ export function CurrentNote() {
     getNotes();
   };
 
-  usePushStateListener(() => {
-    const params = new URLSearchParams(window.location.search);
-    const noteId = params.get("noteId");
+  const [params] = useSearchParams();
+  const noteId = params.get("noteId");
 
+  useEffect(() => {
     setNote(null);
     if (noteId) {
       setPassword("");
       fetchNote(noteId);
     }
-  });
+  }, [noteId]);
 
   const goToNotes = () => {
-    window.history.pushState({}, "", `/`);
+    return navigate("/");
   };
 
   if (!note) return null;
