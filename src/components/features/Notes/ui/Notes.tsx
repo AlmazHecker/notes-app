@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getFolderHandle, verifyPermission } from "@/lib/fileApi";
 import { Button } from "@/components/ui/button";
-import { Plus, SearchIcon } from "lucide-react";
+import { Plus, SearchIcon, Settings } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -60,6 +60,9 @@ export const Notes = () => {
       <h2 className="text-xl font-bold">Saved Notes</h2>
       {hasPermission ? (
         <div className="flex items-center gap-3">
+          <Link size="icon" variant="outline" to="/settings">
+            <Settings />
+          </Link>
           <Button
             size="icon"
             variant="outline"

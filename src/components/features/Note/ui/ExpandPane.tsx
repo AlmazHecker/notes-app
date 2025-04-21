@@ -18,6 +18,7 @@ const ExpandPane: React.FC = () => {
       leftPane.style.minWidth = "0";
       leftPane.style.opacity = "0";
       leftPane.style.overflow = "hidden";
+      leftPane.classList.toggle("p-4");
 
       divider.style.opacity = "0";
 
@@ -28,6 +29,7 @@ const ExpandPane: React.FC = () => {
       leftPane.style.minWidth = "500px";
       leftPane.style.opacity = "1";
       leftPane.style.overflow = "auto";
+      leftPane.classList.toggle("p-4");
 
       divider.style.opacity = "1";
 
