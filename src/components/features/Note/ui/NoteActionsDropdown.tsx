@@ -13,65 +13,54 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MenuIcon } from "lucide-react";
+import { Lock, MenuIcon, Search, Trash, Unlock } from "lucide-react";
+import { Note } from "@/lib/notesDB";
+import { FC } from "react";
 
-export const NoteActionsDropdown = () => {
+type NoteActionsDropdownProps = {
+  isNew: boolean;
+  isEncrypted: boolean;
+  note: Note;
+  onEncryptionClick: () => void;
+  onDeleteClick: () => void;
+  onSearchClick: () => void;
+};
+export const NoteActionsDropdown: FC<NoteActionsDropdownProps> = ({
+  isNew,
+  isEncrypted,
+  note,
+  onEncryptionClick,
+  onDeleteClick,
+  onSearchClick,
+}) => {
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="icon">
           <MenuIcon />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuLabel>Note Preferences</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            Profile
-            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+          <DropdownMenuItem disabled={isEncrypted} onClick={onEncryptionClick}>
+            {note.isEncrypted ? <Lock className="text-blue-500" /> : <Unlock />}
+            <span>{note.isEncrypted ? "Decrypt Note" : "Encrypt Note"}</span>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            Billing
-            <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
+
+          <DropdownMenuItem onClick={onSearchClick}>
+            <Search />
+            <span>Search</span>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            Settings
-            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            Keyboard shortcuts
-            <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
-          </DropdownMenuItem>
+
+          {isNew || (
+            <DropdownMenuItem variant="destructive" onClick={onDeleteClick}>
+              <Trash />
+              <span>Delete Note</span>
+            </DropdownMenuItem>
+          )}
         </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem>Team</DropdownMenuItem>
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger>Invite users</DropdownMenuSubTrigger>
-            <DropdownMenuPortal>
-              <DropdownMenuSubContent>
-                <DropdownMenuItem>Email</DropdownMenuItem>
-                <DropdownMenuItem>Message</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>More...</DropdownMenuItem>
-              </DropdownMenuSubContent>
-            </DropdownMenuPortal>
-          </DropdownMenuSub>
-          <DropdownMenuItem>
-            New Team
-            <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>GitHub</DropdownMenuItem>
-        <DropdownMenuItem>Support</DropdownMenuItem>
-        <DropdownMenuItem disabled>API</DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          Log out
-          <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

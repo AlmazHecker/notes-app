@@ -1,15 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { TextEditor } from "@/components/ui/text-editor/text-editor";
-import { ArrowLeft, EditIcon, SaveIcon, Trash } from "lucide-react";
+import { ArrowLeft, EditIcon, SaveIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Range, type Editor } from "@tiptap/react";
+import { type Editor } from "@tiptap/react";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useNoteStore } from "@/components/entities/note/api";
-import { EncryptionToggle } from "./EncryptionToggle";
 import ExpandPane from "./ExpandPane";
 import { NoteService } from "@/components/entities/note/service";
 import { Note } from "@/lib/notesDB";
@@ -22,12 +21,13 @@ import DraggableLayout, {
   LAYOUT_SELECTORS,
 } from "@/components/features/Note/ui/DraggableLayout";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Input } from "@/components/ui/input";
 import { NoteActionsDropdown } from "./NoteActionsDropdown";
+import SearchInput from "./SearchInput";
 
-export function CurrentNote() {
+export const CurrentNote = () => {
   const editorRef = useRef<Editor | null>(null);
   const getNotes = useNoteStore((state) => state.fetchNotes);
+  const [toggleSearch, setToggleSearch] = useState(false);
 
   const navigate = useNavigate();
 
@@ -152,39 +152,6 @@ export function CurrentNote() {
     return navigate("/");
   };
 
-  const updateSearchReplace = (search: string, clearIndex: boolean = false) => {
-    if (!editorRef.current) return;
-    editorRef.current.commands.nextSearchResult();
-
-    if (clearIndex) editorRef.current.commands.resetIndex();
-
-    editorRef.current.commands.setSearchTerm(search);
-    editorRef.current.commands.setCaseSensitive(false);
-
-    goToSelection();
-  };
-
-  const goToSelection = () => {
-    if (!editorRef.current) return;
-
-    const { results, resultIndex } = editorRef.current.storage.searchAndReplace;
-    const position: Range = results[resultIndex];
-
-    if (!position) return;
-
-    editorRef.current.commands.setTextSelection(position as Range);
-
-    const { node } = editorRef.current.view.domAtPos(
-      editorRef.current.state.selection.anchor
-    );
-
-    setTimeout(() => {
-      if (node instanceof HTMLElement) {
-        node.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
-    }, 0);
-  };
-
   if (!note) return null;
 
   const displayContent = isEncrypted
@@ -194,16 +161,15 @@ export function CurrentNote() {
   return (
     <div
       id={LAYOUT_SELECTORS.right}
-      className="flex-1 flex flex-col md:h-screen overflow-y-auto h-full p-4 space-y-4 shadow"
+      className="relative flex-1 flex flex-col md:h-screen overflow-y-auto h-full p-4 space-y-4 shadow"
     >
-      <Input
-        placeholder="Search"
-        onKeyUp={(e) => {
-          if (e.key === "Enter") {
-            updateSearchReplace(e.target.value);
-          }
-        }}
-      />
+      {toggleSearch && (
+        <SearchInput
+          onClose={() => setToggleSearch(false)}
+          editor={editorRef.current}
+        />
+      )}
+
       <div className="flex items-center justify-between py-1">
         <div className="flex items-center gap-3 w-full">
           <Button
@@ -228,12 +194,6 @@ export function CurrentNote() {
         </div>
 
         <div className="flex gap-3 items-center">
-          <EncryptionToggle
-            isEncrypted={isEncrypted}
-            isNoteEncrypted={note.isEncrypted}
-            onEncryptionToggle={handleEncryptionToggle}
-          />
-
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
@@ -247,17 +207,14 @@ export function CurrentNote() {
             <TooltipContent>{isEditing ? "Save" : "Edit"}</TooltipContent>
           </Tooltip>
 
-          {isNewNote || (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="destructive" size="icon" onClick={deleteNote}>
-                  <Trash />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>{"Delete"}</TooltipContent>
-            </Tooltip>
-          )}
-          <NoteActionsDropdown />
+          <NoteActionsDropdown
+            isNew={isNewNote}
+            isEncrypted={isEncrypted}
+            note={note}
+            onEncryptionClick={handleEncryptionToggle}
+            onDeleteClick={deleteNote}
+            onSearchClick={() => setToggleSearch(!toggleSearch)}
+          />
         </div>
       </div>
       <TextEditor
@@ -279,4 +236,4 @@ export function CurrentNote() {
       <DraggableLayout />
     </div>
   );
-}
+};
