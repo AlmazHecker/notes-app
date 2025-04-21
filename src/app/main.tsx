@@ -2,12 +2,12 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./router";
-import ThemeProvider from "./ThemeProvider";
+import UserPreferenceProvider from "./UserPreferenceProvider";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <ThemeProvider />
+    <UserPreferenceProvider />
     <RouterProvider router={router} />
   </React.StrictMode>
 );

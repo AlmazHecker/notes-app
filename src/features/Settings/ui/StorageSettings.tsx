@@ -3,6 +3,7 @@ import {
   getTotalFolderSize,
   verifyPermission,
 } from "@/lib/fileApi";
+import { formatSize } from "@/lib/utils";
 import { Button } from "@/shared/ui/button";
 import {
   Card,
@@ -12,13 +13,6 @@ import {
   CardTitle,
 } from "@/shared/ui/card";
 import React, { useEffect, useState } from "react";
-
-function formatSize(bytes: number): string {
-  if (bytes === 0) return "0 B";
-  const sizes = ["B", "KB", "MB", "GB", "TB"];
-  const i = Math.floor(Math.log(bytes) / Math.log(1024));
-  return `${(bytes / Math.pow(1024, i)).toFixed(1)} ${sizes[i]}`;
-}
 
 type StorageSettingsProps = {
   // Define your props here

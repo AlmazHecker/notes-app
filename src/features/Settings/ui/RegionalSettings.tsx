@@ -1,9 +1,8 @@
-import { Button } from "@/shared/ui/button";
+import React from "react";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/shared/ui/card";
@@ -15,13 +14,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/ui/select";
-import React from "react";
 
-type RegionalSettingsProps = {
-  // Define your props here
-};
+import { useUserPreferences } from "@/shared/hooks/useUserPreferences";
 
-const RegionalSettings: React.FC<RegionalSettingsProps> = (props) => {
+type RegionalSettingsProps = {};
+
+const RegionalSettings: React.FC<RegionalSettingsProps> = () => {
+  const { language, dateFormat, setLanguage, setDateFormat } =
+    useUserPreferences();
+
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold">Language</h1>
@@ -36,7 +37,7 @@ const RegionalSettings: React.FC<RegionalSettingsProps> = (props) => {
         <CardContent className="space-y-6">
           <div className="space-y-2">
             <Label htmlFor="language">Display Language</Label>
-            <Select defaultValue="en">
+            <Select value={language} onValueChange={setLanguage}>
               <SelectTrigger id="language">
                 <SelectValue placeholder="Select language" />
               </SelectTrigger>
@@ -47,28 +48,26 @@ const RegionalSettings: React.FC<RegionalSettingsProps> = (props) => {
                 <SelectItem value="fr">Français</SelectItem>
                 <SelectItem value="de">Deutsch</SelectItem>
                 <SelectItem value="zh">中文</SelectItem>
-                <SelectItem value="ja">日本語</SelectItem>
+                <SelectItem value="jp">日本語</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="dateFormat">Date Format</Label>
-            <Select defaultValue="mdy">
+            <Select value={dateFormat} onValueChange={setDateFormat}>
               <SelectTrigger id="dateFormat">
                 <SelectValue placeholder="Select date format" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="mdy">MM/DD/YYYY</SelectItem>
-                <SelectItem value="dmy">DD/MM/YYYY</SelectItem>
-                <SelectItem value="ymd">YYYY/MM/DD</SelectItem>
+                <SelectItem value="DD.MM.YYYY">DD.MM.YYYY</SelectItem>
+                <SelectItem value="MM/DD/YYYY">MM/DD/YYYY</SelectItem>
+                <SelectItem value="DD/MM/YYYY">DD/MM/YYYY</SelectItem>
+                <SelectItem value="YYYY-MM-DD">YYYY/MM/DD</SelectItem>
               </SelectContent>
             </Select>
           </div>
         </CardContent>
-        <CardFooter>
-          <Button>Save Language Settings</Button>
-        </CardFooter>
       </Card>
     </div>
   );
