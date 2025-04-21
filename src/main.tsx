@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { CurrentNote } from "./components/features/Note/ui/CurrentNote";
-import { LAYOUT_SELECTORS } from "./components/features/Note/ui/DraggableLayout";
-import { Notes } from "./components/features/Notes/ui/Notes";
+import { CurrentNote } from "@/features/Note/ui/CurrentNote";
+import { LAYOUT_SELECTORS } from "@/features/Note/ui/DraggableLayout";
+import { Notes } from "@/features/Notes/ui/Notes";
 import { BrowserRouter } from "react-router-dom";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import { getFolderHandle, verifyPermission } from "@/lib/fileApi";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import { Plus, SearchIcon, Settings } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Link } from "@/components/ui/link";
-import { useNoteStore } from "@/components/entities/note/api";
+} from "@/shared/ui/tooltip";
+import { Link } from "@/shared/ui/link";
+import { useNoteStore } from "@/entities/note/api";
 import { NoteList } from "./NoteList";
-import { LAYOUT_SELECTORS } from "@/components/features/Note/ui/DraggableLayout";
+import { LAYOUT_SELECTORS } from "@/features/Note/ui/DraggableLayout";
 import { useMediaQuery } from "@/shared/hooks/useMediaQuery";
 import { SearchNotesModal } from "../../SearchNotes/ui/SearchNotesModal";
 import { useSearchParams } from "react-router-dom";

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Note } from "@/lib/notesDB";
-import { NoteService } from "@/components/entities/note/service";
+import { NoteService } from "@/entities/note/service";
 import { useModalActions } from "@/shared/hooks/useModalStore";
 
 export const useNoteManagement = () => {

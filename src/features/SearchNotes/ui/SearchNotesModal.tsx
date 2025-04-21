@@ -1,6 +1,6 @@
 import { useState, useEffect, FC } from "react";
 import { useNavigate } from "react-router-dom";
-import { useNoteStore } from "@/components/entities/note/api";
+import { useNoteStore } from "@/entities/note/api";
 import {
   CommandDialog,
   CommandEmpty,
@@ -8,7 +8,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command";
+} from "@/shared/ui/command";
 import { formatDate, getEscapedHtml } from "@/lib/utils";
 
 type SearchNotesModalProps = {

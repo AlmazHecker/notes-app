@@ -1,16 +1,16 @@
 import { useEffect, useRef, useState } from "react";
-import { TextEditor } from "@/components/ui/text-editor/text-editor";
+import { TextEditor } from "@/shared/ui/text-editor/text-editor";
 import { ArrowLeft, EditIcon, SaveIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import { type Editor } from "@tiptap/react";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { useNoteStore } from "@/components/entities/note/api";
+} from "@/shared/ui/tooltip";
+import { useNoteStore } from "@/entities/note/api";
 import ExpandPane from "./ExpandPane";
-import { NoteService } from "@/components/entities/note/service";
+import { NoteService } from "@/entities/note/service";
 import { Note } from "@/lib/notesDB";
 import { useNoteEncryption } from "../hooks/useNoteEncryption";
 import { useNoteManagement } from "../hooks/useNoteManagement";
@@ -19,7 +19,7 @@ import { EnterPasswordModal } from "../../NoteEncryption/ui/EnterPasswordModal";
 import { useModalActions } from "@/shared/hooks/useModalStore";
 import DraggableLayout, {
   LAYOUT_SELECTORS,
-} from "@/components/features/Note/ui/DraggableLayout";
+} from "@/features/Note/ui/DraggableLayout";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { NoteActionsDropdown } from "./NoteActionsDropdown";
 import SearchInput from "./SearchInput";

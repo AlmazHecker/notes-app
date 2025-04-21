@@ -3,12 +3,12 @@
 "use client";
 
 import * as React from "react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Badge } from "@/shared/ui/badge";
+import { Button } from "@/shared/ui/button";
 import { XIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ComponentProps } from "react";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/shared/ui/input";
 
 type InputTagsProps = Omit<
   ComponentProps<typeof Input>,

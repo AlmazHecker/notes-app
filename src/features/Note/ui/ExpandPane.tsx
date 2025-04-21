@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 
 import { Expand, Minimize2 } from "lucide-react";
 import React, { useState } from "react";
