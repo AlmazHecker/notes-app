@@ -2,11 +2,7 @@ import { useEffect, useState } from "react";
 import { getFolderHandle, verifyPermission } from "@/lib/fileApi";
 import { Button } from "@/shared/ui/button";
 import { Plus, SearchIcon, Settings } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/shared/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
 import { Link } from "@/shared/ui/link";
 import { useNoteStore } from "@/entities/note/api";
 import { NoteList } from "./NoteList";
@@ -35,6 +31,7 @@ export const Notes = () => {
 
     try {
       const handle = await getFolderHandle();
+
       if (!(await verifyPermission(handle))) {
         setHasPermission(false);
         setIsLoading(false);

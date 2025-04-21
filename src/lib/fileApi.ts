@@ -96,3 +96,20 @@ export async function doesFileExist(
     throw err;
   }
 }
+
+export async function getTotalFolderSize(
+  handle: FileSystemDirectoryHandle
+): Promise<number> {
+  let totalSize = 0;
+
+  for await (const [name, entry] of handle.entries()) {
+    if (entry.kind === "file") {
+      const file = await entry.getFile();
+      totalSize += file.size;
+    } else if (entry.kind === "directory") {
+      totalSize += await getTotalFolderSize(entry);
+    }
+  }
+
+  return totalSize;
+}
