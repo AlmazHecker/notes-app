@@ -1,0 +1,75 @@
+{
+  "fileApi": {
+    "permissionDenied": "Permission denied or folder not set. Please reselect the folder.",
+    "selectFolder": "Select folder"
+  },
+  "notes": {
+    "title": "Saved Notes",
+    "addNote": "Add new note",
+    "encrypted": "This note is encrypted."
+  },
+  "note": {
+    "title": "Note Preferences",
+    "editNote": "Edit note",
+    "encryptNote": "Encrypt Note",
+    "decryptNote": "Decrypt Note",
+    "deleteNote": "Delete note",
+    "searchInNote": "Search in note...",
+    "encrypted": "This note is encrypted. Click the lock icon to decrypt"
+  },
+  "encryption": {
+    "setNotePassword": {
+      "title": "Set Encryption Password",
+      "description": "Set a password to encrypt this note. You'll need this password to view or edit the note in the future.",
+      "lockNote": "Encrypt Note"
+    },
+    "enterNotePassword": {
+      "title": "Enter Password",
+      "description": "This note is encrypted. Enter the password to view its contents.",
+      "unlockNote": "Unlock Note"
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "search": "Search",
+    "password": "Password",
+    "confirm": "Confirm",
+    "cancel": "Cancel"
+  },
+  "settings": {
+    "appearance": {
+      "title": "Appearance",
+      "theme": "Theme",
+      "themeDescription": "Customize how the application looks",
+      "mode": "Mode",
+      "modes": {
+        "light": "Light",
+        "dark": "Dark",
+        "system": "System"
+      },
+      "fontSize": "Font Size",
+      "fontSizeDescription": "Adjust the font size used throughout the application"
+    },
+    "language": {
+      "title": "Language",
+      "description": "Choose your preferred language and regional settings",
+      "languageSettings": "Language Settings",
+      "displayLanguage": "Display Language",
+      "dateFormat": "Date Format"
+    },
+    "storage": {
+      "title": "Storage",
+      "used": "Storage Used"
+    },
+    "dataManagement": {
+      "title": "Data Management",
+      "description": "Download or delete your data",
+      "downloadTitle": "Download Your Data",
+      "downloadDescription": "You can download a copy of all your data that we have stored in our systems.",
+      "exportButton": "Request Data Export",
+      "deleteTitle": "Delete Your Data",
+      "deleteDescription": "This will permanently delete your data and all associated data. This action cannot be undone.",
+      "deleteButton": "Delete Data"
+    }
+  }
+}

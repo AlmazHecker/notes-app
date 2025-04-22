@@ -12,13 +12,14 @@ import {
   useUserPreferences,
 } from "@/shared/hooks/useUserPreferences";
 import React from "react";
-import { Button } from "@/shared/ui/button";
 import { Link } from "@/shared/ui/link";
+import { useTranslation } from "react-i18next";
 
 type AppearanceSettingsProps = {};
 
 const AppearanceSettings: React.FC<AppearanceSettingsProps> = () => {
   const userPreferences = useUserPreferences();
+  const { t } = useTranslation();
 
   // useEffect(() => {
   //   // Base font size: 1rem = 16px
@@ -33,7 +34,7 @@ const AppearanceSettings: React.FC<AppearanceSettingsProps> = () => {
         <Link to="/" size="icon" variant="outline">
           <ArrowLeft />
         </Link>
-        <h1 className="text-2xl font-bold">Appearance</h1>
+        <h1 className="text-2xl font-bold">{t("settings.appearance.title")}</h1>
       </div>
 
       <Card>
