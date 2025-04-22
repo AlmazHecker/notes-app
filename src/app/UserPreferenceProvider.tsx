@@ -1,13 +1,27 @@
+import { isCyrillic } from "@/lib/utils";
 import { useUserPreferences } from "@/shared/hooks/useUserPreferences";
 import React, { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 const UserPreferenceProvider: React.FC = () => {
   const userPreferences = useUserPreferences();
+  const { i18n } = useTranslation();
+
+  useEffect(() => {
+    i18n.changeLanguage(userPreferences.language);
+    if (isCyrillic(userPreferences.language)) {
+      document.body.classList.remove("geist-mono");
+    } else {
+      document.body.classList.add("geist-mono");
+    }
+  }, [userPreferences.language]);
 
   useEffect(() => {
     const scale = [0.75, 0.875, 1, 1.125, 1.25];
     document.documentElement.style.fontSize = `${scale[userPreferences.fontSize - 1]}rem`;
+  }, [userPreferences.fontSize]);
 
+  useEffect(() => {
     const isDarkPreferred = () =>
       window.matchMedia("(prefers-color-scheme: dark)").matches;
 
@@ -29,10 +43,11 @@ const UserPreferenceProvider: React.FC = () => {
       if (userPreferences.theme === "system") setBodyClass(e.matches);
     };
 
-    if (userPreferences.theme === "system")
+    if (userPreferences.theme === "system") {
       media.addEventListener("change", listener);
-    return () => media.removeEventListener("change", listener);
-  }, [userPreferences.theme, userPreferences.fontSize]);
+      return () => media.removeEventListener("change", listener);
+    }
+  }, [userPreferences.theme]);
 
   return null;
 };

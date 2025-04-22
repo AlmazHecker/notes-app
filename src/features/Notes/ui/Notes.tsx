@@ -10,8 +10,11 @@ import { LAYOUT_SELECTORS } from "@/features/Note/ui/DraggableLayout";
 import { useMediaQuery } from "@/shared/hooks/useMediaQuery";
 import { SearchNotesModal } from "../../SearchNotes/ui/SearchNotesModal";
 import { useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export const Notes = () => {
+  const { t } = useTranslation();
+
   const notes = useNoteStore((state) => state.notes);
   const getNotes = useNoteStore((state) => state.fetchNotes);
 
@@ -54,7 +57,7 @@ export const Notes = () => {
 
   const sharedContent = (
     <div className="flex justify-between items-center sticky top-0 md:-top-4 py-1 bg-background z-10 ">
-      <h2 className="text-xl font-bold">Saved Notes</h2>
+      <h2 className="text-xl font-bold">{t("notes.title")}</h2>
       {hasPermission ? (
         <div className="flex items-center gap-3">
           <Link size="icon" variant="outline" to="/settings">
@@ -73,11 +76,11 @@ export const Notes = () => {
                 <Plus />
               </Link>
             </TooltipTrigger>
-            <TooltipContent>Add new note</TooltipContent>
+            <TooltipContent>{t("notes.addNote")}</TooltipContent>
           </Tooltip>
         </div>
       ) : (
-        <Button onClick={init}>Select folder</Button>
+        <Button onClick={init}>{t("notes.openFolder")}</Button>
       )}
     </div>
   );
@@ -86,9 +89,7 @@ export const Notes = () => {
     return (
       <div className={containerClassName} id={LAYOUT_SELECTORS.left}>
         {sharedContent}
-        <p className="text-red-500">
-          Permission denied or folder not set. Please reselect the folder.
-        </p>
+        <p className="text-red-500">{t("fileApi.permissionDenied")}</p>
       </div>
     );
   }
@@ -98,7 +99,9 @@ export const Notes = () => {
       <div className={containerClassName} id={LAYOUT_SELECTORS.left}>
         {sharedContent}
         <div className="h-12 w-12 animate-spin rounded-full border-4 border-t-gray-900 border-gray-300" />
-        <p className="mt-2 text-gray-500 dark:text-gray-400">Loading...</p>
+        <p className="mt-2 text-gray-500 dark:text-gray-400">
+          {t("common.loading")}
+        </p>
       </div>
     );
   }
@@ -107,7 +110,7 @@ export const Notes = () => {
     return (
       <div className={containerClassName} id={LAYOUT_SELECTORS.left}>
         {sharedContent}
-        <p className="text-muted-foreground">No notes saved yet.</p>
+        <p className="text-muted-foreground">{t("notes.empty")}</p>
       </div>
     );
   }

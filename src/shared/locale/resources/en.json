@@ -6,7 +6,12 @@
   "notes": {
     "title": "Saved Notes",
     "addNote": "Add new note",
-    "encrypted": "This note is encrypted."
+    "openFolder": "Open folder",
+    "encrypted": "This note is encrypted.",
+    "empty": "No notes saved yet.",
+    "notFound": "No notes found",
+    "searchNotes": "Search notes...",
+    "notes": "Notes"
   },
   "note": {
     "title": "Note Preferences",
@@ -34,7 +39,10 @@
     "search": "Search",
     "password": "Password",
     "confirm": "Confirm",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "noResults": "No results",
+    "previous": "Previous",
+    "next": "Next"
   },
   "settings": {
     "appearance": {
@@ -59,7 +67,8 @@
     },
     "storage": {
       "title": "Storage",
-      "used": "Storage Used"
+      "used": "Storage Used",
+      "permissionNeeded": "Allow Permission to view"
     },
     "dataManagement": {
       "title": "Data Management",

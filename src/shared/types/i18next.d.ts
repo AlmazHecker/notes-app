@@ -11,6 +11,6 @@ declare module "i18next" {
       kg: typeof kgJSON;
       en: typeof enJSON;
     };
-    defaultNS: "ru";
+    defaultNS: "en";
   }
 }

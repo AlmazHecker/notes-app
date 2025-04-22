@@ -1,75 +1,84 @@
 {
   "fileApi": {
-    "permissionDenied": "Permission denied or folder not set. Please reselect the folder.",
-    "selectFolder": "Select folder"
+    "permissionDenied": "Уруксат берилген жок же папка тандалган эмес. Папканы кайра тандаңыз.",
+    "selectFolder": "Папканы тандоо"
   },
   "notes": {
-    "title": "Saved Notes",
-    "addNote": "Add new note",
-    "encrypted": "This note is encrypted."
+    "title": "Сакталган жазуулар",
+    "addNote": "Жаңы жазуу кошуу",
+    "openFolder": "Папканы ачуу",
+    "encrypted": "Бул жазуу шифрленген.",
+    "empty": "Азырынча эч кандай жазуулар сакталган жок.",
+    "notFound": "Жазуулар табылган жок",
+    "searchNotes": "Жазууларды изде...",
+    "notes": "Жазуулар"
   },
   "note": {
-    "title": "Note Preferences",
-    "editNote": "Edit note",
-    "encryptNote": "Encrypt Note",
-    "decryptNote": "Decrypt Note",
-    "deleteNote": "Delete note",
-    "searchInNote": "Search in note...",
-    "encrypted": "This note is encrypted. Click the lock icon to decrypt"
+    "title": "Жазуунун жөндөөлөрү",
+    "editNote": "Жазууну түзөтүү",
+    "encryptNote": "Жазууну шифрлөө",
+    "decryptNote": "Жазууну чечүү",
+    "deleteNote": "Жазууну өчүрүү",
+    "searchInNote": "Жазуудан издөө...",
+    "encrypted": "Бул жазуу шифрленген. Чечүү үчүн кулпунун иконкасына басыңыз"
   },
   "encryption": {
     "setNotePassword": {
-      "title": "Set Encryption Password",
-      "description": "Set a password to encrypt this note. You'll need this password to view or edit the note in the future.",
-      "lockNote": "Encrypt Note"
+      "title": "Шифрлөө үчүн сырсөз коюу",
+      "description": "Бул жазууну шифрлөө үчүн сырсөз коюңуз. Кийин жазууну көрүү же өзгөртүү үчүн бул сырсөз керек болот.",
+      "lockNote": "Жазууну шифрлөө"
     },
     "enterNotePassword": {
-      "title": "Enter Password",
-      "description": "This note is encrypted. Enter the password to view its contents.",
-      "unlockNote": "Unlock Note"
+      "title": "Сырсөздү киргизүү",
+      "description": "Бул жазуу шифрленген. Мазмунун көрүү үчүн сырсөздү киргизиңиз.",
+      "unlockNote": "Жазууну ачуу"
     }
   },
   "common": {
-    "loading": "Loading...",
-    "search": "Search",
-    "password": "Password",
-    "confirm": "Confirm",
-    "cancel": "Cancel"
+    "loading": "Жүктөлүүдө...",
+    "search": "Издөө",
+    "password": "Сырсөз",
+    "confirm": "Тастыктоо",
+    "cancel": "Жокко чыгаруу",
+    "noResults": "Жыйынтыктар жок",
+    "previous": "Буга чейин",
+    "next": "Кийинки"
   },
   "settings": {
     "appearance": {
-      "title": "Appearance",
-      "theme": "Theme",
-      "themeDescription": "Customize how the application looks",
-      "mode": "Mode",
+      "title": "Көрүнүш",
+      "theme": "Тема",
+      "themeDescription": "Тиркеменин көрүнүшүн ыңгайлаштырыңыз",
+      "mode": "Режим",
       "modes": {
-        "light": "Light",
-        "dark": "Dark",
-        "system": "System"
+        "light": "Жарык",
+        "dark": "Караңгы",
+        "system": "Система боюнча"
       },
-      "fontSize": "Font Size",
-      "fontSizeDescription": "Adjust the font size used throughout the application"
+      "fontSize": "Шрифт өлчөмү",
+      "fontSizeDescription": "Тиркемедеги шрифт өлчөмүн өзгөртүңүз"
     },
     "language": {
-      "title": "Language",
-      "description": "Choose your preferred language and regional settings",
-      "languageSettings": "Language Settings",
-      "displayLanguage": "Display Language",
-      "dateFormat": "Date Format"
+      "title": "Тил",
+      "description": "Каалаган тилди жана аймактык жөндөөлөрдү тандаңыз",
+      "languageSettings": "Тил жөндөөлөрү",
+      "displayLanguage": "Көрсөтүлгөн тил",
+      "dateFormat": "Дата форматы"
     },
     "storage": {
-      "title": "Storage",
-      "used": "Storage Used"
+      "title": "Сактагыч",
+      "used": "Колдонуулган сактагыч",
+      "permissionNeeded": "Көрүү үчүн уруксат бериңиз"
     },
     "dataManagement": {
-      "title": "Data Management",
-      "description": "Download or delete your data",
-      "downloadTitle": "Download Your Data",
-      "downloadDescription": "You can download a copy of all your data that we have stored in our systems.",
-      "exportButton": "Request Data Export",
-      "deleteTitle": "Delete Your Data",
-      "deleteDescription": "This will permanently delete your data and all associated data. This action cannot be undone.",
-      "deleteButton": "Delete Data"
+      "title": "Маалыматтарды башкаруу",
+      "description": "Маалыматтарыңызды жүктөп алуу же өчүрүү",
+      "downloadTitle": "Маалыматтарыңызды жүктөп алуу",
+      "downloadDescription": "Биздин система сактаган маалыматтарыңыздын көчүрмөсүн жүктөп алсаңыз болот.",
+      "exportButton": "Маалыматты экспорттоо өтүнүчү",
+      "deleteTitle": "Маалыматтарыңызды өчүрүү",
+      "deleteDescription": "Бул сиздин бардык маалыматтарыңызды жана байланыштуу маалыматтарды түбөлүккө өчүрөт. Бул аракетти артка кайтарууга болбойт.",
+      "deleteButton": "Маалыматты өчүрүү"
     }
   }
 }

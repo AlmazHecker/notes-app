@@ -7,7 +7,7 @@ export type DateFormat =
   | "DD/MM/YYYY"
   | "YYYY-MM-DD"
   | "DD.MM.YYYY";
-export type Language = "en" | "jp" | "kg" | "fr"; // for now...
+export type Language = "en" | "jp" | "kg" | "fr" | "ru"; // for now...
 
 type UserPreferencesState = {
   theme: Theme;

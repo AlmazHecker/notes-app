@@ -2,6 +2,7 @@ import React, { FC, useState, useEffect, useRef } from "react";
 import { Editor, Range } from "@tiptap/react";
 import { Input } from "@/shared/ui/input";
 import { Search, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 type SearchInputProps = {
   editor: Editor | null;
@@ -9,6 +10,7 @@ type SearchInputProps = {
 };
 
 const SearchInput: FC<SearchInputProps> = ({ editor, onClose }) => {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [resultsInfo, setResultsInfo] = useState<string>("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -34,7 +36,7 @@ const SearchInput: FC<SearchInputProps> = ({ editor, onClose }) => {
     if (count > 0) {
       setResultsInfo(`${resultIndex + 1} of ${count}`);
     } else {
-      setResultsInfo("No results");
+      setResultsInfo(t("common.noResults"));
     }
   };
 
@@ -86,9 +88,9 @@ const SearchInput: FC<SearchInputProps> = ({ editor, onClose }) => {
   };
 
   const handleCloseClick = () => {
-    onClose();
-    editor.commands.resetIndex();
-    editor.commands.setSearchTerm("");
+    onClose?.();
+    editor?.commands.resetIndex();
+    editor?.commands.setSearchTerm("");
   };
 
   useEffect(() => {
@@ -108,7 +110,7 @@ const SearchInput: FC<SearchInputProps> = ({ editor, onClose }) => {
           <Input
             ref={inputRef}
             className="pl-10 pr-10 py-2 w-full rounded-md border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="Search in note..."
+            placeholder={t("note.searchInNote")}
             value={searchTerm}
             onChange={handleSearchChange}
             onKeyDown={(e) => {
@@ -147,13 +149,13 @@ const SearchInput: FC<SearchInputProps> = ({ editor, onClose }) => {
               onClick={handlePrevResult}
               className="p-1 text-sm bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300"
             >
-              Previous
+              {t("common.previous")}
             </button>
             <button
               onClick={handleNextResult}
               className="p-1 text-sm bg-blue-500 rounded hover:bg-blue-600 text-white"
             >
-              Next
+              {t("common.next")}
             </button>
           </div>
         </div>

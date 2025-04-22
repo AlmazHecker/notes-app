@@ -37,3 +37,5 @@ export const formatSize = (bytes: number): string => {
   const i = Math.floor(Math.log(bytes) / Math.log(1024));
   return `${(bytes / Math.pow(1024, i)).toFixed(1)} ${sizes[i]}`;
 };
+
+export const isCyrillic = (lng: string) => ["ru", "kg"].includes(lng);

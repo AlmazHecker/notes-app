@@ -1,0 +1,84 @@
+{
+  "fileApi": {
+    "permissionDenied": "アクセスが拒否されたか、フォルダーが設定されていません。フォルダーを再選択してください。",
+    "selectFolder": "フォルダーを選択"
+  },
+  "notes": {
+    "title": "保存されたメモ",
+    "addNote": "新しいメモを追加",
+    "openFolder": "フォルダーを開く",
+    "encrypted": "このメモは暗号化されています。",
+    "empty": "まだメモは保存されていません。",
+    "notFound": "メモが見つかりません",
+    "searchNotes": "メモを検索...",
+    "notes": "メモ"
+  },
+  "note": {
+    "title": "メモの設定",
+    "editNote": "メモを編集",
+    "encryptNote": "メモを暗号化",
+    "decryptNote": "メモを復号",
+    "deleteNote": "メモを削除",
+    "searchInNote": "メモ内を検索...",
+    "encrypted": "このメモは暗号化されています。ロックアイコンをクリックして復号してください。"
+  },
+  "encryption": {
+    "setNotePassword": {
+      "title": "暗号化パスワードの設定",
+      "description": "このメモを暗号化するパスワードを設定してください。今後このメモを表示または編集するには、このパスワードが必要になります。",
+      "lockNote": "メモを暗号化"
+    },
+    "enterNotePassword": {
+      "title": "パスワードを入力",
+      "description": "このメモは暗号化されています。内容を表示するにはパスワードを入力してください。",
+      "unlockNote": "メモを解除"
+    }
+  },
+  "common": {
+    "loading": "読み込み中...",
+    "search": "検索",
+    "password": "パスワード",
+    "confirm": "確認",
+    "cancel": "キャンセル",
+    "noResults": "結果はありません",
+    "previous": "前へ",
+    "next": "次へ"
+  },
+  "settings": {
+    "appearance": {
+      "title": "外観",
+      "theme": "テーマ",
+      "themeDescription": "アプリの見た目をカスタマイズします",
+      "mode": "モード",
+      "modes": {
+        "light": "ライト",
+        "dark": "ダーク",
+        "system": "システム"
+      },
+      "fontSize": "フォントサイズ",
+      "fontSizeDescription": "アプリ全体で使用するフォントサイズを調整します"
+    },
+    "language": {
+      "title": "言語",
+      "description": "希望する言語と地域の設定を選択してください",
+      "languageSettings": "言語設定",
+      "displayLanguage": "表示言語",
+      "dateFormat": "日付形式"
+    },
+    "storage": {
+      "title": "ストレージ",
+      "used": "使用済みストレージ",
+      "permissionNeeded": "表示するには許可が必要です"
+    },
+    "dataManagement": {
+      "title": "データ管理",
+      "description": "データのダウンロードまたは削除",
+      "downloadTitle": "データをダウンロード",
+      "downloadDescription": "当社のシステムに保存されているすべてのデータのコピーをダウンロードできます。",
+      "exportButton": "データエクスポートをリクエスト",
+      "deleteTitle": "データを削除",
+      "deleteDescription": "この操作はあなたのデータおよび関連するすべてのデータを完全に削除します。この操作は元に戻せません。",
+      "deleteButton": "データを削除"
+    }
+  }
+}

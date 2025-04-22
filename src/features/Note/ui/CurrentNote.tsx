@@ -3,11 +3,7 @@ import { TextEditor } from "@/shared/ui/text-editor/text-editor";
 import { ArrowLeft, EditIcon, SaveIcon } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import { type Editor } from "@tiptap/react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/shared/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
 import { useNoteStore } from "@/entities/note/api";
 import ExpandPane from "./ExpandPane";
 import { NoteService } from "@/entities/note/service";
@@ -23,8 +19,11 @@ import DraggableLayout, {
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { NoteActionsDropdown } from "./NoteActionsDropdown";
 import SearchInput from "./SearchInput";
+import { useTranslation } from "react-i18next";
 
 export const CurrentNote = () => {
+  const { t } = useTranslation();
+
   const editorRef = useRef<Editor | null>(null);
   const getNotes = useNoteStore((state) => state.fetchNotes);
   const [toggleSearch, setToggleSearch] = useState(false);
@@ -84,7 +83,7 @@ export const CurrentNote = () => {
     );
     getNotes();
     if (isNewNote) {
-      navigate(`?noteId=${updatedNote.id}`);
+      navigate(`?noteId=${updatedNote?.id}`);
     }
   };
 
@@ -112,7 +111,7 @@ export const CurrentNote = () => {
 
   const handleEnterPassword = async (password: string) => {
     // this if else shouldn't exist...
-    if (!note || !note.isEncrypted) return;
+    if (!note || !note.isEncrypted) return false;
 
     const decrypted = await decryptContent(note.content, password);
 
@@ -154,9 +153,7 @@ export const CurrentNote = () => {
 
   if (!note) return null;
 
-  const displayContent = isEncrypted
-    ? "This note is encrypted. Click the lock icon to decrypt."
-    : note.content;
+  const displayContent = isEncrypted ? t("note.encrypted") : note.content;
 
   return (
     <div

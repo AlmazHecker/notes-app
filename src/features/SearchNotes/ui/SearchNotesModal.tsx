@@ -10,6 +10,7 @@ import {
   CommandList,
 } from "@/shared/ui/command";
 import { formatDate, getEscapedHtml } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 type SearchNotesModalProps = {
   open: boolean;
@@ -20,15 +21,15 @@ export const SearchNotesModal: FC<SearchNotesModalProps> = ({
   open,
   setOpen,
 }) => {
+  const { t } = useTranslation();
+
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
 
   const { notes, fetchNotes } = useNoteStore();
 
   useEffect(() => {
-    if (open) {
-      fetchNotes();
-    }
+    if (open) fetchNotes();
   }, [open, fetchNotes]);
 
   const handleSelectNote = (noteId: string) => {
@@ -40,14 +41,14 @@ export const SearchNotesModal: FC<SearchNotesModalProps> = ({
     <>
       <CommandDialog open={open} onOpenChange={setOpen}>
         <CommandInput
-          placeholder="Search notes..."
+          placeholder={t("notes.searchNotes")}
           className="flex-1 h-12  bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground"
           value={query}
           onValueChange={setQuery}
         />
         <CommandList>
-          <CommandEmpty>No notes found.</CommandEmpty>
-          <CommandGroup heading="Notes">
+          <CommandEmpty>{t("notes.notFound")}</CommandEmpty>
+          <CommandGroup heading={t("notes.notes")}>
             {notes.map((note) => (
               <CommandItem
                 key={note.id}
@@ -69,7 +70,7 @@ export const SearchNotesModal: FC<SearchNotesModalProps> = ({
                   )}
                   {note.isEncrypted && (
                     <p className="text-xs text-muted-foreground mt-1 italic">
-                      Encrypted note
+                      {t("notes.encrypted")}
                     </p>
                   )}
                 </div>

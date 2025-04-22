@@ -13,12 +13,14 @@ import {
   CardTitle,
 } from "@/shared/ui/card";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 type StorageSettingsProps = {
   // Define your props here
 };
 
 const StorageSettings: React.FC<StorageSettingsProps> = (props) => {
+  const { t } = useTranslation();
   const [folderSize, setFolderSize] = useState<number | null>(null);
 
   async function loadFolderSize() {
@@ -42,18 +44,22 @@ const StorageSettings: React.FC<StorageSettingsProps> = (props) => {
     folderSize !== null ? (
       formatSize(folderSize)
     ) : (
-      <Button onClick={loadFolderSize}>Open Folder</Button>
+      <Button onClick={loadFolderSize}>
+        {t("settings.storage.permissionNeeded")}
+      </Button>
     );
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Storage</h1>
+      <h1 className="text-2xl font-bold">{t("settings.storage.title")}</h1>
 
       <Card>
         <CardContent className="space-y-6">
           <div className="space-y-4">
             <div className="flex justify-between items-center">
-              <h3 className="text-base font-medium">Storage Used</h3>
+              <h3 className="text-base font-medium">
+                {t("settings.storage.used")}
+              </h3>
               <p className="text-sm font-medium">{formattedSize}</p>
             </div>
           </div>
@@ -62,28 +68,34 @@ const StorageSettings: React.FC<StorageSettingsProps> = (props) => {
 
       <Card>
         <CardHeader>
-          <CardTitle>Data Management</CardTitle>
-          <CardDescription>Download or delete your data</CardDescription>
+          <CardTitle>{t("settings.dataManagement.title")}</CardTitle>
+          <CardDescription>
+            {t("settings.dataManagement.description")}
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800">
-            <h3 className="font-medium mb-2">Download Your Data</h3>
+            <h3 className="font-medium mb-2">
+              {t("settings.dataManagement.downloadTitle")}
+            </h3>
             <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-              You can download a copy of all your data that we have stored in
-              our systems.
+              {t("settings.dataManagement.downloadDescription")}
             </p>
-            <Button variant="outline">Request Data Export</Button>
+            <Button variant="outline">
+              {t("settings.dataManagement.exportButton")}
+            </Button>
           </div>
 
           <div className="p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800">
             <h3 className="font-medium mb-2 text-red-600 dark:text-red-400">
-              Delete Your Data
+              {t("settings.dataManagement.deleteTitle")}
             </h3>
             <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-              This will permanently delete your data and all associated data.
-              This action cannot be undone.
+              {t("settings.dataManagement.deleteDescription")}
             </p>
-            <Button variant="destructive">Delete Data</Button>
+            <Button variant="destructive">
+              {t("settings.dataManagement.deleteButton")}
+            </Button>
           </div>
         </CardContent>
       </Card>

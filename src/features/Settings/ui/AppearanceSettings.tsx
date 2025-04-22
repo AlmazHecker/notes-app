@@ -14,19 +14,13 @@ import {
 import React from "react";
 import { Link } from "@/shared/ui/link";
 import { useTranslation } from "react-i18next";
+import { TFunction } from "i18next";
 
 type AppearanceSettingsProps = {};
 
 const AppearanceSettings: React.FC<AppearanceSettingsProps> = () => {
   const userPreferences = useUserPreferences();
   const { t } = useTranslation();
-
-  // useEffect(() => {
-  //   // Base font size: 1rem = 16px
-  //   // We'll go from 0.75rem (12px) to 1.25rem (20px) using this logic
-  //   const scale = [0.75, 0.875, 1, 1.125, 1.25];
-  //   document.documentElement.style.fontSize = `${scale[fontSize - 1]}rem`;
-  // }, [userPreferences.fontSize]);
 
   return (
     <div className="space-y-6">
@@ -39,15 +33,19 @@ const AppearanceSettings: React.FC<AppearanceSettingsProps> = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle>Theme</CardTitle>
-          <CardDescription>Customize how the application looks</CardDescription>
+          <CardTitle>{t("settings.appearance.theme")}</CardTitle>
+          <CardDescription>
+            {t("settings.appearance.themeDescription")}
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-8">
           {/* Theme Mode */}
           <div className="space-y-4">
-            <h3 className="text-lg font-medium">Mode</h3>
+            <h3 className="text-lg font-medium">
+              {t("settings.appearance.mode")}
+            </h3>
             <div className="grid grid-cols-3 gap-4">
-              {THEMES.map(({ label, value, icon, bg }) => (
+              {getThemes(t).map(({ label, value, icon, bg }) => (
                 <div
                   key={value}
                   className={`relative cursor-pointer rounded-lg border-2 ${
@@ -73,7 +71,9 @@ const AppearanceSettings: React.FC<AppearanceSettingsProps> = () => {
 
           {/* Font Size */}
           <div className="space-y-4">
-            <h3 className="text-lg font-medium">Font Size</h3>
+            <h3 className="text-lg font-medium">
+              {t("settings.appearance.fontSize")}
+            </h3>
             <div className="space-y-2">
               <div className="flex items-center">
                 <span className="text-sm">A</span>
@@ -92,7 +92,7 @@ const AppearanceSettings: React.FC<AppearanceSettingsProps> = () => {
                 <span className="text-lg">A</span>
               </div>
               <p className="text-sm text-gray-500 dark:text-gray-400">
-                Adjust the font size used throughout the application
+                {t("settings.appearance.fontSizeDescription")}
               </p>
             </div>
           </div>
@@ -104,23 +104,25 @@ const AppearanceSettings: React.FC<AppearanceSettingsProps> = () => {
 
 export default AppearanceSettings;
 
-const THEMES = [
-  {
-    label: "Light",
-    value: "light",
-    icon: <Sun size={24} className="text-yellow-500" />,
-    bg: "bg-white",
-  },
-  {
-    label: "Dark",
-    value: "dark",
-    icon: <Moon size={24} className="text-gray-400" />,
-    bg: "bg-gray-900",
-  },
-  {
-    label: "System",
-    value: "system",
-    icon: <Laptop size={24} className="text-blue-500" />,
-    bg: "bg-gradient-to-r from-white to-gray-900",
-  },
-];
+const getThemes = (t: TFunction) => {
+  return [
+    {
+      label: t("settings.appearance.modes.light"),
+      value: "light",
+      icon: <Sun size={24} className="text-yellow-500" />,
+      bg: "bg-white",
+    },
+    {
+      label: t("settings.appearance.modes.dark"),
+      value: "dark",
+      icon: <Moon size={24} className="text-gray-400" />,
+      bg: "bg-gray-900",
+    },
+    {
+      label: t("settings.appearance.modes.system"),
+      value: "system",
+      icon: <Laptop size={24} className="text-blue-500" />,
+      bg: "bg-gradient-to-r from-white to-gray-900",
+    },
+  ];
+};

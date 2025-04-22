@@ -16,45 +16,56 @@ import {
 } from "@/shared/ui/select";
 
 import { useUserPreferences } from "@/shared/hooks/useUserPreferences";
+import { useTranslation } from "react-i18next";
+import { isCyrillic } from "@/lib/utils";
 
 type RegionalSettingsProps = {};
 
 const RegionalSettings: React.FC<RegionalSettingsProps> = () => {
+  const { t } = useTranslation();
   const { language, dateFormat, setLanguage, setDateFormat } =
     useUserPreferences();
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Language</h1>
+      <h1 className="text-2xl font-bold">{t("settings.language.title")}</h1>
 
       <Card>
         <CardHeader>
-          <CardTitle>Language Settings</CardTitle>
+          <CardTitle>{t("settings.language.languageSettings")}</CardTitle>
           <CardDescription>
-            Choose your preferred language and regional settings
+            {t("settings.language.description")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="language">Display Language</Label>
+            <Label htmlFor="language">
+              {t("settings.language.displayLanguage")}
+            </Label>
             <Select value={language} onValueChange={setLanguage}>
-              <SelectTrigger id="language">
+              <SelectTrigger
+                id="language"
+                className={isCyrillic(language) ? "font-sans" : ""}
+              >
                 <SelectValue placeholder="Select language" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="en">English (US)</SelectItem>
-                <SelectItem value="en-gb">English (UK)</SelectItem>
-                <SelectItem value="es">Español</SelectItem>
-                <SelectItem value="fr">Français</SelectItem>
-                <SelectItem value="de">Deutsch</SelectItem>
-                <SelectItem value="zh">中文</SelectItem>
+                <SelectItem value="en">English</SelectItem>
+                <SelectItem value="ru" className="font-sans">
+                  Русский
+                </SelectItem>
+                <SelectItem value="kg" className="font-sans">
+                  Кыргызча
+                </SelectItem>
                 <SelectItem value="jp">日本語</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="dateFormat">Date Format</Label>
+            <Label htmlFor="dateFormat">
+              {t("settings.language.dateFormat")}
+            </Label>
             <Select value={dateFormat} onValueChange={setDateFormat}>
               <SelectTrigger id="dateFormat">
                 <SelectValue placeholder="Select date format" />

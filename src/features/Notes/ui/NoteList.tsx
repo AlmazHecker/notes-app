@@ -2,12 +2,15 @@ import { Note } from "@/lib/notesDB";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { LockIcon } from "lucide-react";
 import { FC, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 type NoteListProps = {
   notes: Note[];
 };
 export const NoteList: FC<NoteListProps> = ({ notes }) => {
+  const { t } = useTranslation();
+
   const parentRef = useRef(null);
 
   const rowVirtualizer = useVirtualizer({
@@ -47,7 +50,7 @@ export const NoteList: FC<NoteListProps> = ({ notes }) => {
                 className="text-sm text-muted-foreground line-clamp-1"
                 dangerouslySetInnerHTML={{
                   __html: note.isEncrypted
-                    ? "This note is encrypted."
+                    ? t("notes.encrypted")
                     : note.content,
                 }}
               ></p>

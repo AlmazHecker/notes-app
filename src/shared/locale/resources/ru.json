@@ -1,75 +1,84 @@
 {
   "fileApi": {
-    "permissionDenied": "Permission denied or folder not set. Please reselect the folder.",
-    "selectFolder": "Select folder"
+    "permissionDenied": "Доступ запрещён или папка не выбрана. Пожалуйста, выберите папку заново.",
+    "selectFolder": "Выбрать папку"
   },
   "notes": {
-    "title": "Saved Notes",
-    "addNote": "Add new note",
-    "encrypted": "This note is encrypted."
+    "title": "Сохранённые заметки",
+    "addNote": "Добавить новую заметку",
+    "openFolder": "Открыть папку",
+    "encrypted": "Эта заметка зашифрована.",
+    "empty": "Заметок нет.",
+    "notFound": "Заметки не найдены",
+    "searchNotes": "Поиск по заметкам...",
+    "notes": "Заметки"
   },
   "note": {
-    "title": "Note Preferences",
-    "editNote": "Edit note",
-    "encryptNote": "Encrypt Note",
-    "decryptNote": "Decrypt Note",
-    "deleteNote": "Delete note",
-    "searchInNote": "Search in note...",
-    "encrypted": "This note is encrypted. Click the lock icon to decrypt"
+    "title": "Настройки заметки",
+    "editNote": "Редактировать заметку",
+    "encryptNote": "Зашифровать заметку",
+    "decryptNote": "Расшифровать заметку",
+    "deleteNote": "Удалить заметку",
+    "searchInNote": "Поиск в заметке...",
+    "encrypted": "Эта заметка зашифрована. Нажмите на иконку замка, чтобы расшифровать"
   },
   "encryption": {
     "setNotePassword": {
-      "title": "Set Encryption Password",
-      "description": "Set a password to encrypt this note. You'll need this password to view or edit the note in the future.",
-      "lockNote": "Encrypt Note"
+      "title": "Установить пароль для шифрования",
+      "description": "Установите пароль для шифрования этой заметки. Этот пароль понадобится для просмотра или редактирования заметки в будущем.",
+      "lockNote": "Зашифровать заметку"
     },
     "enterNotePassword": {
-      "title": "Enter Password",
-      "description": "This note is encrypted. Enter the password to view its contents.",
-      "unlockNote": "Unlock Note"
+      "title": "Введите пароль",
+      "description": "Эта заметка зашифрована. Введите пароль, чтобы просмотреть содержимое.",
+      "unlockNote": "Разблокировать заметку"
     }
   },
   "common": {
-    "loading": "Loading...",
-    "search": "Search",
-    "password": "Password",
-    "confirm": "Confirm",
-    "cancel": "Cancel"
+    "loading": "Загрузка...",
+    "search": "Поиск",
+    "password": "Пароль",
+    "confirm": "Подтвердить",
+    "cancel": "Отмена",
+    "noResults": "Нет результатов",
+    "previous": "Предыдущий",
+    "next": "Следующий"
   },
   "settings": {
     "appearance": {
-      "title": "Appearance",
-      "theme": "Theme",
-      "themeDescription": "Customize how the application looks",
-      "mode": "Mode",
+      "title": "Внешний вид",
+      "theme": "Тема",
+      "themeDescription": "Настройте внешний вид приложения",
+      "mode": "Режим",
       "modes": {
-        "light": "Light",
-        "dark": "Dark",
-        "system": "System"
+        "light": "Светлый",
+        "dark": "Тёмный",
+        "system": "Системный"
       },
-      "fontSize": "Font Size",
-      "fontSizeDescription": "Adjust the font size used throughout the application"
+      "fontSize": "Размер шрифта",
+      "fontSizeDescription": "Настройте размер шрифта в приложении"
     },
     "language": {
-      "title": "Language",
-      "description": "Choose your preferred language and regional settings",
-      "languageSettings": "Language Settings",
-      "displayLanguage": "Display Language",
-      "dateFormat": "Date Format"
+      "title": "Язык",
+      "description": "Выберите предпочитаемый язык и региональные настройки",
+      "languageSettings": "Настройки языка",
+      "displayLanguage": "Язык интерфейса",
+      "dateFormat": "Формат даты"
     },
     "storage": {
-      "title": "Storage",
-      "used": "Storage Used"
+      "title": "Хранилище",
+      "used": "Использовано хранилища",
+      "permissionNeeded": "Разрешить доступ для просмотра"
     },
     "dataManagement": {
-      "title": "Data Management",
-      "description": "Download or delete your data",
-      "downloadTitle": "Download Your Data",
-      "downloadDescription": "You can download a copy of all your data that we have stored in our systems.",
-      "exportButton": "Request Data Export",
-      "deleteTitle": "Delete Your Data",
-      "deleteDescription": "This will permanently delete your data and all associated data. This action cannot be undone.",
-      "deleteButton": "Delete Data"
+      "title": "Управление данными",
+      "description": "Скачайте или удалите свои данные",
+      "downloadTitle": "Скачать ваши данные",
+      "downloadDescription": "Вы можете скачать копию всех своих данных, хранящихся в нашей системе.",
+      "exportButton": "Запросить экспорт данных",
+      "deleteTitle": "Удалить ваши данные",
+      "deleteDescription": "Это действие навсегда удалит ваши данные и все связанные с ними данные. Оно необратимо.",
+      "deleteButton": "Удалить данные"
     }
   }
 }
