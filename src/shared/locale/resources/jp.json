@@ -26,12 +26,21 @@
     "setNotePassword": {
       "title": "暗号化パスワードの設定",
       "description": "このメモを暗号化するパスワードを設定してください。今後このメモを表示または編集するには、このパスワードが必要になります。",
-      "lockNote": "メモを暗号化"
+      "lockNote": "メモを暗号化",
+      "confirmPassword": "パスワードの確認",
+
+      "validation": {
+        "noMatch": "パスワードが一致しません",
+        "minLimit": "パスワードは4文字以上である必要があります",
+        "minLimitWarning": "警告: パスワードが弱く、簡単に解読される可能性があります。本当に続けますか？",
+        "minLimitMessage": "⚠️ セキュリティを強化するために、少なくとも12文字を使用してください"
+      }
     },
     "enterNotePassword": {
       "title": "パスワードを入力",
       "description": "このメモは暗号化されています。内容を表示するにはパスワードを入力してください。",
-      "unlockNote": "メモを解除"
+      "unlockNote": "メモを解除",
+      "wrongPassword": "WRONG PASSWORD"
     }
   },
   "common": {
@@ -42,7 +51,9 @@
     "cancel": "キャンセル",
     "noResults": "結果はありません",
     "previous": "前へ",
-    "next": "次へ"
+    "next": "次へ",
+    "save": "保存",
+    "edit": "編集"
   },
   "settings": {
     "appearance": {

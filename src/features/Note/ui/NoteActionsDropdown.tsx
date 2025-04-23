@@ -16,6 +16,7 @@ import {
 import { Lock, MenuIcon, Search, Trash, Unlock } from "lucide-react";
 import { Note } from "@/lib/notesDB";
 import { FC } from "react";
+import { useTranslation } from "react-i18next";
 
 type NoteActionsDropdownProps = {
   isNew: boolean;
@@ -33,6 +34,8 @@ export const NoteActionsDropdown: FC<NoteActionsDropdownProps> = ({
   onDeleteClick,
   onSearchClick,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
@@ -41,23 +44,25 @@ export const NoteActionsDropdown: FC<NoteActionsDropdownProps> = ({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel>Note Preferences</DropdownMenuLabel>
+        <DropdownMenuLabel>{t("note.title")}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem disabled={isEncrypted} onClick={onEncryptionClick}>
             {note.isEncrypted ? <Lock className="text-blue-500" /> : <Unlock />}
-            <span>{note.isEncrypted ? "Decrypt Note" : "Encrypt Note"}</span>
+            <span>
+              {note.isEncrypted ? t("note.decryptNote") : t("note.encryptNote")}
+            </span>
           </DropdownMenuItem>
 
           <DropdownMenuItem onClick={onSearchClick}>
             <Search />
-            <span>Search</span>
+            <span>{t("common.search")}</span>
           </DropdownMenuItem>
 
           {isNew || (
             <DropdownMenuItem variant="destructive" onClick={onDeleteClick}>
               <Trash />
-              <span>Delete Note</span>
+              <span>{t("note.deleteNote")}</span>
             </DropdownMenuItem>
           )}
         </DropdownMenuGroup>

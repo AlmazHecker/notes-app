@@ -201,7 +201,9 @@ export const CurrentNote = () => {
                 {isEditing ? <SaveIcon /> : <EditIcon />}
               </Button>
             </TooltipTrigger>
-            <TooltipContent>{isEditing ? "Save" : "Edit"}</TooltipContent>
+            <TooltipContent>
+              {isEditing ? t("common.save") : t("common.edit")}
+            </TooltipContent>
           </Tooltip>
 
           <NoteActionsDropdown

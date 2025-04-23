@@ -15,12 +15,15 @@ import {
   useSetPasswordModalOpen,
 } from "@/shared/hooks/useModalStore";
 import { usePasswordStore } from "../../Note/hooks/usePasswordStore";
+import { useTranslation } from "react-i18next";
 
 type SetPasswordModalProps = {
   onSuccess: (password: string) => void;
 };
 
 export const SetPasswordModal = ({ onSuccess }: SetPasswordModalProps) => {
+  const { t } = useTranslation();
+
   const passwordStore = usePasswordStore();
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
@@ -43,18 +46,18 @@ export const SetPasswordModal = ({ onSuccess }: SetPasswordModalProps) => {
     setPasswordError("");
 
     if (passwordStore.password !== confirmPassword) {
-      setPasswordError("Passwords do not match");
+      setPasswordError(t("encryption.setNotePassword.validation.noMatch"));
       return;
     }
 
     if (passwordStore.password.length < 4) {
-      setPasswordError("Password must be at least 4 characters");
+      setPasswordError(t("encryption.setNotePassword.validation.minLimit"));
       return;
     }
 
     if (passwordStore.password.length < 12) {
       const isConfirmed = confirm(
-        "Warning: Your password is weak and may be easily cracked. Continue anyway?"
+        t("encryption.setNotePassword.validation.minLimitWarning")
       );
       if (!isConfirmed) return;
     }
@@ -73,16 +76,15 @@ export const SetPasswordModal = ({ onSuccess }: SetPasswordModalProps) => {
     <Dialog open={isOpen} onOpenChange={closeSetPasswordModal}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Set Encryption Password</DialogTitle>
+          <DialogTitle>{t("encryption.setNotePassword.title")}</DialogTitle>
           <DialogDescription>
-            Set a password to encrypt this note. You'll need this password to
-            view or edit the note in the future.
+            {t("encryption.setNotePassword.description")}
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="password" className="text-right">
-              Password
+              {t("common.password")}
             </Label>
             <Input
               id="password"
@@ -95,7 +97,7 @@ export const SetPasswordModal = ({ onSuccess }: SetPasswordModalProps) => {
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="confirmPassword" className="text-right">
-              Confirm
+              {t("encryption.setNotePassword.confirmPassword")}
             </Label>
             <Input
               id="confirmPassword"
@@ -108,7 +110,7 @@ export const SetPasswordModal = ({ onSuccess }: SetPasswordModalProps) => {
 
           {showWarning && (
             <p className="text-yellow-600 text-sm">
-              ⚠️ For better security, use at least 12 characters
+              {t("encryption.setNotePassword.validation.minLimitMessage")}
             </p>
           )}
 
@@ -118,9 +120,9 @@ export const SetPasswordModal = ({ onSuccess }: SetPasswordModalProps) => {
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={handleCancel}>
-            Cancel
+            {t("common.cancel")}
           </Button>
-          <Button onClick={handleSubmit}>Encrypt Note</Button>
+          <Button onClick={handleSubmit}>{t("note.encryptNote")}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

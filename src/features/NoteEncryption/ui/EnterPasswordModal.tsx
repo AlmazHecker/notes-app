@@ -15,12 +15,15 @@ import {
   useModalActions,
 } from "@/shared/hooks/useModalStore";
 import { usePasswordStore } from "../../Note/hooks/usePasswordStore";
+import { useTranslation } from "react-i18next";
 
 type EnterPasswordModalProps = {
   onSuccess: (password: string) => Promise<boolean>;
 };
 
 export const EnterPasswordModal = ({ onSuccess }: EnterPasswordModalProps) => {
+  const { t } = useTranslation();
+
   const passwordStore = usePasswordStore();
   const [passwordError, setPasswordError] = useState("");
   const isOpen = useEnterPasswordModalOpen();
@@ -30,7 +33,7 @@ export const EnterPasswordModal = ({ onSuccess }: EnterPasswordModalProps) => {
     setPasswordError("");
     const isPasswordValid = await onSuccess(passwordStore.password);
     if (!isPasswordValid) {
-      return setPasswordError("WRONG PASSWORD!");
+      return setPasswordError(t("encryption.enterNotePassword.wrongPassword"));
     }
   };
 
@@ -44,15 +47,15 @@ export const EnterPasswordModal = ({ onSuccess }: EnterPasswordModalProps) => {
     <Dialog open={isOpen} onOpenChange={closeEnterPasswordModal}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Enter Password</DialogTitle>
+          <DialogTitle>{t("encryption.enterNotePassword.title")}</DialogTitle>
           <DialogDescription>
-            This note is encrypted. Enter the password to view its contents.
+            {t("encryption.enterNotePassword.description")}
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="enterPassword" className="text-right">
-              Password
+              {t("common.password")}
             </Label>
             <Input
               id="enterPassword"
@@ -72,9 +75,11 @@ export const EnterPasswordModal = ({ onSuccess }: EnterPasswordModalProps) => {
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={handleClose}>
-            Cancel
+            {t("common.cancel")}
           </Button>
-          <Button onClick={handleSubmit}>Unlock Note</Button>
+          <Button onClick={handleSubmit}>
+            {t("encryption.enterNotePassword.unlockNote")}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

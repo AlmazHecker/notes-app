@@ -26,23 +26,34 @@
     "setNotePassword": {
       "title": "Set Encryption Password",
       "description": "Set a password to encrypt this note. You'll need this password to view or edit the note in the future.",
-      "lockNote": "Encrypt Note"
+      "lockNote": "Encrypt Note",
+
+      "confirmPassword": "Confirm",
+
+      "validation": {
+        "noMatch": "Passwords do not match",
+        "minLimit": "Password must be at least 4 characters",
+        "minLimitWarning": "Warning: Your password is weak and may be easily cracked. Continue anyway?",
+        "minLimitMessage": "⚠️ For better security, use at least 12 characters"
+      }
     },
     "enterNotePassword": {
       "title": "Enter Password",
       "description": "This note is encrypted. Enter the password to view its contents.",
-      "unlockNote": "Unlock Note"
+      "unlockNote": "Unlock Note",
+      "wrongPassword": "WRONG PASSWORD"
     }
   },
   "common": {
     "loading": "Loading...",
     "search": "Search",
     "password": "Password",
-    "confirm": "Confirm",
     "cancel": "Cancel",
     "noResults": "No results",
     "previous": "Previous",
-    "next": "Next"
+    "next": "Next",
+    "save": "Save",
+    "edit": "Edit"
   },
   "settings": {
     "appearance": {
