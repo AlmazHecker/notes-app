@@ -75,6 +75,17 @@ export class NoteService {
     await writable.close();
   }
 
+  static async import(noteId: string, note: Blob) {
+    const folderHandle = await getFolderHandle();
+
+    const fileHandle = await folderHandle.getFileHandle(noteId, {
+      create: true,
+    });
+    const writable = await fileHandle.createWritable();
+    await writable.write(note);
+    await writable.close();
+  }
+
   static async createFolder(folderName: string) {
     const dirHandle = await window.showDirectoryPicker();
 

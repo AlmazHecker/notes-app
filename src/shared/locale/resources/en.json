@@ -84,9 +84,12 @@
     "dataManagement": {
       "title": "Data Management",
       "description": "Download or delete your data",
-      "downloadTitle": "Download Your Data",
-      "downloadDescription": "You can download a copy of all your data that we have stored in our systems.",
-      "exportButton": "Request Data Export",
+      "downloadTitle": "Export Notes",
+      "downloadDescription": "You can export notes to share it with other devices",
+      "exportButton": "Export Data",
+      "importTitle": "Import Notes",
+      "importDescription": "Load exported notes.",
+      "importButton": "Import Data",
       "deleteTitle": "Delete Your Data",
       "deleteDescription": "This will permanently delete your data and all associated data. This action cannot be undone.",
       "deleteButton": "Delete Data"

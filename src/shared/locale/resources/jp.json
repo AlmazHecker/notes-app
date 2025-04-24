@@ -84,9 +84,12 @@
     "dataManagement": {
       "title": "データ管理",
       "description": "データのダウンロードまたは削除",
-      "downloadTitle": "データをダウンロード",
-      "downloadDescription": "当社のシステムに保存されているすべてのデータのコピーをダウンロードできます。",
-      "exportButton": "データエクスポートをリクエスト",
+      "downloadTitle": "ノートのエクスポート",
+      "downloadDescription": "ノートをエクスポートして他のデバイスと共有できます。",
+      "exportButton": "今すぐデータをエクスポート",
+      "importTitle": "ノートのインポート",
+      "importDescription": "エクスポートしたノートを読み込む。",
+      "importButton": "今すぐデータをインポート",
       "deleteTitle": "データを削除",
       "deleteDescription": "この操作はあなたのデータおよび関連するすべてのデータを完全に削除します。この操作は元に戻せません。",
       "deleteButton": "データを削除"

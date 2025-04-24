@@ -1,7 +1,7 @@
+import { lazy } from "react";
 const ExportNotes = lazy(() => import("@/pages/ExportNotes"));
 const Index = lazy(() => import("@/pages/Index"));
 const Settings = lazy(() => import("@/pages/Settings"));
-import { lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
 
 export const router = createBrowserRouter(
