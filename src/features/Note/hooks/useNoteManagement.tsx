@@ -26,23 +26,18 @@ export const useNoteManagement = () => {
       return;
     }
 
-    try {
-      const note = await NoteService.getByName(fileId);
-      if (!note) return;
+    const note = await NoteService.getByName(fileId);
+    if (!note) return;
 
-      setNote(note);
-      setIsNewNote(false);
-      setIsEditing(false);
-      setIsEncrypted(note.isEncrypted);
-      if (note.isEncrypted) {
-        openEnterPasswordModal();
-      }
-
-      return note;
-    } catch (err) {
-      console.error("File not found:", fileId);
-      return null;
+    setNote(note);
+    setIsNewNote(false);
+    setIsEditing(false);
+    setIsEncrypted(note.isEncrypted);
+    if (note.isEncrypted) {
+      openEnterPasswordModal();
     }
+
+    return note;
   };
 
   const saveNote = async (
@@ -58,7 +53,7 @@ export const useNoteManagement = () => {
     if (!note) return;
 
     if (isEncrypted) {
-      note.content = await encryptContent(editorContent, password);
+      note.content = (await encryptContent(editorContent, password)) as string;
     } else {
       note.content = editorContent;
     }

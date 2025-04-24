@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { TextEditor } from "@/shared/ui/text-editor/text-editor";
-import { ArrowLeft, EditIcon, SaveIcon } from "lucide-react";
+import { ArrowLeft, EditIcon, Folder, SaveIcon } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import { type Editor } from "@tiptap/react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
@@ -139,12 +139,20 @@ export const CurrentNote = () => {
   const [params] = useSearchParams();
   const noteId = params.get("noteId");
 
-  useEffect(() => {
-    setNote(null);
-    if (noteId) {
-      setPassword("");
-      fetchNote(noteId);
+  const getNote = async () => {
+    try {
+      setNote(null);
+      if (noteId) {
+        setPassword("");
+        await fetchNote(noteId);
+      }
+    } catch (e) {
+      navigate("/");
     }
+  };
+
+  useEffect(() => {
+    getNote();
   }, [noteId]);
 
   const goToNotes = () => {
