@@ -4,7 +4,7 @@ import { NoteService } from "./service";
 
 interface NoteState {
   notes: Note[];
-  fetchNotes: () => Promise<void>;
+  fetchNotes: () => Promise<Note[]>;
 }
 
 export const useNoteStore = create<NoteState>((set, get) => ({
@@ -15,5 +15,7 @@ export const useNoteStore = create<NoteState>((set, get) => ({
     const sortedNotes = [...notes].sort((a, b) => b.updatedAt - a.updatedAt);
 
     set({ notes: sortedNotes });
+
+    return sortedNotes;
   },
 }));

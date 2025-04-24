@@ -14,6 +14,7 @@ import {
 } from "@/shared/ui/card";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 type StorageSettingsProps = {
   // Define your props here
@@ -21,6 +22,7 @@ type StorageSettingsProps = {
 
 const StorageSettings: React.FC<StorageSettingsProps> = (props) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [folderSize, setFolderSize] = useState<number | null>(null);
 
   async function loadFolderSize() {
@@ -35,6 +37,10 @@ const StorageSettings: React.FC<StorageSettingsProps> = (props) => {
       console.error("Failed to load folder size:", err);
     }
   }
+
+  const goToExport = () => {
+    return navigate("/export");
+  };
 
   useEffect(() => {
     loadFolderSize();
@@ -68,7 +74,9 @@ const StorageSettings: React.FC<StorageSettingsProps> = (props) => {
 
       <Card>
         <CardHeader>
-          <CardTitle>{t("settings.dataManagement.title")}</CardTitle>
+          <CardTitle>
+            {t("settings.dataManagement.title")} IN PROCESS!
+          </CardTitle>
           <CardDescription>
             {t("settings.dataManagement.description")}
           </CardDescription>
@@ -81,7 +89,7 @@ const StorageSettings: React.FC<StorageSettingsProps> = (props) => {
             <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
               {t("settings.dataManagement.downloadDescription")}
             </p>
-            <Button variant="outline">
+            <Button variant="outline" onClick={goToExport}>
               {t("settings.dataManagement.exportButton")}
             </Button>
           </div>

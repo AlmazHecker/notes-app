@@ -91,5 +91,17 @@
       "deleteDescription": "This will permanently delete your data and all associated data. This action cannot be undone.",
       "deleteButton": "Delete Data"
     }
+  },
+  "exportNotes": {
+    "title": "Export Notes",
+    "permissionDenied": "Permission denied to access folder",
+    "noNotes": "No notes available to export",
+    "deselectAll": "Deselect all notes",
+    "selectAll": "Select all notes",
+    "encrypted": "Encrypted note",
+    "buttons": {
+      "openFolder": "Open Folder",
+      "export": "Export"
+    }
   }
 }

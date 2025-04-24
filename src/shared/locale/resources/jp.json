@@ -91,5 +91,17 @@
       "deleteDescription": "この操作はあなたのデータおよび関連するすべてのデータを完全に削除します。この操作は元に戻せません。",
       "deleteButton": "データを削除"
     }
+  },
+  "exportNotes": {
+    "title": "ノートのエクスポート",
+    "permissionDenied": "フォルダへのアクセスが拒否されました",
+    "noNotes": "エクスポートするノートがありません",
+    "deselectAll": "すべてのノートの選択を解除",
+    "selectAll": "すべてのノートを選択",
+    "encrypted": "暗号化されたノート",
+    "buttons": {
+      "openFolder": "フォルダを開く",
+      "export": "エクスポート"
+    }
   }
 }
