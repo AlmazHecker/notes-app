@@ -1,11 +1,7 @@
 import { useNoteStore } from "@/entities/note/api";
-import { NoteService } from "@/entities/note/service";
-import {
-  getFolderHandle,
-  getTotalFolderSize,
-  verifyPermission,
-} from "@/lib/fileApi";
-import { formatSize } from "@/lib/utils";
+import { noteService } from "@/entities/note/service";
+import { getFolderHandle, getTotalFolderSize } from "@/shared/lib/fileApi";
+import { formatSize } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/button";
 import {
   Card,
@@ -25,20 +21,19 @@ type StorageSettingsProps = {
 
 const StorageSettings: React.FC<StorageSettingsProps> = (props) => {
   const { t } = useTranslation();
+
   const navigate = useNavigate();
 
-  const { notes, fetchNotes } = useNoteStore();
+  const notesStore = useNoteStore();
   const [folderSize, setFolderSize] = useState<number | null>(null);
 
   async function loadFolderSize() {
     try {
+      await notesStore.verifyPermission();
       const handle = await getFolderHandle();
-      const hasPermission = await verifyPermission(handle);
-      if (!hasPermission) return;
-
       const size = await getTotalFolderSize(handle);
       setFolderSize(size);
-      fetchNotes();
+      notesStore.fetchNotes();
     } catch (err) {
       console.error("Failed to load folder size:", err);
     }
@@ -49,15 +44,14 @@ const StorageSettings: React.FC<StorageSettingsProps> = (props) => {
   };
 
   const deleteNotes = async () => {
-    if (notes.length === 0) {
+    if (notesStore.notes.length === 0) {
       return alert("You don't have any notes");
     }
-    const folderHandle = await getFolderHandle();
 
     try {
       if (confirm("Are you sure bruh ?")) {
-        for await (let note of notes) {
-          await folderHandle.removeEntry(note.id);
+        for await (let note of notesStore.notes) {
+          await noteService.delete(note.id);
         }
         alert("Successfully deleted all notes!");
         await loadFolderSize();
@@ -83,7 +77,7 @@ const StorageSettings: React.FC<StorageSettingsProps> = (props) => {
         for await (const [filename, zipEntry] of Object.entries(zip.files)) {
           if (zipEntry.dir) continue;
           const file = await zipEntry.async("blob");
-          await NoteService.import(filename, file);
+          await noteService.import(filename, file);
         }
 
         alert("Notes imported successfully!");

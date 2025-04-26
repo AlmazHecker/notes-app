@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/shared/ui/dropdown-menu";
 import { Lock, MenuIcon, Search, Trash, Unlock } from "lucide-react";
-import { Note } from "@/lib/notesDB";
+import { Note } from "@/shared/lib/notesDB";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 

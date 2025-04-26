@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { getFolderHandle, verifyPermission } from "@/lib/fileApi";
 import { Button } from "@/shared/ui/button";
 import { Plus, SearchIcon, Settings } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
@@ -15,8 +14,7 @@ import { useTranslation } from "react-i18next";
 export const Notes = () => {
   const { t } = useTranslation();
 
-  const notes = useNoteStore((state) => state.notes);
-  const getNotes = useNoteStore((state) => state.fetchNotes);
+  const notesStore = useNoteStore();
 
   const [params] = useSearchParams();
   const noteId = params.get("noteId");
@@ -25,28 +23,9 @@ export const Notes = () => {
 
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [hasPermission, setHasPermission] = useState(true);
-
   const init = async () => {
-    setIsLoading(true);
-    setHasPermission(true);
-
-    try {
-      const handle = await getFolderHandle();
-
-      if (!(await verifyPermission(handle))) {
-        setHasPermission(false);
-        setIsLoading(false);
-        return;
-      }
-      await getNotes();
-    } catch (err) {
-      console.error("Error loading folder:", err);
-      setHasPermission(false);
-    }
-
-    setIsLoading(false);
+    await notesStore.verifyPermission();
+    await notesStore.fetchNotes();
   };
 
   useEffect(() => {
@@ -58,7 +37,7 @@ export const Notes = () => {
   const sharedContent = (
     <div className="flex justify-between items-center sticky top-0 md:-top-4 py-1 bg-background z-10 ">
       <h2 className="text-xl font-bold">{t("notes.title")}</h2>
-      {hasPermission ? (
+      {notesStore.hasPermission ? (
         <div className="flex items-center gap-3">
           <Link size="icon" variant="outline" to="/settings">
             <Settings />
@@ -85,7 +64,7 @@ export const Notes = () => {
     </div>
   );
 
-  if (!hasPermission) {
+  if (!notesStore.hasPermission) {
     return (
       <div className={containerClassName} id={LAYOUT_SELECTORS.left}>
         {sharedContent}
@@ -94,7 +73,7 @@ export const Notes = () => {
     );
   }
 
-  if (isLoading) {
+  if (notesStore.isLoading) {
     return (
       <div className={containerClassName} id={LAYOUT_SELECTORS.left}>
         {sharedContent}
@@ -106,7 +85,7 @@ export const Notes = () => {
     );
   }
 
-  if (!notes.length) {
+  if (!notesStore.notes.length) {
     return (
       <div className={containerClassName} id={LAYOUT_SELECTORS.left}>
         {sharedContent}
@@ -119,7 +98,7 @@ export const Notes = () => {
     <div className={containerClassName} id={LAYOUT_SELECTORS.left}>
       {sharedContent}
       <div className="grid gap-4">
-        <NoteList notes={notes} />
+        <NoteList notes={notesStore.notes} />
       </div>
 
       {isSearchModalOpen && (

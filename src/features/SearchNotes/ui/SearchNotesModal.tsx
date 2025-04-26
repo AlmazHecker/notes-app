@@ -9,7 +9,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/shared/ui/command";
-import { formatDate, getEscapedHtml } from "@/lib/utils";
+import { formatDate, getEscapedHtml } from "@/shared/lib/utils";
 import { useTranslation } from "react-i18next";
 
 type SearchNotesModalProps = {

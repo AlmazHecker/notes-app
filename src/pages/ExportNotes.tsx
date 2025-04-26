@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { getFolderHandle, verifyPermission } from "@/lib/fileApi";
+import { getFolderHandle } from "@/shared/lib/fileApi";
 import { Download, ArrowLeft, Folder } from "lucide-react";
 import JSZip from "jszip";
 import { useNoteStore } from "@/entities/note/api";
 
 import { Button } from "@/shared/ui/button";
 import { Checkbox } from "@/shared/ui/checkbox";
-import { formatDate, getEscapedHtml } from "@/lib/utils";
+import { formatDate, getEscapedHtml } from "@/shared/lib/utils";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 const ExportNotes: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [hasPermission, setHasPermission] = useState(false);
 
-  const { notes, fetchNotes } = useNoteStore();
+  const notesStore = useNoteStore();
   const [selectedNotes, setSelectedNotes] = useState<Record<string, boolean>>(
     {}
   );
@@ -30,10 +29,12 @@ const ExportNotes: React.FC = () => {
   };
 
   const toggleAllNotes = () => {
-    const allSelected = notes.every((note) => selectedNotes[note.id]);
+    const allSelected = notesStore.notes.every(
+      (note) => selectedNotes[note.id]
+    );
     const newSelection: Record<string, boolean> = {};
 
-    notes.forEach((note) => {
+    notesStore.notes.forEach((note) => {
       newSelection[note.id] = !allSelected;
     });
 
@@ -41,17 +42,14 @@ const ExportNotes: React.FC = () => {
   };
 
   const getSelectedCount = () => {
-    return notes.filter((note) => selectedNotes[note.id]).length;
+    return notesStore.notes.filter((note) => selectedNotes[note.id]).length;
   };
 
   const getNotes = async () => {
     try {
-      const handle = await getFolderHandle();
-      const hasPermission = await verifyPermission(handle);
-      if (!hasPermission) return;
+      await notesStore.verifyPermission();
+      const notes = await notesStore.fetchNotes();
 
-      setHasPermission(true);
-      const notes = await fetchNotes();
       const initialSelection: Record<string, boolean> = {};
       notes.forEach((note) => {
         initialSelection[note.id] = true;
@@ -66,7 +64,9 @@ const ExportNotes: React.FC = () => {
     try {
       setIsExporting(true);
 
-      const notesToExport = notes.filter((note) => selectedNotes[note.id]);
+      const notesToExport = notesStore.notes.filter(
+        (note) => selectedNotes[note.id]
+      );
       if (notesToExport.length === 0) {
         setIsExporting(false);
         return;
@@ -114,7 +114,7 @@ const ExportNotes: React.FC = () => {
   }, []);
 
   const renderNotes = () => {
-    if (!hasPermission) {
+    if (!notesStore.hasPermission) {
       return (
         <div className="flex flex-col items-center justify-center h-full py-12">
           <p className="text-slate-500 text-center">
@@ -123,7 +123,7 @@ const ExportNotes: React.FC = () => {
         </div>
       );
     }
-    return notes.length === 0 ? (
+    return notesStore.notes.length === 0 ? (
       <div className="flex flex-col items-center justify-center h-full py-12">
         <p className="text-slate-500 text-center">{t("exportNotes.noNotes")}</p>
       </div>
@@ -132,18 +132,18 @@ const ExportNotes: React.FC = () => {
         <div className="flex items-center gap-3 mb-3">
           <Checkbox
             id="toggle-select"
-            checked={notes.every((note) => selectedNotes[note.id])}
+            checked={notesStore.notes.every((note) => selectedNotes[note.id])}
             onCheckedChange={toggleAllNotes}
           />
           <label className="text-sm font-medium" htmlFor="toggle-select">
-            {notes.every((note) => selectedNotes[note.id])
+            {notesStore.notes.every((note) => selectedNotes[note.id])
               ? t("exportNotes.deselectAll")
               : t("exportNotes.selectAll")}
           </label>
         </div>
 
         <div className="space-y-2 mb-20">
-          {notes.map((note) => (
+          {notesStore.notes.map((note) => (
             <div
               key={note.id}
               className="bg-card p-5 rounded-md cursor-pointer transition-colors flex flex-col w-full"
@@ -192,7 +192,7 @@ const ExportNotes: React.FC = () => {
           <h1 className="text-lg font-medium">{t("exportNotes.title")}</h1>
         </div>
         <div className="flex items-center gap-2">
-          {hasPermission || (
+          {notesStore.hasPermission || (
             <>
               <Button
                 variant="outline"

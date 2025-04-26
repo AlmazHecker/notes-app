@@ -6,8 +6,8 @@ import { type Editor } from "@tiptap/react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
 import { useNoteStore } from "@/entities/note/api";
 import ExpandPane from "./ExpandPane";
-import { NoteService } from "@/entities/note/service";
-import { Note } from "@/lib/notesDB";
+import { noteService } from "@/entities/note/service";
+import { Note } from "@/shared/lib/notesDB";
 import { useNoteEncryption } from "../hooks/useNoteEncryption";
 import { useNoteManagement } from "../hooks/useNoteManagement";
 import { SetPasswordModal } from "../../NoteEncryption/ui/SetPasswordModal";
@@ -130,7 +130,7 @@ export const CurrentNote = () => {
 
     const updatedNote: Note = { ...note, isEncrypted: false };
 
-    await NoteService.update(updatedNote);
+    await noteService.update(updatedNote);
     setNote(updatedNote);
     setPassword("");
     getNotes();

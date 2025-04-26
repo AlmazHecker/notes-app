@@ -17,7 +17,7 @@ import {
 
 import { useUserPreferences } from "@/shared/hooks/useUserPreferences";
 import { useTranslation } from "react-i18next";
-import { isCyrillic } from "@/lib/utils";
+import { isCyrillic } from "@/shared/lib/utils";
 
 type RegionalSettingsProps = {};
 

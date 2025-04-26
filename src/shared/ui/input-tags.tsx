@@ -6,7 +6,7 @@ import * as React from "react";
 import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
 import { XIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/lib/utils";
 import { ComponentProps } from "react";
 import { Input } from "@/shared/ui/input";
 
@@ -46,7 +46,7 @@ const InputTags = React.forwardRef<HTMLInputElement, InputTagsProps>(
         className={cn(
           // caveat: :has() variant requires tailwind v3.4 or above: https://tailwindcss.com/blog/tailwindcss-v3-4#new-has-variant
           "has-[:focus-visible]:outline-none has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-neutral-950 has-[:focus-visible]:ring-offset-2 dark:has-[:focus-visible]:ring-neutral-300 min-h-10 flex w-full flex-wrap gap-2 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm ring-offset-white  disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-800 dark:bg-neutral-950 dark:ring-offset-neutral-950",
-          className,
+          className
         )}
       >
         {value.map((item) => (
@@ -86,7 +86,7 @@ const InputTags = React.forwardRef<HTMLInputElement, InputTagsProps>(
         />
       </div>
     );
-  },
+  }
 );
 
 InputTags.displayName = "InputTags";

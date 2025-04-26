@@ -2,7 +2,7 @@ import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { buttonVariants } from "./button";
 import type { VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/lib/utils";
 import { Link as RouterLink } from "react-router-dom";
 function Link({
   className,

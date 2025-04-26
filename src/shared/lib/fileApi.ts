@@ -74,12 +74,15 @@ export async function requestPersistence(): Promise<boolean> {
 
 export async function verifyPermission(handle: FileSystemDirectoryHandle) {
   const options: FileSystemHandlePermissionDescriptor = { mode: "readwrite" };
+
   if ((await handle.queryPermission(options)) === "granted") {
     return true;
   }
+
   if ((await handle.requestPermission(options)) === "granted") {
     return true;
   }
+
   return false;
 }
 

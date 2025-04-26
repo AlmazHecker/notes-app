@@ -1,4 +1,4 @@
-import { Note } from "@/lib/notesDB";
+import { Note } from "@/shared/lib/notesDB";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { LockIcon } from "lucide-react";
 import { FC, useRef } from "react";

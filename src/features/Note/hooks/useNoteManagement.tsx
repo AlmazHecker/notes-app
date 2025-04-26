@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Note } from "@/lib/notesDB";
-import { NoteService } from "@/entities/note/service";
+import { Note } from "@/shared/lib/notesDB";
+import { noteService } from "@/entities/note/service";
 import { useModalActions } from "@/shared/hooks/useModalStore";
 
 export const useNoteManagement = () => {
@@ -26,7 +26,7 @@ export const useNoteManagement = () => {
       return;
     }
 
-    const note = await NoteService.getByName(fileId);
+    const note = await noteService.getByName(fileId);
     if (!note) return;
 
     setNote(note);
@@ -60,10 +60,10 @@ export const useNoteManagement = () => {
 
     if (isNewNote) {
       note.id = crypto.randomUUID();
-      await NoteService.create(note);
+      await noteService.create(note);
       setIsNewNote(false);
     } else {
-      await NoteService.update(note);
+      await noteService.update(note);
     }
 
     setNote({ ...note, content: editorContent });
@@ -73,7 +73,7 @@ export const useNoteManagement = () => {
 
   const deleteNote = async (note: Note | null) => {
     if (!note) return;
-    await NoteService.delete(note.id);
+    await noteService.delete(note.id);
     setNote(null);
   };
 
