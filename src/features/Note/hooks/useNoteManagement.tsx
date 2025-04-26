@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Note } from "@/shared/lib/notesDB";
 import { noteService } from "@/entities/note/service";
 import { useModalActions } from "@/shared/hooks/useModalStore";
+import {Note} from "@/entities/note/types";
 
 export const useNoteManagement = () => {
   const [isEncrypted, setIsEncrypted] = useState(false);

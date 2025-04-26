@@ -1,6 +1,6 @@
 import { getFolderHandle } from "../fileApi";
-import { Note } from "../notesDB";
 import { NoteStorageStrategy } from "./storage";
+import {Note} from "@/entities/note/types";
 
 export class FileSystemNoteStrategy implements NoteStorageStrategy {
   async getByName(noteId: string): Promise<Note | null> {

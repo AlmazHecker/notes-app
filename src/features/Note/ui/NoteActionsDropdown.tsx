@@ -9,9 +9,9 @@ import {
   DropdownMenuTrigger,
 } from "@/shared/ui/dropdown-menu";
 import { Lock, MenuIcon, Search, Trash, Unlock } from "lucide-react";
-import { Note } from "@/shared/lib/notesDB";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
+import {Note} from "@/entities/note/types";
 
 type NoteActionsDropdownProps = {
   isNew: boolean;

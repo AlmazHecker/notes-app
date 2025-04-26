@@ -1,9 +1,9 @@
-import { Note } from "@/shared/lib/notesDB";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { LockIcon } from "lucide-react";
 import { FC, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import {Note} from "@/entities/note/types";
 
 type NoteListProps = {
   notes: Note[];

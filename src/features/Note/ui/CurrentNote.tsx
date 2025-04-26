@@ -7,7 +7,6 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
 import { useNoteStore } from "@/entities/note/api";
 import ExpandPane from "./ExpandPane";
 import { noteService } from "@/entities/note/service";
-import { Note } from "@/shared/lib/notesDB";
 import { useNoteEncryption } from "../hooks/useNoteEncryption";
 import { useNoteManagement } from "../hooks/useNoteManagement";
 import { SetPasswordModal } from "../../NoteEncryption/ui/SetPasswordModal";
@@ -20,6 +19,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { NoteActionsDropdown } from "./NoteActionsDropdown";
 import SearchInput from "./SearchInput";
 import { useTranslation } from "react-i18next";
+import {Note} from "@/entities/note/types";
 
 export const CurrentNote = () => {
   const { t } = useTranslation();

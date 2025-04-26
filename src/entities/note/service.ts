@@ -1,6 +1,6 @@
-import { Note } from "@/shared/lib/notesDB";
 import { FileSystemNoteStrategy } from "@/shared/lib/storage/FileSystemNoteStrategy";
 import { NoteStorageStrategy } from "@/shared/lib/storage/storage";
+import {Note} from "@/entities/note/types";
 
 class NoteService {
   constructor(

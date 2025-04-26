@@ -1,4 +1,4 @@
-import { Note } from "../notesDB";
+import {Note} from "@/entities/note/types";
 
 export interface NoteStorageStrategy {
   getByName(noteId: string): Promise<Note | null>;

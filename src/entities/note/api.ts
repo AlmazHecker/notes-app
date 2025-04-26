@@ -1,7 +1,7 @@
 import { create } from "zustand";
-import { Note } from "@/shared/lib/notesDB";
 import { noteService } from "./service";
 import { getFolderHandle, verifyPermission } from "@/shared/lib/fileApi";
+import {Note} from "@/entities/note/types";
 
 interface NoteState {
   notes: Note[];
