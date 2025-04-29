@@ -42,7 +42,7 @@ const ExpandPane: React.FC = () => {
     <Button
       onClick={handleButtonClick}
       className="md:flex hidden fixed bottom-5 right-5 z-10"
-      variant="outline"
+      variant="secondary"
       size="icon"
       title={isExpanded ? "Collapse" : "Expand"}
     >

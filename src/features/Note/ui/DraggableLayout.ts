@@ -13,9 +13,9 @@ export default function DraggableLayout() {
   useEffect(() => {
     if (isMobile) return;
 
-    const divider = document.getElementById(LAYOUT_SELECTORS.divider);
-    const leftPane = document.getElementById(LAYOUT_SELECTORS.left);
-    const rightPane = document.getElementById(LAYOUT_SELECTORS.right);
+    const divider = document.getElementById(LAYOUT_SELECTORS.divider)!;
+    const leftPane = document.getElementById(LAYOUT_SELECTORS.left)!;
+    const rightPane = document.getElementById(LAYOUT_SELECTORS.right)!;
 
     if (!divider || !leftPane || !rightPane) return;
 
@@ -53,12 +53,21 @@ export default function DraggableLayout() {
       if (isDragging) {
         isDragging = false;
         document.body.style.cursor = "default";
+
+        divider.classList.add("dark:bg-border");
+        divider.classList.remove("bg-zinc-300");
+
         enableTransitions();
       }
     };
 
     const onMouseMove = (e: MouseEvent) => {
       if (!isDragging) return;
+
+      divider.classList.remove("dark:bg-border");
+      divider.classList.add("bg-zinc-300");
+
+      // divider.style.background = "blue";
       const newWidth = e.clientX;
       if (newWidth > 150 && newWidth < window.innerWidth * 0.8) {
         leftPane.style.width = `${newWidth}px`;

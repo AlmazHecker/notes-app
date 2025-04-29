@@ -7,12 +7,12 @@ type IndexProps = {};
 
 const Index: React.FC<IndexProps> = (props) => {
   return (
-    <div className="md:flex md:h-full md:max-h-full shadow select-none">
+    <div className="md:flex md:h-full md:max-h-full shadow">
       <Notes />
 
       <div
         id={LAYOUT_SELECTORS.divider}
-        className="md:block hidden w-1 bg-gray-300 dark:bg-border cursor-col-resize"
+        className="transition duration-300 md:block hidden w-1 dark:bg-border cursor-col-resize"
       ></div>
       <CurrentNote />
     </div>
