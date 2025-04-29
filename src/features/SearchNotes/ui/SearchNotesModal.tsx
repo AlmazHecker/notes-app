@@ -30,7 +30,7 @@ export const SearchNotesModal: FC<SearchNotesModalProps> = ({
 
   useEffect(() => {
     if (open) fetchNotes();
-  }, [open, fetchNotes]);
+  }, [open]);
 
   const handleSelectNote = (noteId: string) => {
     navigate(`?noteId=${noteId}`);

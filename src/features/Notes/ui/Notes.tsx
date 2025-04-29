@@ -32,7 +32,7 @@ export const Notes = () => {
     init();
   }, []);
 
-  const containerClassName = `md:overflow-auto md:w-1/2 min-w-[200px] md:max-w-[80%] md:h-screen space-y-4 p-4 ${noteId && isMobile && "hidden"}`;
+  const containerClassName = `md:overflow-auto md:w-1/2 min-w-[200px] md:max-w-[80%] md:h-full space-y-4 p-4 ${noteId && isMobile && "hidden"}`;
 
   const sharedContent = (
     <div className="flex justify-between items-center sticky top-0 md:-top-4 py-1 bg-background z-10 ">
@@ -64,49 +64,51 @@ export const Notes = () => {
     </div>
   );
 
-  if (!notesStore.hasPermission) {
-    return (
-      <div className={containerClassName} id={LAYOUT_SELECTORS.left}>
-        {sharedContent}
-        <p className="text-red-500">{t("fileApi.permissionDenied")}</p>
-      </div>
-    );
-  }
+  const renderContent = () => {
+    if (!notesStore.hasPermission) {
+      return (
+        <>
+          <p className="text-red-500">{t("fileApi.permissionDenied")}</p>
+          <p>
+            If this is your first time setting a folder, create an empty one and
+            select it. Otherwise, choose an existing folder where your notes are
+            saved
+          </p>
+        </>
+      );
+    }
 
-  if (notesStore.isLoading) {
-    return (
-      <div className={containerClassName} id={LAYOUT_SELECTORS.left}>
-        {sharedContent}
-        <div className="h-12 w-12 animate-spin rounded-full border-4 border-t-gray-900 border-gray-300" />
-        <p className="mt-2 text-gray-500 dark:text-gray-400">
-          {t("common.loading")}
-        </p>
-      </div>
-    );
-  }
+    if (notesStore.isLoading) {
+      return (
+        <>
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-t-gray-900 border-gray-300" />
+          <p className="mt-2 text-gray-500 dark:text-gray-400">
+            {t("common.loading")}
+          </p>
+        </>
+      );
+    }
 
-  if (!notesStore.notes.length) {
+    if (!notesStore.notes.length) {
+      return <p className="text-muted-foreground">{t("notes.empty")}</p>;
+    }
+
     return (
-      <div className={containerClassName} id={LAYOUT_SELECTORS.left}>
-        {sharedContent}
-        <p className="text-muted-foreground">{t("notes.empty")}</p>
+      <div className="grid gap-4">
+        <NoteList notes={notesStore.notes} />
       </div>
     );
-  }
+  };
 
   return (
     <div className={containerClassName} id={LAYOUT_SELECTORS.left}>
       {sharedContent}
-      <div className="grid gap-4">
-        <NoteList notes={notesStore.notes} />
-      </div>
+      {renderContent()}
 
-      {isSearchModalOpen && (
-        <SearchNotesModal
-          open={isSearchModalOpen}
-          setOpen={setIsSearchModalOpen}
-        />
-      )}
+      <SearchNotesModal
+        open={isSearchModalOpen}
+        setOpen={setIsSearchModalOpen}
+      />
     </div>
   );
 };

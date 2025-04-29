@@ -150,10 +150,7 @@ const ExportNotes: React.FC = () => {
               onClick={() => toggleNoteSelection(note.id)}
             >
               <div className="flex justify-between items-center gap-3">
-                <Checkbox
-                  checked={selectedNotes[note.id]}
-                  onCheckedChange={() => toggleNoteSelection(note.id)}
-                />
+                <Checkbox checked={selectedNotes[note.id]} id={note.id} />
                 <span className="font-medium mr-auto">{note.label}</span>
                 <span className="text-xs text-muted-foreground">
                   {formatDate(note.updatedAt)}
@@ -178,7 +175,7 @@ const ExportNotes: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-background">
+    <div className="container max-w-5xl mx-auto flex flex-col h-full bg-background">
       <div className="sticky top-0 z-10 border-b px-4 py-3 flex items-center justify-between">
         <div className="flex items-center">
           <Button

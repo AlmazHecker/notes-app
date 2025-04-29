@@ -3,7 +3,8 @@ import { LockIcon } from "lucide-react";
 import { FC, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import {Note} from "@/entities/note/types";
+import { Note } from "@/entities/note/types";
+import { getEscapedHtml } from "@/shared/lib/utils";
 
 type NoteListProps = {
   notes: Note[];
@@ -46,14 +47,16 @@ export const NoteList: FC<NoteListProps> = ({ notes }) => {
                 <h3 className="font-semibold">{note.label}</h3>
                 {note.isEncrypted && <LockIcon size="10px" />}
               </div>
-              <p
-                className="text-sm text-muted-foreground line-clamp-1"
-                dangerouslySetInnerHTML={{
-                  __html: note.isEncrypted
-                    ? t("notes.encrypted")
-                    : note.content,
-                }}
-              ></p>
+              <p className="text-sm text-muted-foreground line-clamp-1">
+                {note.isEncrypted ? (
+                  t("notes.encrypted")
+                ) : (
+                  <>
+                    {getEscapedHtml(note.content)}
+                    {note.content.length > 100 ? "..." : ""}
+                  </>
+                )}
+              </p>
             </Link>
           );
         })}

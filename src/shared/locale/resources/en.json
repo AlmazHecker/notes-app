@@ -88,7 +88,7 @@
       "downloadDescription": "You can export notes to share it with other devices",
       "exportButton": "Export Data",
       "importTitle": "Import Notes",
-      "importDescription": "Load exported notes.",
+      "importDescription": "Load exported notes.(ZIP)",
       "importButton": "Import Data",
       "deleteTitle": "Delete Your Data",
       "deleteDescription": "This will permanently delete your data and all associated data. This action cannot be undone.",

@@ -19,7 +19,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { NoteActionsDropdown } from "./NoteActionsDropdown";
 import SearchInput from "./SearchInput";
 import { useTranslation } from "react-i18next";
-import {Note} from "@/entities/note/types";
+import { Note } from "@/entities/note/types";
 
 export const CurrentNote = () => {
   const { t } = useTranslation();
@@ -166,7 +166,7 @@ export const CurrentNote = () => {
   return (
     <div
       id={LAYOUT_SELECTORS.right}
-      className="relative flex-1 flex flex-col md:h-screen overflow-y-auto h-full p-4 space-y-4 shadow"
+      className="relative flex-1 flex flex-col md:h-full overflow-y-auto h-full p-4 space-y-4 shadow"
     >
       {toggleSearch && (
         <SearchInput

@@ -88,7 +88,7 @@
       "downloadDescription": "ノートをエクスポートして他のデバイスと共有できます。",
       "exportButton": "今すぐデータをエクスポート",
       "importTitle": "ノートのインポート",
-      "importDescription": "エクスポートしたノートを読み込む。",
+      "importDescription": "エクスポートしたノートを読み込む。(ZIP)",
       "importButton": "今すぐデータをインポート",
       "deleteTitle": "データを削除",
       "deleteDescription": "この操作はあなたのデータおよび関連するすべてのデータを完全に削除します。この操作は元に戻せません。",

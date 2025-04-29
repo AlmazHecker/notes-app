@@ -122,9 +122,7 @@ const StorageSettings: React.FC<StorageSettingsProps> = (props) => {
 
       <Card>
         <CardHeader>
-          <CardTitle>
-            {t("settings.dataManagement.title")} IN PROCESS!
-          </CardTitle>
+          <CardTitle>{t("settings.dataManagement.title")}</CardTitle>
           <CardDescription>
             {t("settings.dataManagement.description")}
           </CardDescription>

@@ -7,7 +7,7 @@ type IndexProps = {};
 
 const Index: React.FC<IndexProps> = (props) => {
   return (
-    <div className="md:flex md:h-screen md:max-h-screen shadow select-none">
+    <div className="md:flex md:h-full md:max-h-full shadow select-none">
       <Notes />
 
       <div
