@@ -2,14 +2,20 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import path from "path";
-import { Display, VitePWA } from "vite-plugin-pwa";
+import { Display, ManifestOptions, VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
     tailwindcss(),
-    VitePWA({ registerType: "autoUpdate", manifest: getManifest(mode) }),
+    VitePWA({
+      strategies: "injectManifest",
+      registerType: "autoUpdate",
+      manifest: getManifest(mode),
+      srcDir: "/src",
+      filename: "sw.js",
+    }),
   ],
   server: {
     port: 3000,
@@ -26,7 +32,7 @@ export default defineConfig(({ mode }) => ({
   base: mode === "gh-pages" ? "/notes-app/" : "/",
 }));
 
-const getManifest = (mode: string) => {
+const getManifest = (mode: string): Partial<ManifestOptions> => {
   let assetPrefix = mode === "gh-pages" ? "/notes-app/" : "/";
 
   return {
