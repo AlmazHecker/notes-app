@@ -4,6 +4,8 @@ import { CacheFirst } from 'workbox-strategies'
 import { CacheableResponsePlugin } from 'workbox-cacheable-response'
 import { ExpirationPlugin } from 'workbox-expiration'
 
+self.skipWaiting();
+
 const adjustedManifest = self.__WB_MANIFEST.map(entry => ({
     ...entry,
     url: `${__BASE_PATH__}${entry.url}` // gh-pages lore
