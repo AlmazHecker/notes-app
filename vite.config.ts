@@ -13,8 +13,9 @@ export default defineConfig(({ mode }) => ({
       strategies: "injectManifest",
       registerType: "autoUpdate",
       manifest: getManifest(mode),
-      srcDir: "/src",
+      srcDir: "./src",
       filename: "sw.js",
+      disable: process.env.NODE_ENV === 'development',
     }),
   ],
   server: {
@@ -28,6 +29,9 @@ export default defineConfig(({ mode }) => ({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+  },
+  define: {
+    __BASE_PATH__: JSON.stringify(mode === "gh-pages" ? "/notes-app/" : "/")
   },
   base: mode === "gh-pages" ? "/notes-app/" : "/",
 }));

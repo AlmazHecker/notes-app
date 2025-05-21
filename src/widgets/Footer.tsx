@@ -12,7 +12,7 @@ export default function Footer() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <img src="/github.svg" className="mr-2 size-5" />
+            <img src={`${window.__BASE_PATH__}github.svg`} className="mr-2 size-5" />
             <span>Source code</span>
           </a>
         </div>
