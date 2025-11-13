@@ -1,144 +1,83 @@
 import { usePasswordStore } from "./usePasswordStore";
+import { argon2id } from "hash-wasm";
 
 export const useNoteEncryption = () => {
   const { password, setPassword } = usePasswordStore();
 
-  // Helper function to convert a string to ArrayBuffer
-  const strToBuffer = (str: string): ArrayBuffer => {
-    return new TextEncoder().encode(str).buffer;
-  };
+  const strToBuffer = (str: string): ArrayBuffer =>
+    new TextEncoder().encode(str).buffer;
 
-  // Helper function to convert ArrayBuffer to string
-  const bufferToStr = (buffer: ArrayBuffer): string => {
-    return new TextDecoder().decode(buffer);
-  };
+  const bufferToStr = (buffer: ArrayBuffer): string =>
+    new TextDecoder().decode(buffer);
 
-  // Helper function to convert ArrayBuffer to base64
-  const bufferToBase64 = (buffer: ArrayBuffer): string => {
-    return btoa(String.fromCharCode(...new Uint8Array(buffer)));
-  };
+  const bufferToBase64 = (buffer: Uint8Array<ArrayBuffer>): string =>
+    btoa(String.fromCharCode(...new Uint8Array(buffer)));
 
-  // Helper function to convert base64 to ArrayBuffer
   const base64ToBuffer = (base64: string): ArrayBuffer => {
-    const binaryString = atob(base64);
-    const bytes = new Uint8Array(binaryString.length);
-    for (let i = 0; i < binaryString.length; i++) {
-      bytes[i] = binaryString.charCodeAt(i);
-    }
+    const binary = atob(base64);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
     return bytes.buffer;
   };
 
-  // Derive a cryptographic key from password
-  const deriveKey = async (
-    password: string,
-    salt: ArrayBuffer
-  ): Promise<CryptoKey> => {
-    const passwordBuffer = strToBuffer(password);
-    const importedKey = await crypto.subtle.importKey(
-      "raw",
-      passwordBuffer,
-      { name: "PBKDF2" },
-      false,
-      ["deriveBits", "deriveKey"]
-    );
+  const deriveKey = async (password: string, salt: Uint8Array) => {
+    const keyBytesRaw = await argon2id({
+      password,
+      salt,
+      parallelism: 1,
+      iterations: 3,
+      memorySize: 2 ** 16, // 64 MB
+      hashLength: 32,
+      outputType: "binary",
+    });
 
-    return await crypto.subtle.deriveKey(
-      {
-        name: "PBKDF2",
-        salt: salt,
-        iterations: 100000,
-        hash: "SHA-256",
-      },
-      importedKey,
-      { name: "AES-GCM", length: 256 },
+    const keyBytes = new Uint8Array(keyBytesRaw as unknown as ArrayBuffer);
+
+    return crypto.subtle.importKey(
+      "raw",
+      keyBytes.buffer,
+      { name: "AES-GCM" },
       false,
       ["encrypt", "decrypt"]
     );
   };
 
-  const encryptContent = async (
-    content: string,
-    password: string
-  ): Promise<string | null> => {
-    try {
-      // Generate a random salt (16 bytes)
-      const salt = crypto.getRandomValues(new Uint8Array(16));
+  const encryptContent = async (content: string, password: string) => {
+    const salt = crypto.getRandomValues(new Uint8Array(16));
+    const iv = crypto.getRandomValues(new Uint8Array(12));
+    const key = await deriveKey(password, salt);
 
-      // Generate a random IV (12 bytes recommended for AES-GCM)
-      const iv = crypto.getRandomValues(new Uint8Array(12));
+    const encrypted = await crypto.subtle.encrypt(
+      { name: "AES-GCM", iv },
+      key,
+      strToBuffer(content)
+    );
 
-      // Derive the key
-      const key = await deriveKey(password, salt);
+    const combined = new Uint8Array(
+      salt.byteLength + iv.byteLength + encrypted.byteLength
+    );
+    combined.set(salt, 0);
+    combined.set(iv, salt.byteLength);
+    combined.set(new Uint8Array(encrypted), salt.byteLength + iv.byteLength);
 
-      // Encrypt the content
-      const encryptedContent = await crypto.subtle.encrypt(
-        {
-          name: "AES-GCM",
-          iv: iv,
-        },
-        key,
-        strToBuffer(content)
-      );
-
-      // Combine salt + iv + encrypted content
-      const combined = new Uint8Array(
-        salt.byteLength + iv.byteLength + encryptedContent.byteLength
-      );
-      combined.set(new Uint8Array(salt), 0);
-      combined.set(new Uint8Array(iv), salt.byteLength);
-      combined.set(
-        new Uint8Array(encryptedContent),
-        salt.byteLength + iv.byteLength
-      );
-
-      return bufferToBase64(combined);
-    } catch (e) {
-      console.error("Encryption error:", e);
-      return null;
-    }
+    return bufferToBase64(combined);
   };
 
-  const decryptContent = async (
-    encryptedContent: string,
-    password: string
-  ): Promise<string | null> => {
-    try {
-      // Convert from base64 to buffer
-      const combined = base64ToBuffer(encryptedContent);
+  const decryptContent = async (encryptedContent: string, password: string) => {
+    const combined = base64ToBuffer(encryptedContent);
+    const salt = combined.slice(0, 16);
+    const iv = combined.slice(16, 28);
+    const ciphertext = combined.slice(28);
 
-      // Extract salt (first 16 bytes)
-      const salt = combined.slice(0, 16);
+    const key = await deriveKey(password, new Uint8Array(salt));
+    const decrypted = await crypto.subtle.decrypt(
+      { name: "AES-GCM", iv: new Uint8Array(iv) },
+      key,
+      ciphertext
+    );
 
-      // Extract iv (next 12 bytes)
-      const iv = combined.slice(16, 16 + 12);
-
-      // Extract actual ciphertext (rest)
-      const ciphertext = combined.slice(16 + 12);
-
-      // Derive the key
-      const key = await deriveKey(password, salt);
-
-      // Decrypt
-      const decrypted = await crypto.subtle.decrypt(
-        {
-          name: "AES-GCM",
-          iv: iv,
-        },
-        key,
-        ciphertext
-      );
-
-      return bufferToStr(decrypted);
-    } catch (e) {
-      console.error("Decryption error:", e);
-      return null;
-    }
+    return bufferToStr(decrypted);
   };
 
-  return {
-    password,
-    setPassword,
-    encryptContent,
-    decryptContent,
-  };
+  return { password, setPassword, encryptContent, decryptContent };
 };
