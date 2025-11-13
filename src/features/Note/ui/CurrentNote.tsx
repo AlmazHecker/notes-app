@@ -16,6 +16,7 @@ import { Note } from "@/entities/note/types";
 import { NoteEncryption } from "../lib/NoteEncryption";
 import { PermissionDenied } from "@/shared/ui/permission-denied";
 import { EncryptedContent } from "./EncryptedContent";
+import { useLaunchQueue } from "../hooks/useLaunchQueue";
 
 export const CurrentNote = () => {
   const editorRef = useRef<Editor | null>(null);
@@ -114,6 +115,20 @@ export const CurrentNote = () => {
   useEffect(() => {
     if (noteId) getNote(noteId);
   }, [noteId]);
+
+  useLaunchQueue((launchedNote) => {
+    setNote(launchedNote);
+    setIsEncrypted(launchedNote.isEncrypted);
+
+    if (launchedNote.isEncrypted) {
+      openEnterPasswordModal(true);
+    } else {
+      setIsEditing(true);
+      editorRef.current?.commands.setContent(launchedNote.content);
+    }
+
+    navigate(`?noteId=${launchedNote.id}`);
+  });
 
   const { hasPermission } = useNoteStore();
 
