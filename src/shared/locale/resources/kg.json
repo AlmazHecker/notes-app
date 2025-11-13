@@ -19,8 +19,7 @@
     "encryptNote": "Жазууну шифрлөө",
     "decryptNote": "Жазууну чечүү",
     "deleteNote": "Жазууну өчүрүү",
-    "searchInNote": "Жазуудан издөө...",
-    "encrypted": "Бул жазуу шифрленген. Чечүү үчүн кулпунун иконкасына басыңыз"
+    "searchInNote": "Жазуудан издөө..."
   },
   "encryption": {
     "setNotePassword": {

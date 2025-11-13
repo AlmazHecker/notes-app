@@ -6,21 +6,6 @@ import UserPreferenceProvider from "./UserPreferenceProvider";
 import "@/shared/locale/i18next";
 import Layout from "@/widgets/Layout";
 
-
-import { registerSW } from 'virtual:pwa-register'
-
-const updateSW = registerSW({
-    onNeedRefresh() {
-        // Show update prompt
-        if (confirm('New content available. Reload?')) {
-            updateSW(true)
-        }
-    },
-    onOfflineReady() {
-        console.log('App is ready for offline use')
-    },
-})
-
 const root = ReactDOM.createRoot(document.getElementById("root")!);
 root.render(
   <React.StrictMode>
@@ -30,3 +15,9 @@ root.render(
     </Layout>
   </React.StrictMode>
 );
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js");
+  });
+}

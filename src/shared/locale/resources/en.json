@@ -19,8 +19,7 @@
     "encryptNote": "Encrypt Note",
     "decryptNote": "Decrypt Note",
     "deleteNote": "Delete note",
-    "searchInNote": "Search in note...",
-    "encrypted": "This note is encrypted. Click the lock icon to decrypt"
+    "searchInNote": "Search in note..."
   },
   "encryption": {
     "setNotePassword": {

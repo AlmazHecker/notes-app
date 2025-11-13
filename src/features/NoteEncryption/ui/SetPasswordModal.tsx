@@ -10,70 +10,66 @@ import {
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 import { Button } from "@/shared/ui/button";
-import {
-  useModalActions,
-  useSetPasswordModalOpen,
-} from "@/shared/hooks/useModalStore";
-import { usePasswordStore } from "../../Note/hooks/usePasswordStore";
+
 import { useTranslation } from "react-i18next";
 
 type SetPasswordModalProps = {
-  onSuccess: (password: string) => void;
+  onSubmit: (password: string) => Promise<void>;
+  onClose: () => void;
 };
 
-export const SetPasswordModal = ({ onSuccess }: SetPasswordModalProps) => {
+export const SetPasswordModal = ({
+  onSubmit,
+  onClose,
+}: SetPasswordModalProps) => {
   const { t } = useTranslation();
 
-  const passwordStore = usePasswordStore();
+  const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [showWarning, setShowWarning] = useState(false);
-  const isOpen = useSetPasswordModalOpen();
-  const { closeSetPasswordModal } = useModalActions();
 
   useEffect(() => {
-    if (
-      passwordStore.password.length > 0 &&
-      passwordStore.password.length < 12
-    ) {
+    if (password.length > 0 && password.length < 12) {
       setShowWarning(true);
     } else {
       setShowWarning(false);
     }
-  }, [passwordStore.password]);
+  }, [password]);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setPasswordError("");
 
-    if (passwordStore.password !== confirmPassword) {
+    if (password !== confirmPassword) {
       setPasswordError(t("encryption.setNotePassword.validation.noMatch"));
       return;
     }
 
-    if (passwordStore.password.length < 4) {
+    if (password.length < 4) {
       setPasswordError(t("encryption.setNotePassword.validation.minLimit"));
       return;
     }
 
-    if (passwordStore.password.length < 12) {
+    if (password.length < 12) {
       const isConfirmed = confirm(
         t("encryption.setNotePassword.validation.minLimitWarning")
       );
       if (!isConfirmed) return;
     }
 
-    onSuccess(passwordStore.password);
+    await onSubmit(password);
+    onClose();
   };
 
   const handleCancel = () => {
-    passwordStore.setPassword("");
+    setPassword("");
     setConfirmPassword("");
     setPasswordError("");
-    closeSetPasswordModal();
+    onClose();
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={closeSetPasswordModal}>
+    <Dialog open onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>{t("encryption.setNotePassword.title")}</DialogTitle>
@@ -89,8 +85,8 @@ export const SetPasswordModal = ({ onSuccess }: SetPasswordModalProps) => {
             <Input
               id="password"
               type="password"
-              value={passwordStore.password}
-              onChange={(e) => passwordStore.setPassword(e.target.value)}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="col-span-3"
               autoFocus
             />

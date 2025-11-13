@@ -14,20 +14,26 @@ interface NoteState {
 export const useNoteStore = create<NoteState>((set, get) => ({
   notes: [],
   isLoading: false,
-  hasPermission: true, // by default
+  hasPermission: true,
   fetchNotes: async () => {
-    set({ isLoading: true });
-    const notes = await noteService.getAll();
-    const sortedNotes = [...notes].sort((a, b) => b.updatedAt - a.updatedAt);
+    try {
+      set({ isLoading: true });
+      const notes = await noteService.getAll();
+      const sortedNotes = [...notes].sort((a, b) => b.updatedAt - a.updatedAt);
 
-    set({ notes: sortedNotes, isLoading: false });
+      set({ notes: sortedNotes, isLoading: false });
 
-    return sortedNotes;
+      return sortedNotes;
+    } catch (e) {
+      set({ isLoading: false });
+      return [];
+    }
+  },
+  setIsLoading: (isLoading: boolean) => {
+    set({ isLoading });
   },
   verifyPermission: async () => {
     try {
-      set({ isLoading: true });
-
       const handle = await getFolderHandle();
 
       if (!(await verifyPermission(handle))) {

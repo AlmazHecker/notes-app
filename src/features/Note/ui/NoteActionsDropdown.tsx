@@ -11,10 +11,9 @@ import {
 import { Lock, MenuIcon, Search, Trash, Unlock } from "lucide-react";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
-import {Note} from "@/entities/note/types";
+import { Note } from "@/entities/note/types";
 
 type NoteActionsDropdownProps = {
-  isNew: boolean;
   isEncrypted: boolean;
   note: Note;
   onEncryptionClick: () => void;
@@ -22,7 +21,6 @@ type NoteActionsDropdownProps = {
   onSearchClick: () => void;
 };
 export const NoteActionsDropdown: FC<NoteActionsDropdownProps> = ({
-  isNew,
   isEncrypted,
   note,
   onEncryptionClick,
@@ -44,20 +42,18 @@ export const NoteActionsDropdown: FC<NoteActionsDropdownProps> = ({
         <DropdownMenuGroup>
           <DropdownMenuItem disabled={isEncrypted} onClick={onEncryptionClick}>
             {note.isEncrypted ? <Lock className="text-blue-500" /> : <Unlock />}
-            <span>
-              {note.isEncrypted ? t("note.decryptNote") : t("note.encryptNote")}
-            </span>
+            {note.isEncrypted ? t("note.decryptNote") : t("note.encryptNote")}
           </DropdownMenuItem>
 
           <DropdownMenuItem onClick={onSearchClick}>
             <Search />
-            <span>{t("common.search")}</span>
+            {t("common.search")}
           </DropdownMenuItem>
 
-          {isNew || (
+          {note?.id && (
             <DropdownMenuItem variant="destructive" onClick={onDeleteClick}>
               <Trash />
-              <span>{t("note.deleteNote")}</span>
+              {t("note.deleteNote")}
             </DropdownMenuItem>
           )}
         </DropdownMenuGroup>

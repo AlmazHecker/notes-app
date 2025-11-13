@@ -19,8 +19,7 @@
     "encryptNote": "メモを暗号化",
     "decryptNote": "メモを復号",
     "deleteNote": "メモを削除",
-    "searchInNote": "メモ内を検索...",
-    "encrypted": "このメモは暗号化されています。ロックアイコンをクリックして復号してください。"
+    "searchInNote": "メモ内を検索..."
   },
   "encryption": {
     "setNotePassword": {

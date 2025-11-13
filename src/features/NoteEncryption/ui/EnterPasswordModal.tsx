@@ -10,41 +10,40 @@ import {
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 import { Button } from "@/shared/ui/button";
-import {
-  useEnterPasswordModalOpen,
-  useModalActions,
-} from "@/shared/hooks/useModalStore";
-import { usePasswordStore } from "../../Note/hooks/usePasswordStore";
+
 import { useTranslation } from "react-i18next";
 
 type EnterPasswordModalProps = {
-  onSuccess: (password: string) => Promise<boolean>;
+  onSubmit: (password: string) => Promise<boolean>;
+  onClose: () => void;
 };
 
-export const EnterPasswordModal = ({ onSuccess }: EnterPasswordModalProps) => {
+export const EnterPasswordModal = ({
+  onSubmit,
+  onClose,
+}: EnterPasswordModalProps) => {
   const { t } = useTranslation();
 
-  const passwordStore = usePasswordStore();
+  const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const isOpen = useEnterPasswordModalOpen();
-  const { closeEnterPasswordModal } = useModalActions();
 
   const handleSubmit = async () => {
     setPasswordError("");
-    const isPasswordValid = await onSuccess(passwordStore.password);
+    const isPasswordValid = await onSubmit(password);
     if (!isPasswordValid) {
       return setPasswordError(t("encryption.enterNotePassword.wrongPassword"));
     }
+    onClose();
   };
 
   const handleClose = () => {
-    passwordStore.setPassword("");
+    setPassword("");
     setPasswordError("");
-    closeEnterPasswordModal();
+    onClose();
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={closeEnterPasswordModal}>
+    <Dialog open onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>{t("encryption.enterNotePassword.title")}</DialogTitle>
@@ -60,8 +59,8 @@ export const EnterPasswordModal = ({ onSuccess }: EnterPasswordModalProps) => {
             <Input
               id="enterPassword"
               type="password"
-              value={passwordStore.password}
-              onChange={(e) => passwordStore.setPassword(e.target.value)}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="col-span-3"
               autoFocus
               onKeyDown={(e) => {
