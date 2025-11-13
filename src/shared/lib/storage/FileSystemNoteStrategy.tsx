@@ -1,22 +1,23 @@
-import { getFolderHandle } from "../fileApi";
+import { getFolderHandle, verifyPermission } from "../fileApi";
 import { NoteStorageStrategy } from "./storage";
-import {Note} from "@/entities/note/types";
+import { Note } from "@/entities/note/types";
 
 export class FileSystemNoteStrategy implements NoteStorageStrategy {
   async getByName(noteId: string): Promise<Note | null> {
     const folderHandle = await getFolderHandle();
-    const fileHandle = await folderHandle.getFileHandle(`${noteId}`);
+    await verifyPermission(folderHandle);
+
+    const fileHandle = await folderHandle.getFileHandle(noteId);
     const file = await fileHandle.getFile();
     return JSON.parse(await file.text());
   }
 
   async update(updatedNote: Note): Promise<Note> {
     const folderHandle = await getFolderHandle();
-    const note = {
-      ...updatedNote,
-      tags: [],
-      updatedAt: Date.now(),
-    };
+    const note = { ...updatedNote, tags: [], updatedAt: Date.now() };
+
+    await verifyPermission(folderHandle);
+
     const handle = await folderHandle.getFileHandle(note.id, { create: true });
     const writable = await handle.createWritable();
     await writable.write(JSON.stringify(note));
@@ -26,7 +27,7 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
 
   async delete(noteId: string) {
     const folderHandle = await getFolderHandle();
-    await folderHandle.removeEntry(noteId);
+    return folderHandle.removeEntry(noteId);
   }
 
   async getAll(): Promise<Note[]> {
@@ -43,6 +44,8 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
 
   async create(newNote: Omit<Note, "createdAt" | "updatedAt">) {
     const folderHandle = await getFolderHandle();
+    await verifyPermission(folderHandle);
+
     const note: Note = {
       ...newNote,
       tags: [],

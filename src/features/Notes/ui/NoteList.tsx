@@ -52,7 +52,7 @@ export const NoteList: FC<NoteListProps> = ({ notes }) => {
                   t("notes.encrypted")
                 ) : (
                   <>
-                    {getEscapedHtml(note.content)}
+                    {getEscapedHtml(note.content).slice(0, 100)}
                     {note.content.length > 100 ? "..." : ""}
                   </>
                 )}

@@ -156,15 +156,14 @@ const ExportNotes: React.FC = () => {
                   {formatDate(note.updatedAt)}
                 </span>
               </div>
-              {note.isEncrypted || (
-                <p className="text-xs text-muted-foreground truncate mt-1">
-                  {getEscapedHtml(note.content)}
-                  {note.content.length > 100 ? "..." : ""}
-                </p>
-              )}
-              {note.isEncrypted && (
+              {note.isEncrypted ? (
                 <p className="text-xs text-muted-foreground mt-1 italic">
                   {t("exportNotes.encrypted")}
+                </p>
+              ) : (
+                <p className="text-xs text-muted-foreground truncate mt-1">
+                  {getEscapedHtml(note.content).slice(0, 100)}
+                  {note.content.length > 100 ? "..." : ""}
                 </p>
               )}
             </div>

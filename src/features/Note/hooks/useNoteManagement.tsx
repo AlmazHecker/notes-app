@@ -1,26 +1,18 @@
 import { useState } from "react";
 import { noteService } from "@/entities/note/service";
-import { useModalActions } from "@/shared/hooks/useModalStore";
-import {Note} from "@/entities/note/types";
+import { Note } from "@/entities/note/types";
+import { NoteEncryption } from "../lib/NoteEncryption";
+
+const defaultNote = { content: "", label: "New Note", isEncrypted: false };
 
 export const useNoteManagement = () => {
-  const [isEncrypted, setIsEncrypted] = useState(false);
-
-  const [note, setNote] = useState<Note | null>(null);
+  const [note, setNote] = useState<Note | null>(defaultNote as Note);
   const [isEditing, setIsEditing] = useState(false);
-  const [isNewNote, setIsNewNote] = useState(false);
-
-  const { openEnterPasswordModal } = useModalActions();
+  const [isEncrypted, setIsEncrypted] = useState(false);
 
   const getNote = async (fileId: string) => {
     if (fileId === "new-note") {
-      const tempNote = {
-        content: "",
-        label: "New Note",
-        isEncrypted: false,
-      };
-      setNote(tempNote as Note);
-      setIsNewNote(true);
+      setNote(defaultNote as Note);
       setIsEditing(true);
       setIsEncrypted(false);
       return;
@@ -30,43 +22,28 @@ export const useNoteManagement = () => {
     if (!note) return;
 
     setNote(note);
-    setIsNewNote(false);
     setIsEditing(false);
     setIsEncrypted(note.isEncrypted);
-    if (note.isEncrypted) {
-      openEnterPasswordModal();
-    }
 
     return note;
   };
 
-  const saveNote = async (
-    note: Note | null,
-    editorContent: string,
-    isEncrypted: boolean,
-    password: string,
-    encryptContent: (
-      content: string,
-      password: string
-    ) => Promise<string | null>
-  ) => {
-    if (!note) return;
+  const saveNote = async (note: Note, password: string) => {
+    const originalContent = note.content;
 
-    if (isEncrypted) {
-      note.content = (await encryptContent(editorContent, password)) as string;
-    } else {
-      note.content = editorContent;
+    if (note.isEncrypted) {
+      note.content = await NoteEncryption.encrypt(note.content, password);
     }
 
-    if (isNewNote) {
+    if (!note.id) {
       note.id = crypto.randomUUID();
       await noteService.create(note);
-      setIsNewNote(false);
     } else {
       await noteService.update(note);
     }
 
-    setNote({ ...note, content: editorContent });
+    note.content = originalContent;
+    setNote(note);
     setIsEditing(false);
     return note;
   };
@@ -82,8 +59,6 @@ export const useNoteManagement = () => {
     setNote,
     isEditing,
     setIsEditing,
-    isNewNote,
-    setIsNewNote,
     isEncrypted,
     setIsEncrypted,
     getNote,

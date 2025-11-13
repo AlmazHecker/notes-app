@@ -19,8 +19,7 @@
     "encryptNote": "Зашифровать заметку",
     "decryptNote": "Расшифровать заметку",
     "deleteNote": "Удалить заметку",
-    "searchInNote": "Поиск в заметке...",
-    "encrypted": "Эта заметка зашифрована. Нажмите на иконку замка, чтобы расшифровать"
+    "searchInNote": "Поиск в заметке..."
   },
   "encryption": {
     "setNotePassword": {

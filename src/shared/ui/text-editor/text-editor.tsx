@@ -56,7 +56,7 @@ export const TextEditor: FC<TextEditorProps> = ({
       extensions,
       content: value,
       onUpdate: ({ editor }) => {
-        onChange?.(editor.getText());
+        onChange?.(editor.getHTML());
       },
       editable,
     },

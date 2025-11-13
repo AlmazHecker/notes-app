@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const getEscapedHtml = (html: string) => {
-  return html.replace(/<[^>]*>/g, "").slice(0, 100);
+  return html.replace(/<[^>]*>/g, "");
 };
 
 export const formatDate = (timestamp: number): string => {
