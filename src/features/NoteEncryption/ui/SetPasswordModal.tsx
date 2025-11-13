@@ -10,10 +10,7 @@ import {
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 import { Button } from "@/shared/ui/button";
-// import {
-//   useModalActions,
-//   useSetPasswordModalOpen,
-// } from "@/shared/hooks/useModalStore";
+
 import { useTranslation } from "react-i18next";
 
 type SetPasswordModalProps = {
@@ -31,8 +28,6 @@ export const SetPasswordModal = ({
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [showWarning, setShowWarning] = useState(false);
-  // const isOpen = useSetPasswordModalOpen();
-  // const { closeSetPasswordModal } = useModalActions();
 
   useEffect(() => {
     if (password.length > 0 && password.length < 12) {

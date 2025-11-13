@@ -2,6 +2,7 @@ import { useState } from "react";
 import { noteService } from "@/entities/note/service";
 import { Note } from "@/entities/note/types";
 import { NoteEncryption } from "../lib/NoteEncryption";
+import { useNoteStore } from "@/entities/note/api";
 
 const defaultNote = { content: "", label: "New Note", isEncrypted: false };
 
@@ -9,23 +10,30 @@ export const useNoteManagement = () => {
   const [note, setNote] = useState<Note | null>(defaultNote as Note);
   const [isEditing, setIsEditing] = useState(false);
   const [isEncrypted, setIsEncrypted] = useState(false);
+  const { verifyPermission } = useNoteStore();
 
   const getNote = async (fileId: string) => {
+    setNote(null);
+
     if (fileId === "new-note") {
       setNote(defaultNote as Note);
       setIsEditing(true);
       setIsEncrypted(false);
       return;
     }
+    try {
+      await verifyPermission();
+      const note = await noteService.getByName(fileId);
+      if (!note) return;
 
-    const note = await noteService.getByName(fileId);
-    if (!note) return;
+      setNote(note);
+      setIsEditing(false);
+      setIsEncrypted(note.isEncrypted);
 
-    setNote(note);
-    setIsEditing(false);
-    setIsEncrypted(note.isEncrypted);
-
-    return note;
+      return note;
+    } catch (e) {
+      if ((e as DOMException).name === "NotFoundError") alert("Note not found");
+    }
   };
 
   const saveNote = async (note: Note, password: string) => {
@@ -51,7 +59,7 @@ export const useNoteManagement = () => {
   const deleteNote = async (note: Note | null) => {
     if (!note) return;
     await noteService.delete(note.id);
-    setNote(null);
+    setNote(defaultNote as Note);
   };
 
   return {

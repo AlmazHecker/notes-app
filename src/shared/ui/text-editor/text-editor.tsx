@@ -56,7 +56,7 @@ export const TextEditor: FC<TextEditorProps> = ({
       extensions,
       content: value,
       onUpdate: ({ editor }) => {
-        onChange?.(editor.getHTML());
+        if (onChange) onChange(editor.getHTML());
       },
       editable,
     },
@@ -67,8 +67,7 @@ export const TextEditor: FC<TextEditorProps> = ({
 
   return (
     <div className={className}>
-      {/* {editor?.isEditable && <MenuBar editor={editor} />} */}
-      <EditorContent value={value} editor={editor} />
+      <EditorContent editor={editor} />
     </div>
   );
 };

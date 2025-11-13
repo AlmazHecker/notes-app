@@ -6,8 +6,9 @@ import { useNoteStore } from "@/entities/note/api";
 import { NoteList } from "./NoteList";
 import { SearchNotesModal } from "../../SearchNotes/ui/SearchNotesModal";
 import { useTranslation } from "react-i18next";
+import { PermissionDenied } from "@/shared/ui/permission-denied";
 
-export const Notes = memo(() => {
+export const Notes = () => {
   const { t } = useTranslation();
 
   const notesStore = useNoteStore();
@@ -20,13 +21,15 @@ export const Notes = memo(() => {
   };
 
   useEffect(() => {
-    init();
-  }, []);
+    if (notesStore.hasPermission) {
+      init();
+    }
+  }, [notesStore.hasPermission]);
 
   const sharedContent = (
     <div className="flex justify-between items-center sticky top-0 md:-top-4 py-1 bg-background z-10 ">
       <h2 className="text-xl font-bold">{t("notes.title")}</h2>
-      {notesStore.hasPermission ? (
+      {notesStore.hasPermission && (
         <div className="flex items-center gap-3">
           <Link size="icon" variant="outline" to="/settings">
             <Settings />
@@ -42,24 +45,13 @@ export const Notes = memo(() => {
             <Plus />
           </Link>
         </div>
-      ) : (
-        <Button onClick={init}>{t("notes.openFolder")}</Button>
       )}
     </div>
   );
 
   const renderContent = () => {
     if (!notesStore.hasPermission) {
-      return (
-        <>
-          <p className="text-red-500">{t("fileApi.permissionDenied")}</p>
-          <p>
-            If this is your first time setting a folder, create an empty one and
-            select it. Otherwise, choose an existing folder where your notes are
-            saved
-          </p>
-        </>
-      );
+      return <PermissionDenied permissionTrigger={init} />;
     }
 
     if (notesStore.isLoading) {
@@ -95,4 +87,4 @@ export const Notes = memo(() => {
       />
     </>
   );
-});
+};

@@ -12,13 +12,12 @@ import DraggableLayout from "@/features/Note/ui/DraggableLayout";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { NoteActionsDropdown } from "./NoteActionsDropdown";
 import SearchInput from "./SearchInput";
-import { useTranslation } from "react-i18next";
 import { Note } from "@/entities/note/types";
 import { NoteEncryption } from "../lib/NoteEncryption";
+import { PermissionDenied } from "@/shared/ui/permission-denied";
+import { EncryptedContent } from "./EncryptedContent";
 
 export const CurrentNote = () => {
-  const { t } = useTranslation();
-
   const editorRef = useRef<Editor | null>(null);
   const getNotes = useNoteStore((state) => state.fetchNotes);
   const [toggleSearch, setToggleSearch] = useState(false);
@@ -89,15 +88,14 @@ export const CurrentNote = () => {
   };
 
   const handleEnterPassword = async (password: string) => {
-    if (!note) return false;
     try {
-      const decrypted = await NoteEncryption.decrypt(note.content, password);
+      const decrypted = await NoteEncryption.decrypt(note?.content!, password);
 
       if (decrypted === null) {
         return false;
       }
 
-      setNote({ ...note, content: decrypted });
+      setNote({ ...(note as Note), content: decrypted });
       setIsEncrypted(false);
       setPassword(password);
       return true;
@@ -106,25 +104,29 @@ export const CurrentNote = () => {
     }
   };
 
+  const handleBack = () => {
+    navigate("/");
+  };
+
   const [params] = useSearchParams();
   const noteId = params.get("noteId");
 
   useEffect(() => {
-    if (!noteId) return;
-
-    getNote(noteId).then(
-      (note) => note?.isEncrypted && openEnterPasswordModal(true)
-    );
+    if (noteId) getNote(noteId);
   }, [noteId]);
 
-  const handleBack = () => {
-    navigate("/");
-  };
-  if (!note) return null;
+  const { hasPermission } = useNoteStore();
 
-  const displayContent = isEncrypted ? t("notes.encrypted") : note.content;
+  if (!hasPermission && noteId !== "new-note") {
+    return (
+      <PermissionDenied
+        containerClassName="p-5"
+        permissionTrigger={() => getNote(noteId!)}
+      />
+    );
+  }
 
-  if (!noteId) {
+  if (!noteId || !note) {
     return (
       <div className="hidden md:flex items-center justify-center h-full text-muted-foreground">
         Select a note to view
@@ -132,7 +134,7 @@ export const CurrentNote = () => {
     );
   }
   return (
-    <div className="relative flex-1 flex flex-col p-4 space-y-4 shadow">
+    <div className="relative flex-1 flex flex-col p-4 space-y-4 shadow h-full">
       {toggleSearch && (
         <SearchInput
           onClose={() => setToggleSearch(false)}
@@ -180,16 +182,20 @@ export const CurrentNote = () => {
           />
         </div>
       </div>
-      <TextEditor
-        className={
-          isEditing
-            ? "bg-input/70 rounded-md p-4 transition-all"
-            : "transition-all"
-        }
-        ref={editorRef}
-        value={displayContent}
-        editable={isEditing && !isEncrypted}
-      />
+      {isEncrypted ? (
+        <EncryptedContent onDecrypt={() => openEnterPasswordModal(true)} />
+      ) : (
+        <TextEditor
+          className={
+            isEditing
+              ? "bg-input/70 rounded-md p-4 transition-all"
+              : "transition-all"
+          }
+          ref={editorRef}
+          value={note.content}
+          editable={isEditing}
+        />
+      )}
 
       {note && <ExpandPane />}
 
