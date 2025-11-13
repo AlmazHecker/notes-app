@@ -126,13 +126,14 @@ export const CurrentNote = () => {
     );
   }
 
-  if (!noteId || !note) {
+  if (!noteId) {
     return (
       <div className="hidden md:flex items-center justify-center h-full text-muted-foreground">
         Select a note to view
       </div>
     );
   }
+  if (!note) return;
   return (
     <div className="relative flex-1 flex flex-col p-4 space-y-4 shadow h-full">
       {toggleSearch && (

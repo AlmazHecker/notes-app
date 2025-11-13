@@ -21,9 +21,7 @@ export const Notes = () => {
   };
 
   useEffect(() => {
-    if (notesStore.hasPermission) {
-      init();
-    }
+    if (notesStore.hasPermission) init();
   }, [notesStore.hasPermission]);
 
   const sharedContent = (
