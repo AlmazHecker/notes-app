@@ -3,8 +3,8 @@
   "short_name": "Notes App",
   "description": "Idk",
   "theme_color": "#ffffff",
-  "start_url": "/",
-  "id": "/",
+  "start_url": "",
+  "id": "",
   "display": "standalone",
   "icons": [
     {
