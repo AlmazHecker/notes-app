@@ -114,6 +114,7 @@ export const CurrentNote = () => {
 
   useEffect(() => {
     if (noteId) getNote(noteId);
+    return () => setNote(null);
   }, [noteId]);
 
   useLaunchQueue((launchedNote) => {
