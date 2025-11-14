@@ -3,52 +3,24 @@
   "short_name": "Notes App",
   "description": "Idk",
   "theme_color": "#ffffff",
-  "start_url": "",
-  "id": "",
+  "start_url": "/notes-app/",
+  "id": "/notes-app/",
   "display": "standalone",
   "icons": [
     {
-      "src": "android-chrome-144.png",
+      "src": "/notes-app/android-chrome-144.png",
       "sizes": "144x144",
       "type": "image/png"
     },
     {
-      "src": "android-chrome-192.png",
+      "src": "/notes-app/android-chrome-192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "android-chrome-512.png",
+      "src": "/notes-app/android-chrome-512.png",
       "sizes": "512x512",
       "type": "image/png"
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "screenshot1.png",
-      "sizes": "1185x945",
-      "type": "image/png",
-      "form_factor": "wide"
-    },
-    {
-      "src": "screenshot2.png",
-      "sizes": "458x945",
-      "type": "image/png",
-      "form_factor": "narrow"
-    }
-  ],
-  "file_handlers": [
-    {
-      "action": "",
-      "accept": { "application/json": [".azych"] },
-      "icons": [
-        {
-          "src": "android-chrome-192.png",
-          "sizes": "192x192",
-          "type": "image/png"
-        }
-      ],
-      "launch_type": "single-client"
     }
   ]
 }
