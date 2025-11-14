@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "analyze-bundle": "npx vite-bundle-visualizer",
-    "deploy:gh-pages": "vite build --mode gh-pages && npx gh-pages -d dist"
+    "deploy:gh-pages": "npm run build:gh-pages && npx gh-pages -d dist",
+    "build:gh-pages": "vite build --mode gh-pages"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.2.3",

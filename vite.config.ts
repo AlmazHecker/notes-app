@@ -19,8 +19,5 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  define: {
-    __BASE_PATH__: JSON.stringify(mode === "gh-pages" ? "/notes-app/" : "/"),
-  },
   base: mode === "gh-pages" ? "/notes-app/" : "/",
 }));
