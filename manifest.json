@@ -23,6 +23,20 @@
       "type": "image/png"
     }
   ],
+  "screenshots": [
+    {
+      "src": "/notes-app/screenshot1.png",
+      "sizes": "1185x945",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/notes-app/screenshot2.png",
+      "sizes": "458x945",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ],
   "file_handlers": [
     {
       "action": "/notes-app/",
