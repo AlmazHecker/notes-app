@@ -86,20 +86,6 @@ export async function verifyPermission(handle: FileSystemDirectoryHandle) {
   return false;
 }
 
-// /lib/fileApi.ts or wherever you want
-export async function doesFileExist(
-  folderHandle: FileSystemDirectoryHandle,
-  filename: string
-) {
-  try {
-    await folderHandle.getFileHandle(filename, { create: false });
-    return true;
-  } catch (err) {
-    if ((err as Error).name === "NotFoundError") return false;
-    throw err;
-  }
-}
-
 export async function getTotalFolderSize(
   handle: FileSystemDirectoryHandle
 ): Promise<number> {
