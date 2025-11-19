@@ -73,11 +73,11 @@ export const EnterPasswordModal = ({
           )}
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={handleClose}>
-            {t("common.cancel")}
-          </Button>
           <Button onClick={handleSubmit}>
             {t("encryption.enterNotePassword.unlockNote")}
+          </Button>
+          <Button variant="outline" onClick={handleClose}>
+            {t("common.cancel")}
           </Button>
         </DialogFooter>
       </DialogContent>

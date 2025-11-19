@@ -115,10 +115,10 @@ export const SetPasswordModal = ({
           )}
         </div>
         <DialogFooter>
+          <Button onClick={handleSubmit}>{t("note.encryptNote")}</Button>
           <Button variant="outline" onClick={handleCancel}>
             {t("common.cancel")}
           </Button>
-          <Button onClick={handleSubmit}>{t("note.encryptNote")}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
