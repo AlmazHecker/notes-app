@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -14,7 +14,7 @@ import { Button } from "@/shared/ui/button";
 import { useTranslation } from "react-i18next";
 
 type EnterPasswordModalProps = {
-  onSubmit: (password: string) => Promise<boolean>;
+  onSubmit: (password: string) => Promise<void>;
   onClose: () => void;
 };
 
@@ -27,13 +27,16 @@ export const EnterPasswordModal = ({
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
-  const handleSubmit = async () => {
-    setPasswordError("");
-    const isPasswordValid = await onSubmit(password);
-    if (!isPasswordValid) {
-      return setPasswordError(t("encryption.enterNotePassword.wrongPassword"));
+  const handleSubmit = async (e: FormEvent) => {
+    try {
+      e.preventDefault();
+
+      setPasswordError("");
+      await onSubmit(password);
+      onClose();
+    } catch (e) {
+      setPasswordError(t("encryption.enterNotePassword.wrongPassword"));
     }
-    onClose();
   };
 
   const handleClose = () => {
@@ -51,29 +54,30 @@ export const EnterPasswordModal = ({
             {t("encryption.enterNotePassword.description")}
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
+        <form
+          id="enter-password-form"
+          className="grid gap-4 py-4"
+          onSubmit={handleSubmit}
+        >
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="enterPassword" className="text-right">
+            <Label htmlFor="password" className="text-right">
               {t("common.password")}
             </Label>
             <Input
-              id="enterPassword"
+              id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="col-span-3"
               autoFocus
-              onKeyDown={(e) => {
-                if (e.key === "Enter") handleSubmit();
-              }}
             />
           </div>
           {passwordError && (
             <p className="text-red-500 text-sm text-center">{passwordError}</p>
           )}
-        </div>
+        </form>
         <DialogFooter>
-          <Button onClick={handleSubmit}>
+          <Button form="enter-password-form" type="submit">
             {t("encryption.enterNotePassword.unlockNote")}
           </Button>
           <Button variant="outline" onClick={handleClose}>

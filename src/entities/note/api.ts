@@ -1,12 +1,16 @@
 import { create } from "zustand";
 import { noteService } from "./service";
-import { getFolderHandle, verifyPermission } from "@/shared/lib/fileApi";
 import { Note } from "@/entities/note/types";
+import {
+  getFolderHandle,
+  requestPermission,
+  verifyPermission,
+} from "@/shared/lib/fileApi";
 
 interface NoteState {
   notes: Note[];
-  fetchNotes: () => Promise<Note[]>;
-  verifyPermission: () => Promise<boolean>;
+  getNotes: () => Promise<Note[]>;
+  getNote: (noteId: string) => Promise<Note | void>;
   isLoading: boolean;
   hasPermission: boolean;
 }
@@ -14,35 +18,39 @@ interface NoteState {
 export const useNoteStore = create<NoteState>((set, get) => ({
   notes: [],
   isLoading: false,
+  isNotFound: false,
   hasPermission: true,
-  fetchNotes: async () => {
+
+  async getNotes() {
     try {
       set({ isLoading: true });
+      if (!get().hasPermission) await requestPermission();
+
       const notes = await noteService.getAll();
       const sortedNotes = [...notes].sort((a, b) => b.updatedAt - a.updatedAt);
 
-      set({ notes: sortedNotes, isLoading: false });
+      set({ notes: sortedNotes, isLoading: false, hasPermission: true });
 
       return sortedNotes;
     } catch (e) {
-      set({ isLoading: false });
+      set({
+        isLoading: false,
+        hasPermission: await verifyPermission(),
+      });
       return [];
     }
   },
-  verifyPermission: async () => {
+  async getNote(noteId: string) {
     try {
-      const handle = await getFolderHandle();
+      if (!get().hasPermission) await requestPermission();
+      const note = await noteService.getByName(noteId);
 
-      if (!(await verifyPermission(handle))) {
-        set({ hasPermission: false });
-        return false;
-      }
       set({ hasPermission: true });
-
-      return true;
+      return note;
     } catch (e) {
-      set({ hasPermission: false });
-      return false;
+      set({
+        hasPermission: await verifyPermission(),
+      });
     }
   },
 }));

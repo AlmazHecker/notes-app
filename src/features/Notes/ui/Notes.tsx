@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/shared/ui/button";
 import { Plus, SearchIcon, Settings } from "lucide-react";
 import { Link } from "@/shared/ui/link";
@@ -14,7 +14,7 @@ export const Notes = () => {
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
   useEffect(() => {
-    if (notesStore.hasPermission) notesStore.fetchNotes();
+    if (notesStore.hasPermission) notesStore.getNotes();
   }, [notesStore.hasPermission]);
 
   const sharedContent = (
@@ -42,7 +42,7 @@ export const Notes = () => {
 
   const renderContent = () => {
     if (!notesStore.hasPermission) {
-      return <PermissionDenied permissionTrigger={notesStore.fetchNotes} />;
+      return <PermissionDenied permissionTrigger={notesStore.getNotes} />;
     }
 
     if (notesStore.isLoading) {

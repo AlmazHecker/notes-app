@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, FormEvent } from "react";
 import {
   Dialog,
   DialogContent,
@@ -37,7 +37,9 @@ export const SetPasswordModal = ({
     }
   }, [password]);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+
     setPasswordError("");
 
     if (password !== confirmPassword) {
@@ -77,13 +79,18 @@ export const SetPasswordModal = ({
             {t("encryption.setNotePassword.description")}
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
+        <form
+          id="set-password-form"
+          className="grid gap-4 py-4"
+          onSubmit={handleSubmit}
+        >
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="password" className="text-right">
+            <Label htmlFor="note-password" className="text-right">
               {t("common.password")}
             </Label>
             <Input
-              id="password"
+              autoComplete="new-password"
+              id="note-password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -92,11 +99,12 @@ export const SetPasswordModal = ({
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="confirmPassword" className="text-right">
+            <Label htmlFor="confirm-password" className="text-right">
               {t("encryption.setNotePassword.confirmPassword")}
             </Label>
             <Input
-              id="confirmPassword"
+              autoComplete="new-password"
+              id="confirm-password"
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
@@ -113,9 +121,11 @@ export const SetPasswordModal = ({
           {passwordError && (
             <p className="text-red-500 text-sm">{passwordError}</p>
           )}
-        </div>
+        </form>
         <DialogFooter>
-          <Button onClick={handleSubmit}>{t("note.encryptNote")}</Button>
+          <Button form="set-password-form" type="submit">
+            {t("note.encryptNote")}
+          </Button>
           <Button variant="outline" onClick={handleCancel}>
             {t("common.cancel")}
           </Button>

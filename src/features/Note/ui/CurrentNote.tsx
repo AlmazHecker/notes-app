@@ -1,81 +1,77 @@
-import { useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { TextEditor } from "@/shared/ui/text-editor/text-editor";
-import { ArrowLeft, EditIcon, SaveIcon } from "lucide-react";
+import { ArrowLeft, SaveIcon } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import { type Editor } from "@tiptap/react";
 import { useNoteStore } from "@/entities/note/api";
 import ExpandPane from "./ExpandPane";
-import { useNoteManagement } from "../hooks/useNoteManagement";
 import { SetPasswordModal } from "../../NoteEncryption/ui/SetPasswordModal";
 import { EnterPasswordModal } from "../../NoteEncryption/ui/EnterPasswordModal";
 import DraggableLayout from "@/features/Note/ui/DraggableLayout";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { NoteActionsDropdown } from "./NoteActionsDropdown";
 import SearchInput from "./SearchInput";
 import { Note } from "@/entities/note/types";
 import { NoteEncryption } from "../lib/NoteEncryption";
-import { PermissionDenied } from "@/shared/ui/permission-denied";
 import { EncryptedContent } from "./EncryptedContent";
-import { useLaunchQueue } from "../hooks/useLaunchQueue";
+import { noteService } from "@/entities/note/service";
+import { useTranslation } from "react-i18next";
 
-export const CurrentNote = () => {
+const getDefaultNote = () => ({
+  content: "",
+  label: "New Note",
+  isEncrypted: false,
+  id: crypto.randomUUID(),
+});
+
+type CurrentNoteProps = {
+  noteId: string;
+};
+export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
   const editorRef = useRef<Editor | null>(null);
-  const getNotes = useNoteStore((state) => state.fetchNotes);
   const [toggleSearch, setToggleSearch] = useState(false);
-
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
-  const [isSetPasswordModalOpen, openSetPasswordModal] = useState(false);
-  const [isEnterPasswordModalOpen, openEnterPasswordModal] = useState(false);
+  const [modal, setModal] = useState<"enter" | "set" | "">("");
   const [password, setPassword] = useState("");
 
-  const {
-    note,
-    setNote,
-    isEncrypted,
-    setIsEncrypted,
-    isEditing,
-    setIsEditing,
-    getNote,
-    saveNote: saveNoteHandler,
-    deleteNote: deleteNoteHandler,
-  } = useNoteManagement();
-
-  const setEditMode = () => {
-    if (isEncrypted) {
-      return openEnterPasswordModal(true);
-    }
-    return setIsEditing(true);
-  };
+  const [note, setNote] = useState<Note | null>(getDefaultNote() as Note);
+  const [isEncrypted, setIsEncrypted] = useState(false);
+  const noteStore = useNoteStore();
 
   const handleEncryptionToggle = () => {
     if (note?.isEncrypted) {
       return handleDecryptNote();
     }
-    return openSetPasswordModal(true);
+    return setModal("set");
   };
 
   const saveNote = async (note: Note, password: string) => {
     note.content = editorRef.current?.getHTML() || "";
+    const originalContent = note.content;
 
-    const updatedNote = await saveNoteHandler(note, password);
-    setNote(updatedNote);
+    if (note.isEncrypted) {
+      note.content = await NoteEncryption.encrypt(note.content, password);
+    }
+
+    await noteService.update(note);
+
+    note.content = originalContent;
+    setNote(note);
     setPassword(password);
-    getNotes();
-    navigate(`?noteId=${updatedNote?.id}`);
+    noteStore.getNotes();
+    navigate(`?noteId=${note?.id}`);
   };
 
   const deleteNote = async () => {
-    if (
-      note?.isEncrypted &&
-      !confirm("This note is encrypted. Are you sure you want to delete it?")
-    ) {
+    if (!note || (note.isEncrypted && !confirm(t("note.deleteNoteConfirm")))) {
       return;
     }
-    await deleteNoteHandler(note);
+    await noteService.delete(note.id);
 
     navigate("/");
-    getNotes();
+    noteStore.getNotes();
   };
 
   const handleEncryptNote = async (password: string) => {
@@ -89,67 +85,40 @@ export const CurrentNote = () => {
   };
 
   const handleEnterPassword = async (password: string) => {
-    try {
-      const decrypted = await NoteEncryption.decrypt(note?.content!, password);
+    const decrypted = await NoteEncryption.decrypt(note?.content!, password);
 
-      if (decrypted === null) {
-        return false;
-      }
+    setNote({ ...(note as Note), content: decrypted });
+    setIsEncrypted(false);
+    setPassword(password);
+  };
 
-      setNote({ ...(note as Note), content: decrypted });
+  const getNote = async (noteId: string) => {
+    setNote(null);
+
+    if (noteId === "new-note") {
+      setNote(getDefaultNote() as Note);
       setIsEncrypted(false);
-      setPassword(password);
-      return true;
-    } catch (error) {
-      return false;
+      return;
     }
-  };
+    const note = await noteStore.getNote(noteId);
+    if (!note) return;
 
-  const handleBack = () => {
-    navigate("/");
+    setNote(note);
+    setIsEncrypted(note.isEncrypted);
   };
-
-  const [params] = useSearchParams();
-  const noteId = params.get("noteId");
 
   useEffect(() => {
     if (noteId) getNote(noteId);
     return () => setNote(null);
   }, [noteId]);
 
-  useLaunchQueue((launchedNote) => {
-    setNote(launchedNote);
-    setIsEncrypted(launchedNote.isEncrypted);
-
-    if (launchedNote.isEncrypted) {
-      openEnterPasswordModal(true);
-    } else {
-      setIsEditing(true);
-      editorRef.current?.commands.setContent(launchedNote.content);
-    }
-
-    navigate(`?noteId=${launchedNote.id}`);
-  });
-
-  const { hasPermission } = useNoteStore();
-
-  if (!hasPermission && noteId !== "new-note") {
+  if (!note)
     return (
-      <PermissionDenied
-        containerClassName="p-5"
-        permissionTrigger={() => getNote(noteId!)}
-      />
-    );
-  }
-
-  if (!noteId) {
-    return (
-      <div className="hidden md:flex items-center justify-center h-full text-muted-foreground">
-        Select a note to view
+      <div className="flex items-center justify-center h-full text-muted-foreground">
+        Note not found
       </div>
     );
-  }
-  if (!note) return;
+
   return (
     <div className="relative flex-1 flex flex-col p-4 space-y-4 shadow h-full">
       {toggleSearch && (
@@ -162,32 +131,29 @@ export const CurrentNote = () => {
       <div className="flex items-center justify-between py-1">
         <div className="flex items-center gap-3 w-full">
           <Button
-            onClick={handleBack}
+            onClick={() => navigate("/")}
             className="md:hidden flex"
             variant="outline"
             size="icon"
           >
             <ArrowLeft />
           </Button>
-          {isEditing ? (
-            <input
-              className="w-full text-2xl border-none font-bold border outline-none rounded p-0"
-              value={note.label}
-              onChange={(e) => setNote({ ...note, label: e.target.value })}
-              placeholder="Enter note title"
-            />
-          ) : (
-            <h1 className="text-2xl font-bold">{note.label}</h1>
-          )}
+          <input
+            className="w-full text-2xl border-none font-bold border outline-none rounded p-0"
+            value={note.label}
+            onChange={(e) => setNote({ ...note, label: e.target.value })}
+            placeholder="Enter note title"
+            readOnly={isEncrypted}
+          />
         </div>
 
         <div className="flex gap-3 items-center">
           <Button
             variant="outline"
             size="icon"
-            onClick={isEditing ? () => saveNote(note, password) : setEditMode}
+            onClick={() => saveNote(note, password)}
           >
-            {isEditing ? <SaveIcon /> : <EditIcon />}
+            <SaveIcon />
           </Button>
 
           <NoteActionsDropdown
@@ -200,32 +166,28 @@ export const CurrentNote = () => {
         </div>
       </div>
       {isEncrypted ? (
-        <EncryptedContent onDecrypt={() => openEnterPasswordModal(true)} />
+        <EncryptedContent onDecrypt={() => setModal("enter")} />
       ) : (
         <TextEditor
-          className={
-            isEditing
-              ? "bg-input/70 rounded-md p-4 transition-all"
-              : "transition-all"
-          }
+          className="transition-all"
           ref={editorRef}
           value={note.content}
-          editable={isEditing}
+          editable={!isEncrypted}
         />
       )}
 
-      {note && <ExpandPane />}
+      <ExpandPane />
 
-      {isSetPasswordModalOpen && (
+      {modal === "set" && (
         <SetPasswordModal
-          onClose={() => openSetPasswordModal(false)}
+          onClose={() => setModal("")}
           onSubmit={handleEncryptNote}
         />
       )}
 
-      {isEnterPasswordModalOpen && (
+      {modal === "enter" && (
         <EnterPasswordModal
-          onClose={() => openEnterPasswordModal(false)}
+          onClose={() => setModal("")}
           onSubmit={handleEnterPassword}
         />
       )}

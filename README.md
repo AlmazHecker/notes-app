@@ -35,7 +35,6 @@ Simple notes app based on File System API and with encryption feature
 1. **First Run**: When you first open the app, you'll be prompted to select a folder where notes will be stored.
 
 2. **Creating Notes**:
-
    - Click the "+" button to create a new note
    - Give your note a title and start writing
    - Click the save icon in the top-right corner
@@ -92,9 +91,7 @@ Each note file contains JSON data with the following format:
 ## Future Features
 
 - [ ] Tagging and categorization
-- [ ] Search functionality
 - [ ] Markdown support
-- [ ] Export/import functionality
 
 ## Browser Support
 

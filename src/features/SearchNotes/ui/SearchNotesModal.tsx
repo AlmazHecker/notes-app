@@ -1,4 +1,4 @@
-import { useState, useEffect, FC } from "react";
+import { useEffect, FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { useNoteStore } from "@/entities/note/api";
 import {
@@ -22,14 +22,11 @@ export const SearchNotesModal: FC<SearchNotesModalProps> = ({
   setOpen,
 }) => {
   const { t } = useTranslation();
-
-  const [query, setQuery] = useState("");
   const navigate = useNavigate();
-
-  const { notes, fetchNotes } = useNoteStore();
+  const { notes, getNotes } = useNoteStore();
 
   useEffect(() => {
-    if (open) fetchNotes();
+    if (open) getNotes();
   }, [open]);
 
   const handleSelectNote = (noteId: string) => {
@@ -43,8 +40,6 @@ export const SearchNotesModal: FC<SearchNotesModalProps> = ({
         <CommandInput
           placeholder={t("notes.searchNotes")}
           className="flex-1 h-12  bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground"
-          value={query}
-          onValueChange={setQuery}
         />
         <CommandList>
           <CommandEmpty>{t("notes.notFound")}</CommandEmpty>

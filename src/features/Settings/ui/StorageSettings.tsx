@@ -26,7 +26,7 @@ const StorageSettings = () => {
     try {
       const size = await noteService.getTotalSize();
       setFolderSize(size);
-      notesStore.fetchNotes();
+      notesStore.getNotes();
     } catch (err) {
       console.error("Failed to load folder size:", err);
     }

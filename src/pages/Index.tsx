@@ -1,5 +1,5 @@
-import { CurrentNote } from "@/features/Note/ui/CurrentNote";
 import { LAYOUT_SELECTORS } from "@/features/Note/ui/DraggableLayout";
+import { NoteView } from "@/features/Note/ui/NoteView";
 import { Notes } from "@/features/Notes/ui/Notes";
 import { useSearchParams } from "react-router-dom";
 
@@ -42,7 +42,7 @@ const Index = () => {
           "
           id={LAYOUT_SELECTORS.right}
         >
-          <CurrentNote />
+          <NoteView />
         </div>
       </div>
     </div>

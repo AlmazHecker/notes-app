@@ -47,7 +47,7 @@ const ExportNotes: React.FC = () => {
 
   const getNotes = async () => {
     try {
-      const notes = await notesStore.fetchNotes();
+      const notes = await notesStore.getNotes();
 
       const initialSelection: Record<string, boolean> = {};
       notes.forEach((note) => {

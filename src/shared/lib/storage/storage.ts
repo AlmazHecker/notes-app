@@ -1,7 +1,7 @@
 import { Note } from "@/entities/note/types";
 
 export interface NoteStorageStrategy {
-  getByName(noteId: string): Promise<Note | null>;
+  getByName(noteId: string): Promise<Note | void>;
   getFileByName(noteId: string): Promise<Blob>;
   update(note: Note): Promise<Note>;
   delete(noteId: string): Promise<void>;

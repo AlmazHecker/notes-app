@@ -9,14 +9,13 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
     return `${noteId}${PREFIX}`;
   }
 
-  async getByName(noteId: string): Promise<Note | null> {
+  async getByName(noteId: string): Promise<Note> {
     const file = await this.getFileByName(noteId);
     return JSON.parse(await file.text());
   }
 
   async getFileByName(noteId: string): Promise<File> {
     const folderHandle = await getFolderHandle();
-    await verifyPermission(folderHandle);
 
     const fileHandle = await folderHandle.getFileHandle(
       this.getPrefixedName(noteId)
@@ -29,7 +28,7 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
     const folderHandle = await getFolderHandle();
     const note = { ...updatedNote, tags: [], updatedAt: Date.now() };
 
-    await verifyPermission(folderHandle);
+    await verifyPermission();
 
     const handle = await folderHandle.getFileHandle(
       this.getPrefixedName(note.id),
@@ -48,7 +47,6 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
 
   async getAll(): Promise<Note[]> {
     const folderHandle = await getFolderHandle();
-    await verifyPermission(folderHandle);
 
     const notes: Note[] = [];
     for await (const [, handle] of folderHandle.entries()) {
@@ -62,7 +60,7 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
 
   async create(newNote: Omit<Note, "createdAt" | "updatedAt">) {
     const folderHandle = await getFolderHandle();
-    await verifyPermission(folderHandle);
+    await verifyPermission();
 
     const note: Note = {
       ...newNote,
