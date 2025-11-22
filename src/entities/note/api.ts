@@ -29,9 +29,6 @@ export const useNoteStore = create<NoteState>((set, get) => ({
       return [];
     }
   },
-  setIsLoading: (isLoading: boolean) => {
-    set({ isLoading });
-  },
   verifyPermission: async () => {
     try {
       const handle = await getFolderHandle();

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { getFolderHandle } from "@/shared/lib/fileApi";
 import { Download, ArrowLeft, Folder } from "lucide-react";
 import JSZip from "jszip";
 import { useNoteStore } from "@/entities/note/api";
@@ -9,6 +8,7 @@ import { Checkbox } from "@/shared/ui/checkbox";
 import { formatDate, getEscapedHtml } from "@/shared/lib/utils";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import { noteService } from "@/entities/note/service";
 
 const ExportNotes: React.FC = () => {
   const { t } = useTranslation();
@@ -47,7 +47,6 @@ const ExportNotes: React.FC = () => {
 
   const getNotes = async () => {
     try {
-      await notesStore.verifyPermission();
       const notes = await notesStore.fetchNotes();
 
       const initialSelection: Record<string, boolean> = {};
@@ -73,12 +72,9 @@ const ExportNotes: React.FC = () => {
       }
 
       const zip = new JSZip();
-      const folderHandle = await getFolderHandle();
 
       for (const note of notesToExport) {
-        const fileHandle = await folderHandle.getFileHandle(note.id);
-        const file = await fileHandle.getFile();
-
+        const file = await noteService.getFileByName(note.id);
         if (!file) continue;
 
         zip.file(note.id, file);

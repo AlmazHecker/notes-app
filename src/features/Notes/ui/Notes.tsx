@@ -10,18 +10,11 @@ import { PermissionDenied } from "@/shared/ui/permission-denied";
 
 export const Notes = () => {
   const { t } = useTranslation();
-
   const notesStore = useNoteStore();
-
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
-  const init = async () => {
-    await notesStore.verifyPermission();
-    await notesStore.fetchNotes();
-  };
-
   useEffect(() => {
-    if (notesStore.hasPermission) init();
+    if (notesStore.hasPermission) notesStore.fetchNotes();
   }, [notesStore.hasPermission]);
 
   const sharedContent = (
@@ -49,7 +42,7 @@ export const Notes = () => {
 
   const renderContent = () => {
     if (!notesStore.hasPermission) {
-      return <PermissionDenied permissionTrigger={init} />;
+      return <PermissionDenied permissionTrigger={notesStore.fetchNotes} />;
     }
 
     if (notesStore.isLoading) {

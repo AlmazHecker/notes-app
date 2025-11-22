@@ -1,6 +1,5 @@
 import { useNoteStore } from "@/entities/note/api";
 import { noteService } from "@/entities/note/service";
-import { getFolderHandle, getTotalFolderSize } from "@/shared/lib/fileApi";
 import { formatSize } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/button";
 import {
@@ -11,15 +10,11 @@ import {
   CardTitle,
 } from "@/shared/ui/card";
 import JSZip from "jszip";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
-type StorageSettingsProps = {
-  // Define your props here
-};
-
-const StorageSettings: React.FC<StorageSettingsProps> = (props) => {
+const StorageSettings = () => {
   const { t } = useTranslation();
 
   const navigate = useNavigate();
@@ -29,9 +24,7 @@ const StorageSettings: React.FC<StorageSettingsProps> = (props) => {
 
   async function loadFolderSize() {
     try {
-      await notesStore.verifyPermission();
-      const handle = await getFolderHandle();
-      const size = await getTotalFolderSize(handle);
+      const size = await noteService.getTotalSize();
       setFolderSize(size);
       notesStore.fetchNotes();
     } catch (err) {
