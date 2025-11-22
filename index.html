@@ -2,11 +2,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Notes</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"
-      rel="stylesheet"
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="
+    script-src 'self' 'wasm-unsafe-eval';
+    font-src 'self';
+    img-src 'self' data:;
+    connect-src 'self';
+    manifest-src 'self';
+  "
     />
+
+    <title>Notes</title>
+
     <link rel="manifest" href="/manifest.json" />
     <link href="/src/styles/global.css" rel="stylesheet" />
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
