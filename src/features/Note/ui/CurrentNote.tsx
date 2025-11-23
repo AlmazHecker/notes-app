@@ -120,7 +120,7 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
     );
 
   return (
-    <div className="relative flex-1 flex flex-col p-4 space-y-4 shadow h-full">
+    <div className="relative flex-1 flex flex-col p-4 pt-0 shadow min-h-full">
       {toggleSearch && (
         <SearchInput
           onClose={() => setToggleSearch(false)}
@@ -128,7 +128,7 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
         />
       )}
 
-      <div className="flex items-center justify-between py-1">
+      <div className="sticky top-0 pt-4 bg-background z-1 flex items-center justify-between py-1 mb-3">
         <div className="flex items-center gap-3 w-full">
           <Button
             onClick={() => navigate("/")}
