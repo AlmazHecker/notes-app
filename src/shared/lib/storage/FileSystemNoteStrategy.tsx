@@ -1,4 +1,4 @@
-import { getFolderHandle, verifyPermission } from "../fileApi";
+import { getFolderHandle, withPermission } from "../fileApi";
 import { NoteStorageStrategy } from "./storage";
 import { Note } from "@/entities/note/types";
 
@@ -25,19 +25,19 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
   }
 
   async update(updatedNote: Note): Promise<Note> {
-    const folderHandle = await getFolderHandle();
-    const note = { ...updatedNote, tags: [], updatedAt: Date.now() };
+    return withPermission(async () => {
+      const folderHandle = await getFolderHandle();
+      const note = { ...updatedNote, tags: [], updatedAt: Date.now() };
 
-    await verifyPermission();
-
-    const handle = await folderHandle.getFileHandle(
-      this.getPrefixedName(note.id),
-      { create: true }
-    );
-    const writable = await handle.createWritable();
-    await writable.write(JSON.stringify(note));
-    await writable.close();
-    return note;
+      const handle = await folderHandle.getFileHandle(
+        this.getPrefixedName(note.id),
+        { create: true }
+      );
+      const w = await handle.createWritable();
+      await w.write(JSON.stringify(note));
+      await w.close();
+      return note;
+    });
   }
 
   async delete(noteId: string) {
@@ -59,22 +59,23 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
   }
 
   async create(newNote: Omit<Note, "createdAt" | "updatedAt">) {
-    const folderHandle = await getFolderHandle();
-    await verifyPermission();
+    return withPermission(async () => {
+      const folderHandle = await getFolderHandle();
 
-    const note: Note = {
-      ...newNote,
-      tags: [],
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-    };
-    const handle = await folderHandle.getFileHandle(
-      this.getPrefixedName(note.id),
-      { create: true }
-    );
-    const writable = await handle.createWritable();
-    await writable.write(JSON.stringify(note));
-    await writable.close();
+      const note: Note = {
+        ...newNote,
+        tags: [],
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+      };
+      const handle = await folderHandle.getFileHandle(
+        this.getPrefixedName(note.id),
+        { create: true }
+      );
+      const writable = await handle.createWritable();
+      await writable.write(JSON.stringify(note));
+      await writable.close();
+    });
   }
 
   async import(noteId: string, noteBlob: Blob) {

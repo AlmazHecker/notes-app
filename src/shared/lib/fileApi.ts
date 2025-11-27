@@ -101,3 +101,12 @@ export async function requestPermission() {
     return false;
   }
 }
+
+export async function withPermission<T>(fn: () => Promise<T>): Promise<T> {
+  const granted = await verifyPermission();
+  if (!granted) {
+    const ok = await requestPermission();
+    if (!ok) throw new Error("Permission denied");
+  }
+  return fn();
+}

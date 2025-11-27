@@ -56,6 +56,7 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
     }
 
     await noteService.update(note);
+    alert("Note Updated!");
 
     note.content = originalContent;
     setNote(note);
