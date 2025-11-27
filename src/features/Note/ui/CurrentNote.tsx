@@ -61,7 +61,7 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
 
     setPassword(password);
     noteStore.getNotes();
-    navigate(`?noteId=${note?.id}`);
+    navigate(`?noteId=${note?.id}`, { replace: true });
   };
 
   const deleteNote = async () => {

@@ -12,7 +12,7 @@ export const NoteView = () => {
   const noteId = params.get("noteId") as string;
 
   useLaunchQueue((launchedNote) => {
-    navigate(`?noteId=${launchedNote.id}`);
+    navigate(`?noteId=${launchedNote.id}`, { replace: true });
   });
 
   if (!noteStore.hasPermission) {

@@ -45,19 +45,19 @@ const ExportNotes: React.FC = () => {
     return notesStore.notes.filter((note) => selectedNotes[note.id]).length;
   };
 
-  const getNotes = async () => {
-    try {
-      const notes = await notesStore.getNotes();
+  // const getNotes = async () => {
+  //   try {
+  //     const notes = await notesStore.getNotes();
 
-      const initialSelection: Record<string, boolean> = {};
-      notes.forEach((note) => {
-        initialSelection[note.id] = true;
-      });
-      setSelectedNotes(initialSelection);
-    } catch (err) {
-      console.error("Failed to load folder:", err);
-    }
-  };
+  //     const initialSelection: Record<string, boolean> = {};
+  //     notes.forEach((note) => {
+  //       initialSelection[note.id] = true;
+  //     });
+  //     setSelectedNotes(initialSelection);
+  //   } catch (err) {
+  //     console.error("Failed to load folder:", err);
+  //   }
+  // };
 
   const exportNotes = async () => {
     try {
@@ -106,7 +106,7 @@ const ExportNotes: React.FC = () => {
   };
 
   useEffect(() => {
-    getNotes();
+    notesStore.getNotes();
   }, []);
 
   const renderNotes = () => {
@@ -189,7 +189,7 @@ const ExportNotes: React.FC = () => {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={getNotes}
+                onClick={notesStore.getNotes}
                 className="hidden sm:flex items-center"
               >
                 <Folder className="mr-2 h-4 w-4" />
@@ -198,7 +198,7 @@ const ExportNotes: React.FC = () => {
               <Button
                 variant="outline"
                 size="icon"
-                onClick={getNotes}
+                onClick={notesStore.getNotes}
                 className="sm:hidden"
               >
                 <Folder className="h-4 w-4" />
