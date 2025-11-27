@@ -17,12 +17,13 @@ import { EncryptedContent } from "./EncryptedContent";
 import { noteService } from "@/entities/note/service";
 import { useTranslation } from "react-i18next";
 
-const getDefaultNote = () => ({
-  content: "",
-  label: "New Note",
-  isEncrypted: false,
-  id: crypto.randomUUID(),
-});
+const getDefaultNote = () =>
+  ({
+    content: "",
+    label: "New Note",
+    isEncrypted: false,
+    id: crypto.randomUUID(),
+  }) as Note;
 
 type CurrentNoteProps = {
   noteId: string;
@@ -36,7 +37,7 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
   const [modal, setModal] = useState<"enter" | "set" | "">("");
   const [password, setPassword] = useState("");
 
-  const [note, setNote] = useState<Note | null>(getDefaultNote() as Note);
+  const [note, setNote] = useState<Note | null>(getDefaultNote());
   const [isEncrypted, setIsEncrypted] = useState(false);
   const noteStore = useNoteStore();
 
@@ -48,18 +49,16 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
   };
 
   const saveNote = async (note: Note, password: string) => {
-    note.content = editorRef.current?.getHTML() || "";
-    const originalContent = note.content;
+    const copy = { ...note };
+    copy.content = editorRef.current?.getHTML() || "";
 
     if (note.isEncrypted) {
-      note.content = await NoteEncryption.encrypt(note.content, password);
+      copy.content = await NoteEncryption.encrypt(copy.content, password);
     }
 
-    await noteService.update(note);
+    await noteService.update(copy);
     alert("Note Updated!");
 
-    note.content = originalContent;
-    setNote(note);
     setPassword(password);
     noteStore.getNotes();
     navigate(`?noteId=${note?.id}`);
@@ -87,21 +86,17 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
 
   const handleEnterPassword = async (password: string) => {
     const decrypted = await NoteEncryption.decrypt(note?.content!, password);
-
     setNote({ ...(note as Note), content: decrypted });
     setIsEncrypted(false);
     setPassword(password);
   };
 
   const getNote = async (noteId: string) => {
-    setNote(null);
+    let note: Note | void = getDefaultNote();
 
-    if (noteId === "new-note") {
-      setNote(getDefaultNote() as Note);
-      setIsEncrypted(false);
-      return;
+    if (noteId !== "new-note") {
+      note = await noteStore.getNote(noteId);
     }
-    const note = await noteStore.getNote(noteId);
     if (!note) return;
 
     setNote(note);
@@ -110,7 +105,6 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
 
   useEffect(() => {
     if (noteId) getNote(noteId);
-    return () => setNote(null);
   }, [noteId]);
 
   if (!note)
@@ -179,19 +173,16 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
 
       <ExpandPane />
 
-      {modal === "set" && (
-        <SetPasswordModal
-          onClose={() => setModal("")}
-          onSubmit={handleEncryptNote}
-        />
-      )}
-
-      {modal === "enter" && (
-        <EnterPasswordModal
-          onClose={() => setModal("")}
-          onSubmit={handleEnterPassword}
-        />
-      )}
+      <SetPasswordModal
+        isOpen={modal === "set"}
+        onClose={() => setModal("")}
+        onSubmit={handleEncryptNote}
+      />
+      <EnterPasswordModal
+        isOpen={modal === "enter"}
+        onClose={() => setModal("")}
+        onSubmit={handleEnterPassword}
+      />
       <DraggableLayout />
     </div>
   );

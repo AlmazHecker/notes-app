@@ -11,10 +11,19 @@ import { PermissionDenied } from "@/shared/ui/permission-denied";
 export const Notes = () => {
   const { t } = useTranslation();
   const notesStore = useNoteStore();
+  const [isLoading, setIsLoading] = useState(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
+  const getNotes = async () => {
+    try {
+      setIsLoading(true);
+      await notesStore.getNotes();
+    } finally {
+      setIsLoading(false);
+    }
+  };
   useEffect(() => {
-    if (notesStore.hasPermission) notesStore.getNotes();
+    if (notesStore.hasPermission) getNotes();
   }, [notesStore.hasPermission]);
 
   const sharedContent = (
@@ -45,7 +54,7 @@ export const Notes = () => {
       return <PermissionDenied permissionTrigger={notesStore.getNotes} />;
     }
 
-    if (notesStore.isLoading) {
+    if (isLoading) {
       return (
         <>
           <div className="h-12 w-12 animate-spin rounded-full border-4 border-t-gray-900 border-gray-300" />

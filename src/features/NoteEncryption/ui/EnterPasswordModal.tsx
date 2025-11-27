@@ -16,11 +16,13 @@ import { useTranslation } from "react-i18next";
 type EnterPasswordModalProps = {
   onSubmit: (password: string) => Promise<void>;
   onClose: () => void;
+  isOpen: boolean;
 };
 
 export const EnterPasswordModal = ({
   onSubmit,
   onClose,
+  isOpen,
 }: EnterPasswordModalProps) => {
   const { t } = useTranslation();
 
@@ -33,7 +35,7 @@ export const EnterPasswordModal = ({
 
       setPasswordError("");
       await onSubmit(password);
-      onClose();
+      handleClose();
     } catch (e) {
       setPasswordError(t("encryption.enterNotePassword.wrongPassword"));
     }
@@ -46,7 +48,7 @@ export const EnterPasswordModal = ({
   };
 
   return (
-    <Dialog open onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>{t("encryption.enterNotePassword.title")}</DialogTitle>

@@ -16,11 +16,13 @@ import { useTranslation } from "react-i18next";
 type SetPasswordModalProps = {
   onSubmit: (password: string) => Promise<void>;
   onClose: () => void;
+  isOpen: boolean;
 };
 
 export const SetPasswordModal = ({
   onSubmit,
   onClose,
+  isOpen,
 }: SetPasswordModalProps) => {
   const { t } = useTranslation();
 
@@ -28,14 +30,6 @@ export const SetPasswordModal = ({
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [showWarning, setShowWarning] = useState(false);
-
-  useEffect(() => {
-    if (password.length > 0 && password.length < 12) {
-      setShowWarning(true);
-    } else {
-      setShowWarning(false);
-    }
-  }, [password]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -60,7 +54,7 @@ export const SetPasswordModal = ({
     }
 
     await onSubmit(password);
-    onClose();
+    handleCancel();
   };
 
   const handleCancel = () => {
@@ -70,8 +64,15 @@ export const SetPasswordModal = ({
     onClose();
   };
 
+  useEffect(() => {
+    if (password.length > 0 && password.length < 12) {
+      setShowWarning(true);
+    } else {
+      setShowWarning(false);
+    }
+  }, [password]);
   return (
-    <Dialog open onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={handleCancel}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>{t("encryption.setNotePassword.title")}</DialogTitle>

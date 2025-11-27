@@ -15,7 +15,7 @@ export const NoteView = () => {
     navigate(`?noteId=${launchedNote.id}`);
   });
 
-  if (!noteStore.hasPermission && noteId !== "new-note") {
+  if (!noteStore.hasPermission) {
     return (
       <PermissionDenied
         containerClassName="p-5"
