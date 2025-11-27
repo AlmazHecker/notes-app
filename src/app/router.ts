@@ -19,5 +19,5 @@ export const router = createBrowserRouter(
       Component: ExportNotes,
     },
   ],
-  { basename: import.meta.env.MODE === "gh-pages" ? "/notes-app" : "/" }
+  { basename: import.meta.env.BASE_URL }
 );

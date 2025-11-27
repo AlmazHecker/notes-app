@@ -1,6 +1,7 @@
-const CACHE_NAME = "cache-v6";
+// @ts-nocheck
+const CACHE_NAME = `cache-${__BUILD_TIMESTAMP__}`;
 
-self.addEventListener("install", (event) => {
+self.addEventListener("install", () => {
   self.skipWaiting();
 });
 
