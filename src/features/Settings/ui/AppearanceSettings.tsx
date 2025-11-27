@@ -56,7 +56,7 @@ const AppearanceSettings: React.FC<AppearanceSettingsProps> = () => {
                   onClick={() => userPreferences.setTheme(value as Theme)}
                 >
                   <div
-                    className={`h-24 w-full rounded-md ${bg} border border-gray-200 mb-2 flex items-center justify-center`}
+                    className={`aspect-square w-4/5 rounded-md border border-gray-200 mb-2 flex items-center justify-center ${bg}`}
                   >
                     {icon}
                   </div>
