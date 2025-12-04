@@ -225,23 +225,23 @@ pre {
   outline: none;
 }
 
-.editor-content .ProseMirror p {
+/* .editor-content .ProseMirror p {
   margin: 0 0 12px 0;
-}
+} */
 
-.editor-content .ProseMirror h1 {
+/* .editor-content .ProseMirror h1 {
   font-size: 2em;
   font-weight: bold;
   margin: 16px 0 12px 0;
-}
+} */
 
-.editor-content .ProseMirror h2 {
+/* .editor-content .ProseMirror h2 {
   font-size: 1.5em;
   font-weight: bold;
   margin: 14px 0 10px 0;
-}
+} */
 
-.editor-content .ProseMirror h3 {
+/* .editor-content .ProseMirror h3 {
   font-size: 1.25em;
   font-weight: bold;
   margin: 12px 0 8px 0;
@@ -251,7 +251,7 @@ pre {
 .editor-content .ProseMirror ol {
   padding-left: 24px;
   margin: 12px 0;
-}
+} */
 
 .editor-content .ProseMirror blockquote {
   border-left: 4px solid #e2e8f0;
