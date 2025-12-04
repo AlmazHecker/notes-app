@@ -172,7 +172,7 @@ pre {
 @media (min-width: 769px) {
   .menubar {
     position: sticky;
-    top: 77px;
+    top: 75px;
     bottom: unset;
   }
 }
