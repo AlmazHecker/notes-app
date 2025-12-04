@@ -115,7 +115,7 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
     );
 
   return (
-    <div className="relative flex-1 flex flex-col p-4 pt-0 shadow min-h-full">
+    <div className="relative flex-1 flex flex-col px-4 pt-0 shadow min-h-full">
       {toggleSearch && (
         <SearchInput
           onClose={() => setToggleSearch(false)}
@@ -123,7 +123,7 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
         />
       )}
 
-      <div className="sticky top-0 pt-4 bg-background z-1 flex items-center justify-between py-1 mb-3">
+      <div className="sticky top-0 pt-5 bg-background z-3 flex items-center justify-between pt-4 pb-5">
         <div className="flex items-center gap-3 w-full">
           <Button
             onClick={() => navigate("/")}
@@ -164,7 +164,6 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
         <EncryptedContent onDecrypt={() => setModal("enter")} />
       ) : (
         <TextEditor
-          className="transition-all"
           ref={editorRef}
           value={note.content}
           editable={!isEncrypted}

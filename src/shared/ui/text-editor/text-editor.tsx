@@ -16,8 +16,13 @@ import Bold from "@tiptap/extension-bold";
 import History from "@tiptap/extension-history";
 import Italic from "@tiptap/extension-italic";
 import Blockquote from "@tiptap/extension-blockquote";
-
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import { createLowlight, all } from "lowlight";
 import SearchAndReplace from "./extensions/searchAndReplace";
+import { MenuBar } from "./MenuBar";
+
+const lowlight = createLowlight(all);
+lowlight.register({});
 
 const extensions = [
   Heading,
@@ -33,31 +38,25 @@ const extensions = [
   Blockquote,
   HorizontalRule,
   SearchAndReplace.configure(),
+  CodeBlockLowlight.configure({ lowlight }),
 ];
 
 type TextEditorProps = {
-  onChange?: (text: string) => void;
   value?: string;
   ref: RefObject<Editor | null>;
   editable?: boolean;
-  className?: string;
 };
 
 export const TextEditor: FC<TextEditorProps> = ({
   editable = true,
   value,
-  onChange,
   ref,
-  className,
 }) => {
   const editor = useEditor(
     {
       immediatelyRender: false,
       extensions,
       content: value,
-      onUpdate: ({ editor }) => {
-        if (onChange) onChange(editor.getHTML());
-      },
       editable,
     },
     [editable, value]
@@ -66,8 +65,13 @@ export const TextEditor: FC<TextEditorProps> = ({
   useImperativeHandle(ref, () => editor!, [editor]);
 
   return (
-    <div className={className}>
-      <EditorContent editor={editor} />
+    <div className="editor-wrapper">
+      <MenuBar editor={editor} />
+      <EditorContent
+        className="editor-content"
+        onClick={() => editor?.chain().focus()}
+        editor={editor}
+      />
     </div>
   );
 };

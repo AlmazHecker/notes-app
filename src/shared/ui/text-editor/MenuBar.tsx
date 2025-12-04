@@ -1,139 +1,167 @@
-import { cn } from "@/shared/lib/utils";
-import { Button } from "../button";
+import { Editor } from "@tiptap/react";
+import { useEffect, useRef, useState, type FC } from "react";
 import {
-  BoldIcon,
+  Undo,
+  Redo,
+  Bold,
+  Italic,
   Heading1,
   Heading2,
-  ItalicIcon,
+  Heading3,
   List,
   ListOrdered,
+  Quote,
+  Code2,
   Minus,
-  Redo,
-  TextQuote,
-  Undo,
 } from "lucide-react";
 
-import { Editor } from "@tiptap/react";
+export const MenuBar: FC<{ editor: Editor | null }> = ({ editor }) => {
+  const menubarRef = useRef<HTMLDivElement>(null);
+  const [keyboardOffset, setKeyboardOffset] = useState(-100);
 
-type MenuBarProps = {
-  editor: Editor | null;
-};
-// this component should be migrated to context menu
-const MenuBar: FC<MenuBarProps> = ({ editor }) => {
+  useEffect(() => {
+    const updatePosition = () => {
+      if (window.visualViewport && menubarRef.current) {
+        const offset =
+          window.innerHeight -
+          window.visualViewport.offsetTop -
+          window.visualViewport.height;
+        setKeyboardOffset(offset > 0 ? offset + 10 : -100);
+      }
+    };
+
+    window.visualViewport?.addEventListener("resize", updatePosition);
+    window.addEventListener("scroll", updatePosition);
+
+    return () => {
+      window.visualViewport?.removeEventListener("resize", updatePosition);
+      window.removeEventListener("scroll", updatePosition);
+    };
+  }, []);
+
   if (!editor) return null;
 
   return (
-    // <div className="sticky p-4 top-0 z-10 border-b">
-    <div className="sticky top-0 z-10 pb-2">
-      <div className="button-group">
-        <Button
-          type="button"
-          variant="outline"
+    <div
+      className="menubar"
+      ref={menubarRef}
+      style={{ bottom: keyboardOffset }}
+    >
+      <div className="menubar-group">
+        <button
+          onClick={() => editor.chain().focus().undo().run()}
+          disabled={!editor.can().undo()}
+          className="menubar-btn"
+          title="Undo"
+        >
+          <Undo size={16} />
+        </button>
+        <button
+          onClick={() => editor.chain().focus().redo().run()}
+          disabled={!editor.can().redo()}
+          className="menubar-btn"
+          title="Redo"
+        >
+          <Redo size={16} />
+        </button>
+      </div>
+
+      <div className="menubar-divider" />
+
+      <div className="menubar-group">
+        <button
           onClick={() => editor.chain().focus().toggleBold().run()}
-          disabled={!editor.can().chain().focus().toggleBold().run()}
-          size="icon"
-          className={cn(editor.isActive("bold") && "bg-input/70!")}
+          className={"menubar-btn"}
+          title="Bold"
         >
-          <BoldIcon />
-        </Button>
-
-        <Button
-          type="button"
-          variant="outline"
-          disabled={!editor.can().chain().focus().toggleItalic().run()}
-          size="icon"
-          className={cn(editor.isActive("italic") && "bg-input/70!")}
+          <Bold size={16} />
+        </button>
+        <button
           onClick={() => editor.chain().focus().toggleItalic().run()}
+          className={"menubar-btn"}
+          title="Italic"
         >
-          <ItalicIcon />
-        </Button>
+          <Italic size={16} />
+        </button>
+      </div>
 
-        <Button
-          type="button"
-          variant="outline"
-          size="icon"
-          className={cn(
-            editor.isActive("heading", { level: 1 }) && "bg-input/70!"
-          )}
+      <div className="menubar-divider" />
+
+      <div className="menubar-group">
+        <button
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 1 }).run()
           }
+          className={"menubar-btn"}
+          title="Heading 1"
         >
-          <Heading1 />
-        </Button>
-
-        <Button
-          type="button"
-          variant="outline"
-          size="icon"
-          className={cn(
-            editor.isActive("heading", { level: 2 }) && "bg-input/70!"
-          )}
+          <Heading1 size={20} />
+        </button>
+        <button
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 2 }).run()
           }
+          className={"menubar-btn"}
+          title="Heading 2"
         >
-          <Heading2 />
-        </Button>
+          <Heading2 size={20} />
+        </button>
+        <button
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 3 }).run()
+          }
+          className={"menubar-btn"}
+          title="Heading 3"
+        >
+          <Heading3 size={20} />
+        </button>
+      </div>
 
-        <Button
-          type="button"
-          variant="outline"
-          size="icon"
-          className={cn(editor.isActive("bulletList") && "bg-input/70!")}
+      <div className="menubar-divider" />
+
+      <div className="menubar-group">
+        <button
           onClick={() => editor.chain().focus().toggleBulletList().run()}
+          className={"menubar-btn"}
+          title="Bullet List"
         >
-          <List />
-        </Button>
-
-        <Button
-          type="button"
-          variant="outline"
-          size="icon"
-          className={cn(editor.isActive("orderedList") && "bg-input/70!")}
+          <List size={16} />
+        </button>
+        <button
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
+          className={"menubar-btn"}
+          title="Numbered List"
         >
-          <ListOrdered />
-        </Button>
+          <ListOrdered size={16} />
+        </button>
+      </div>
 
-        <Button
-          type="button"
-          variant="outline"
-          size="icon"
-          className={cn(editor.isActive("blockquote") && "bg-input/70!")}
+      <div className="menubar-divider" />
+
+      <div className="menubar-group">
+        <button
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
+          className={"menubar-btn"}
+          title="Blockquote"
         >
-          <TextQuote />
-        </Button>
+          <Quote size={16} />
+        </button>
 
-        <Button
-          type="button"
-          variant="outline"
-          size="icon"
+        <button
+          onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+          className={"menubar-btn"}
+          title="Code Block"
+        >
+          <Code2 size={16} />
+        </button>
+
+        <button
           onClick={() => editor.chain().focus().setHorizontalRule().run()}
+          className="menubar-btn"
+          title="Horizontal Rule"
         >
-          <Minus />
-        </Button>
-
-        <Button
-          type="button"
-          variant="outline"
-          size="icon"
-          onClick={() => editor.chain().focus().undo().run()}
-          disabled={!editor.can().chain().focus().undo().run()}
-        >
-          <Undo />
-        </Button>
-
-        <Button
-          type="button"
-          variant="outline"
-          size="icon"
-          onClick={() => editor.chain().focus().redo().run()}
-          disabled={!editor.can().chain().focus().redo().run()}
-        >
-          <Redo />
-        </Button>
+          <Minus size={16} />
+        </button>
       </div>
     </div>
   );

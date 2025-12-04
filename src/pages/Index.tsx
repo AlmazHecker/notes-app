@@ -31,7 +31,7 @@ const Index = () => {
 
         <div
           id={LAYOUT_SELECTORS.divider}
-          className="transition duration-300 md:block hidden w-1 dark:bg-border cursor-col-resize flex-shrink-0"
+          className="transition duration-300 md:block hidden w-1 bg-border cursor-col-resize flex-shrink-0"
         ></div>
 
         <div

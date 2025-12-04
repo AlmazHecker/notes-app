@@ -24,13 +24,5 @@ export const NoteView = () => {
     );
   }
 
-  // if (!noteId) {
-  //   return (
-  //     <div className="flex items-center justify-center h-full text-muted-foreground">
-  //       Select a note to view
-  //     </div>
-  //   );
-  // }
-
   return <CurrentNote noteId={noteId} />;
 };
