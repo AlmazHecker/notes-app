@@ -1,5 +1,5 @@
 import { Editor } from "@tiptap/react";
-import { useEffect, useRef, useState, type FC } from "react";
+import { useEffect, useState, type FC } from "react";
 import {
   Undo,
   Redo,
@@ -14,12 +14,11 @@ import {
   Code2,
   Minus,
 } from "lucide-react";
+import "./menubar.css";
 
 export const MenuBar: FC<{ editor: Editor | null }> = ({ editor }) => {
-  const menubarRef = useRef<HTMLDivElement>(null);
   const [keyboardOffset, setKeyboardOffset] = useState(-100);
 
-  const div = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const updatePosition = () => {
       if (window.visualViewport) {
@@ -27,7 +26,7 @@ export const MenuBar: FC<{ editor: Editor | null }> = ({ editor }) => {
           window.innerHeight -
           window.visualViewport.offsetTop -
           window.visualViewport.height;
-        setKeyboardOffset(offset > 0 ? offset + 10 : -100);
+        setKeyboardOffset(offset > 0 ? offset - 45 : -100);
       }
     };
 
@@ -43,11 +42,7 @@ export const MenuBar: FC<{ editor: Editor | null }> = ({ editor }) => {
   if (!editor) return null;
 
   return (
-    <div
-      className="menubar"
-      ref={menubarRef}
-      style={{ bottom: keyboardOffset }}
-    >
+    <div className="mt-5 py-2 px-4 menubar" style={{ bottom: keyboardOffset }}>
       <div className="menubar-group">
         <button
           onClick={() => editor.chain().focus().undo().run()}

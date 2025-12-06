@@ -2,7 +2,7 @@ import "./styles.css";
 
 import { Editor, EditorContent } from "@tiptap/react";
 import Document from "@tiptap/extension-document";
-import { useImperativeHandle, type FC, type RefObject } from "react";
+import { Ref, useImperativeHandle, type FC } from "react";
 import { useEditor } from "@tiptap/react";
 
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
@@ -19,7 +19,6 @@ import Blockquote from "@tiptap/extension-blockquote";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { createLowlight, all } from "lowlight";
 import SearchAndReplace from "./extensions/searchAndReplace";
-import { MenuBar } from "./MenuBar";
 
 const lowlight = createLowlight(all);
 lowlight.register({});
@@ -43,7 +42,7 @@ const extensions = [
 
 type TextEditorProps = {
   value?: string;
-  ref: RefObject<Editor | null>;
+  ref: Ref<Editor | null>;
   editable?: boolean;
 };
 
@@ -65,13 +64,12 @@ export const TextEditor: FC<TextEditorProps> = ({
   useImperativeHandle(ref, () => editor!, [editor]);
 
   return (
-    <div className="editor-wrapper">
-      <MenuBar editor={editor} />
+    <>
       <EditorContent
-        className="editor-content"
+        className="p-4 editor-content"
         onClick={() => editor?.chain().focus()}
         editor={editor}
       />
-    </div>
+    </>
   );
 };

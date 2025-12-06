@@ -16,6 +16,7 @@ import { NoteEncryption } from "../lib/NoteEncryption";
 import { EncryptedContent } from "./EncryptedContent";
 import { noteService } from "@/entities/note/service";
 import { useTranslation } from "react-i18next";
+import { MenuBar } from "@/shared/ui/text-editor/MenuBar";
 
 const getDefaultNote = () =>
   ({
@@ -29,7 +30,7 @@ type CurrentNoteProps = {
   noteId: string;
 };
 export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
-  const editorRef = useRef<Editor | null>(null);
+  const [editor, setEditor] = useState<Editor | null>(null);
   const [toggleSearch, setToggleSearch] = useState(false);
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -50,7 +51,7 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
 
   const saveNote = async (note: Note, password: string) => {
     const copy = { ...note };
-    copy.content = editorRef.current?.getHTML() || "";
+    copy.content = editor?.getHTML() || "";
 
     if (note.isEncrypted) {
       copy.content = await NoteEncryption.encrypt(copy.content, password);
@@ -92,6 +93,11 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
   };
 
   const getNote = async (noteId: string) => {
+    // for mobile smooth experience
+    if (window.innerWidth <= 768) {
+      setNote(null);
+    }
+
     let note: Note | void = getDefaultNote();
 
     if (noteId !== "new-note") {
@@ -115,56 +121,57 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
     );
 
   return (
-    <div className="relative flex-1 flex flex-col px-4 pt-0 shadow min-h-full">
+    <div className="relative flex-1 flex flex-col pt-0 shadow ">
       {toggleSearch && (
-        <SearchInput
-          onClose={() => setToggleSearch(false)}
-          editor={editorRef.current}
-        />
+        <SearchInput onClose={() => setToggleSearch(false)} editor={editor} />
       )}
 
-      <div className="sticky top-0 pt-5 bg-background z-3 flex items-center justify-between pt-4 pb-5">
-        <div className="flex items-center gap-3 w-full">
-          <Button
-            onClick={() => navigate("/")}
-            className="md:hidden flex"
-            variant="outline"
-            size="icon"
-          >
-            <ArrowLeft />
-          </Button>
-          <input
-            className="w-full text-2xl border-none font-bold border outline-none rounded p-0"
-            value={note.label}
-            onChange={(e) => setNote({ ...note, label: e.target.value })}
-            placeholder="Enter note title"
-            readOnly={isEncrypted}
-          />
+      <div className="sticky top-0 pt-5 bg-background z-30 pt-4">
+        <div className="px-4 flex items-center justify-between">
+          <div className="flex items-center gap-3 w-full">
+            <Button
+              onClick={() => navigate("/")}
+              className="md:hidden flex"
+              variant="outline"
+              size="icon"
+            >
+              <ArrowLeft />
+            </Button>
+            <input
+              className="w-full text-2xl border-none font-bold border outline-none rounded p-0"
+              value={note.label}
+              onChange={(e) => setNote({ ...note, label: e.target.value })}
+              placeholder="Enter note title"
+              readOnly={isEncrypted}
+            />
+          </div>
+
+          <div className="flex gap-3 items-center">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => saveNote(note, password)}
+            >
+              <SaveIcon />
+            </Button>
+
+            <NoteActionsDropdown
+              isEncrypted={isEncrypted}
+              note={note}
+              onEncryptionClick={handleEncryptionToggle}
+              onDeleteClick={deleteNote}
+              onSearchClick={() => setToggleSearch(!toggleSearch)}
+            />
+          </div>
         </div>
 
-        <div className="flex gap-3 items-center">
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => saveNote(note, password)}
-          >
-            <SaveIcon />
-          </Button>
-
-          <NoteActionsDropdown
-            isEncrypted={isEncrypted}
-            note={note}
-            onEncryptionClick={handleEncryptionToggle}
-            onDeleteClick={deleteNote}
-            onSearchClick={() => setToggleSearch(!toggleSearch)}
-          />
-        </div>
+        <MenuBar editor={editor} />
       </div>
       {isEncrypted ? (
         <EncryptedContent onDecrypt={() => setModal("enter")} />
       ) : (
         <TextEditor
-          ref={editorRef}
+          ref={setEditor}
           value={note.content}
           editable={!isEncrypted}
         />
