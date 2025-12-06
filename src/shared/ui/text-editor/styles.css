@@ -153,7 +153,10 @@ pre {
   background: var(--background);
 
   min-height: 250px;
-  position: sticky;
+
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 .menubar {
@@ -166,15 +169,6 @@ pre {
   z-index: 9;
   border-top-left-radius: 7px;
   border-top-right-radius: 7px;
-}
-
-/* Desktop: static positioning */
-@media (min-width: 769px) {
-  .menubar {
-    position: sticky;
-    top: 75px;
-    bottom: unset;
-  }
 }
 
 .menubar-group {
@@ -219,39 +213,16 @@ pre {
 .editor-content {
   padding: 16px;
   min-height: 200px;
+  overflow: auto;
+}
+
+.editor-content::-webkit-scrollbar {
+  display: none;
 }
 
 .editor-content .ProseMirror {
   outline: none;
 }
-
-/* .editor-content .ProseMirror p {
-  margin: 0 0 12px 0;
-} */
-
-/* .editor-content .ProseMirror h1 {
-  font-size: 2em;
-  font-weight: bold;
-  margin: 16px 0 12px 0;
-} */
-
-/* .editor-content .ProseMirror h2 {
-  font-size: 1.5em;
-  font-weight: bold;
-  margin: 14px 0 10px 0;
-} */
-
-/* .editor-content .ProseMirror h3 {
-  font-size: 1.25em;
-  font-weight: bold;
-  margin: 12px 0 8px 0;
-}
-
-.editor-content .ProseMirror ul,
-.editor-content .ProseMirror ol {
-  padding-left: 24px;
-  margin: 12px 0;
-} */
 
 .editor-content .ProseMirror blockquote {
   border-left: 4px solid #e2e8f0;

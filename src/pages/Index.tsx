@@ -9,7 +9,7 @@ const Index = () => {
   const isNoteOpen = !!noteId;
 
   return (
-    <div className="flex flex-1 md:h-full md:max-h-full shadow overflow-hidden">
+    <div className="flex flex-1 h-full shadow overflow-hidden">
       <div
         className={`
           flex w-full md:w-auto md:flex-1
@@ -35,11 +35,7 @@ const Index = () => {
         ></div>
 
         <div
-          className="
-            w-full md:w-auto md:flex-1
-            flex-shrink-0
-            h-full overflow-y-auto
-          "
+          className="w-full md:w-auto md:flex-1 flex flex-col flex-shrink-0"
           id={LAYOUT_SELECTORS.right}
         >
           <NoteView />

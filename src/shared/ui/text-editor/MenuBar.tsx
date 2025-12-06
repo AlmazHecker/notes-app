@@ -19,9 +19,10 @@ export const MenuBar: FC<{ editor: Editor | null }> = ({ editor }) => {
   const menubarRef = useRef<HTMLDivElement>(null);
   const [keyboardOffset, setKeyboardOffset] = useState(-100);
 
+  const div = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const updatePosition = () => {
-      if (window.visualViewport && menubarRef.current) {
+      if (window.visualViewport) {
         const offset =
           window.innerHeight -
           window.visualViewport.offsetTop -

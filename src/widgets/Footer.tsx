@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className="w-full border-t border-background-200 py-3 bg-background">
+    <footer className="w-full sticky bottom-0 border-t border-background-200 py-3 bg-background">
       <div className="max-w-6xl mx-auto px-4 flex items-center justify-between">
         <p className="text-sm text-gray-500">
           © {new Date().getFullYear()} Notes
