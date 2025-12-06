@@ -27,7 +27,7 @@ export const Notes = () => {
   }, [notesStore.hasPermission]);
 
   const sharedContent = (
-    <div className="flex justify-between items-center sticky top-0 md:-top-4 py-1 bg-background z-10 ">
+    <div className="flex justify-between items-center sticky top-0 md:-top-4 bg-background z-10 ">
       <h2 className="text-xl font-bold">{t("notes.title")}</h2>
       {notesStore.hasPermission && (
         <div className="flex items-center gap-3">

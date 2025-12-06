@@ -66,7 +66,7 @@ export const TextEditor: FC<TextEditorProps> = ({
   return (
     <>
       <EditorContent
-        className="p-4 editor-content"
+        className="p-4 pt-0 md:pt-4 editor-content"
         onClick={() => editor?.chain().focus()}
         editor={editor}
       />

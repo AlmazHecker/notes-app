@@ -126,7 +126,7 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
         <SearchInput onClose={() => setToggleSearch(false)} editor={editor} />
       )}
 
-      <div className="sticky top-0 pt-5 bg-background z-30 pt-4">
+      <div className="sticky top-0 pt-4 bg-background z-30 pb-4 md:pb-0">
         <div className="px-4 flex items-center justify-between">
           <div className="flex items-center gap-3 w-full">
             <Button

@@ -42,7 +42,7 @@ export const MenuBar: FC<{ editor: Editor | null }> = ({ editor }) => {
   if (!editor) return null;
 
   return (
-    <div className="mt-5 py-2 px-4 menubar" style={{ bottom: keyboardOffset }}>
+    <div className="mt-4 py-2 px-4 menubar" style={{ bottom: keyboardOffset }}>
       <div className="menubar-group">
         <button
           onClick={() => editor.chain().focus().undo().run()}
