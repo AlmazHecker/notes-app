@@ -10,6 +10,7 @@ import { noteService } from "@/entities/note/service";
 const root = ReactDOM.createRoot(document.getElementById("root")!);
 
 const bootstrapApp = async () => {
+  await navigator.storage.persist();
   await noteService.initialize();
 };
 

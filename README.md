@@ -1,10 +1,10 @@
 # Notes App
 
-Simple notes app based on File System API and with encryption feature
+Simple notes app based on OPFS(Origin Private File System) with optional end-to-end encryption.
 
 ## Features
 
-- **Local Storage**: Notes are stored directly on the user's device using the Chrome FileSystem API
+- **Local Storage**: Notes are stored directly on the user's device using the OPFS
 - **Note Encryption**: Secure your sensitive notes with AES-256 encryption
 - **Resizable Panes**: Fully adjustable interface layout
 - **Rich Text Editing**: Powered by Tiptap editor for a great writing experience
