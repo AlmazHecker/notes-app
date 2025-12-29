@@ -55,31 +55,7 @@ Simple notes app based on OPFS(Origin Private File System) with optional end-to-
 
 ## Technical Details
 
-### File Structure
-
-Notes are stored as individual files in the selected folder with the following structure:
-
-```
-notes-folder/
-  ├── normal-note
-  ├── encrypted-note
-  └── ...
-```
-
-Each note file contains JSON data with the following format:
-
-```json
-{
-  "id": "unique-id",
-  "label": "Note Title",
-  "content": "<p>HTML content</p>",
-  "createdAt": 1234567890,
-  "updatedAt": 1234567890,
-  "isEncrypted": false
-}
-```
-
-### Dependencies
+### Stack
 
 - React
 - TypeScript
@@ -87,6 +63,77 @@ Each note file contains JSON data with the following format:
 - Lucide React (Icons)
 - Vite (Build tool)
 - Zustand (State Management)
+
+### Storage
+
+Notes are stored in the **Origin Private File System (OPFS)**.
+
+- Each note is stored as a **separate file** containing only raw content.
+- A single `index.json` file stores metadata for fast access.
+
+```
+opfs/
+  ├── index.json
+  ├── note_<id>
+  ├── note_<id>
+  └── ...
+```
+
+### Index (`index.json`)
+
+Maps note IDs to metadata:
+
+```json
+{
+  "note-id": {
+    "id": "note-id",
+    "label": "Note Title",
+    "createdAt": 1234567890,
+    "updatedAt": 1234567890,
+    "isEncrypted": false,
+    "tags": [],
+    "snippet": "Short content preview..."
+  }
+}
+```
+
+Used for:
+
+- Fast note listing
+- Sorting and filtering
+- Rendering previews without loading full content
+
+### Note Files
+
+Each note file contains **only raw content**:
+
+```ts
+{
+  content: string;
+}
+```
+
+Loaded **on demand** when opening a note.
+
+### Data Model
+
+```ts
+export type Note = NoteMeta & RawNote;
+
+export type NoteMeta = {
+  id: string;
+  label: string;
+  createdAt: number;
+  updatedAt: number;
+  isEncrypted: boolean;
+  tags?: string[];
+  snippet: string;
+};
+
+export type RawNote = {
+  content: string;
+};
+```
 
 ## Future Features
 
@@ -97,9 +144,6 @@ Each note file contains JSON data with the following format:
 
 This app requires a modern browser with support for:
 
-- FileSystem Access API (Currently Chrome/Edge)
-- ES Modules
-- TypeScript
 - Web Crypto API
 
 ## Contributing
