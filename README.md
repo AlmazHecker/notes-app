@@ -1,4 +1,4 @@
-# Notes App
+# Notes
 
 Simple notes app based on OPFS(Origin Private File System) with optional end-to-end encryption.
 

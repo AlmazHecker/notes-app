@@ -1,6 +1,6 @@
 {
-  "name": "Notes App",
-  "short_name": "Notes App",
+  "name": "Notes",
+  "short_name": "Notes",
   "description": "Idk",
   "theme_color": "#ffffff",
   "start_url": "/",
@@ -41,9 +41,7 @@
     {
       "action": "/",
       "accept": {
-        "application/json": [
-          ".azych"
-        ]
+        "application/json": [".azych"]
       },
       "icons": [
         {
