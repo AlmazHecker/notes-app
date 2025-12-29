@@ -1,0 +1,7 @@
+1. Move from each note = each file to all notes = single file architecture
+2. Improve performance by creating an index file.
+Currently, all notes are loaded on every page load and on each note create/update/delete operation.
+To optimize this, create an index.json file that stores only note metadata or indexes.
+On page load or note changes, load only this index file instead of all note contents
+
+This probably solves issues with slow speed on mobile.
