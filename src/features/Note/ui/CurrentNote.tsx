@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { TextEditor } from "@/shared/ui/text-editor/text-editor";
 import { ArrowLeft, SaveIcon } from "lucide-react";
 import { Button } from "@/shared/ui/button";
@@ -16,7 +16,7 @@ import { NoteEncryption } from "../lib/NoteEncryption";
 import { EncryptedContent } from "./EncryptedContent";
 import { noteService } from "@/entities/note/service";
 import { useTranslation } from "react-i18next";
-import { MenuBar } from "@/shared/ui/text-editor/MenuBar";
+import { MenuBar } from "@/shared/ui/text-editor/menubar";
 
 const getDefaultNote = () =>
   ({
@@ -98,7 +98,7 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
       setNote(null);
     }
 
-    let note: Note | void = getDefaultNote();
+    let note: Note | null = getDefaultNote();
 
     if (noteId !== "new-note") {
       note = await noteStore.getNote(noteId);

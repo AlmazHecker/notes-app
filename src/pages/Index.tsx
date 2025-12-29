@@ -22,8 +22,8 @@ const Index = () => {
           className="
             w-full md:w-1/2
             flex-shrink-0
-            md:overflow-auto min-w-[250px] md:max-w-[80%] md:h-full
-            space-y-4 p-4
+            overflow-auto min-w-[250px] md:max-w-[80%] md:h-full
+            space-y-4 p-4 pt-0
           "
         >
           <Notes />

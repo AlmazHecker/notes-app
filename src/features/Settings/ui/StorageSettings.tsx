@@ -20,12 +20,16 @@ const StorageSettings = () => {
   const navigate = useNavigate();
 
   const notesStore = useNoteStore();
-  const [folderSize, setFolderSize] = useState<number | null>(null);
+  const [storage, setStorage] = useState<StorageEstimate | null>(null);
+  const used = storage?.usage ?? 0;
+  const quota = storage?.quota ?? 0;
+  const percent =
+    quota > 0 ? Math.min(100, Math.round((used / quota) * 100)) : null;
 
   async function loadFolderSize() {
     try {
-      const size = await noteService.getTotalSize();
-      setFolderSize(size);
+      const estimate = await noteService.getStorageEstimate();
+      setStorage(estimate);
       notesStore.getNotes();
     } catch (err) {
       console.error("Failed to load folder size:", err);
@@ -37,15 +41,9 @@ const StorageSettings = () => {
   };
 
   const deleteNotes = async () => {
-    if (notesStore.notes.length === 0) {
-      return alert("You don't have any notes");
-    }
-
     try {
       if (confirm("Are you sure bruh ?")) {
-        for await (let note of notesStore.notes) {
-          await noteService.delete(note.id);
-        }
+        noteService.clear();
         alert("Successfully deleted all notes!");
         await loadFolderSize();
       }
@@ -70,7 +68,7 @@ const StorageSettings = () => {
         for await (const [filename, zipEntry] of Object.entries(zip.files)) {
           if (zipEntry.dir) continue;
           const file = await zipEntry.async("blob");
-          await noteService.import(filename, file);
+          await noteService.import(file);
         }
 
         alert("Notes imported successfully!");
@@ -87,29 +85,30 @@ const StorageSettings = () => {
     loadFolderSize();
   }, []);
 
-  const formattedSize =
-    folderSize !== null ? (
-      formatSize(folderSize)
-    ) : (
-      <Button onClick={loadFolderSize}>
-        {t("settings.storage.permissionNeeded")}
-      </Button>
-    );
+  // const formattedSize = folderSize !== null && formatSize(folderSize);
 
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold">{t("settings.storage.title")}</h1>
 
       <Card>
-        <CardContent className="space-y-6">
-          <div className="space-y-4">
-            <div className="flex justify-between items-center">
-              <h3 className="text-base font-medium">
-                {t("settings.storage.used")}
-              </h3>
-              <p className="text-sm font-medium">{formattedSize}</p>
-            </div>
+        <CardContent className="space-y-4">
+          <div className="flex justify-between">
+            <span>{t("settings.storage.used")}</span>
+            <span>{formatSize(used)}</span>
           </div>
+
+          <div className="flex justify-between">
+            <span>{t("settings.storage.quota")}</span>
+            <span>{quota ? formatSize(quota) : "—"}</span>
+          </div>
+
+          {percent !== null && (
+            <div className="flex justify-between">
+              <span>{t("settings.storage.usagePercent")}</span>
+              <span>{percent}%</span>
+            </div>
+          )}
         </CardContent>
       </Card>
 

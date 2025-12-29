@@ -31,6 +31,12 @@ import {
 import { Node as PMNode } from "@tiptap/pm/model";
 
 declare module "@tiptap/core" {
+  interface Storage {
+    searchAndReplace: SearchAndReplaceStorage;
+  }
+}
+
+declare module "@tiptap/core" {
   interface Commands<ReturnType> {
     search: {
       /**
@@ -233,7 +239,7 @@ const replaceAll = (
     resultsCopy = rebaseNextResultResponse[1];
   }
 
-  dispatch(tr);
+  dispatch!(tr);
 };
 
 export const searchAndReplacePluginKey = new PluginKey(

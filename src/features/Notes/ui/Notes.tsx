@@ -6,7 +6,6 @@ import { useNoteStore } from "@/entities/note/api";
 import { NoteList } from "./NoteList";
 import { SearchNotesModal } from "../../SearchNotes/ui/SearchNotesModal";
 import { useTranslation } from "react-i18next";
-import { PermissionDenied } from "@/shared/ui/permission-denied";
 
 export const Notes = () => {
   const { t } = useTranslation();
@@ -23,36 +22,34 @@ export const Notes = () => {
     }
   };
   useEffect(() => {
-    if (notesStore.hasPermission) getNotes();
-  }, [notesStore.hasPermission]);
+    getNotes();
+  }, []);
 
   const sharedContent = (
-    <div className="flex justify-between items-center sticky top-0 md:-top-4 bg-background z-10 ">
+    <div className="flex justify-between items-center sticky py-4 mb-0 top-0 bg-background z-10 ">
       <h2 className="text-xl font-bold">{t("notes.title")}</h2>
-      {notesStore.hasPermission && (
-        <div className="flex items-center gap-3">
-          <Link size="icon" variant="outline" to="/settings">
-            <Settings />
-          </Link>
-          <Button
-            size="icon"
-            variant="outline"
-            onClick={() => setIsSearchModalOpen(true)}
-          >
-            <SearchIcon />
-          </Button>
-          <Link to="?noteId=new-note" size="icon" variant="outline">
-            <Plus />
-          </Link>
-        </div>
-      )}
+      <div className="flex items-center gap-3">
+        <Link size="icon" variant="outline" to="/settings">
+          <Settings />
+        </Link>
+        <Button
+          size="icon"
+          variant="outline"
+          onClick={() => setIsSearchModalOpen(true)}
+        >
+          <SearchIcon />
+        </Button>
+        <Link to="?noteId=new-note" size="icon" variant="outline">
+          <Plus />
+        </Link>
+      </div>
     </div>
   );
 
   const renderContent = () => {
-    if (!notesStore.hasPermission) {
-      return <PermissionDenied permissionTrigger={notesStore.getNotes} />;
-    }
+    // if (!notesStore.hasPermission) {
+    //   return <PermissionDenied permissionTrigger={notesStore.getNotes} />;
+    // }
 
     if (isLoading) {
       return (

@@ -78,7 +78,9 @@
     },
     "storage": {
       "title": "Storage",
-      "used": "Storage Used",
+      "used": "Storage used",
+      "quota": "Storage quota",
+      "usagePercent": "Usage",
       "permissionNeeded": "Allow Permission to view"
     },
     "dataManagement": {

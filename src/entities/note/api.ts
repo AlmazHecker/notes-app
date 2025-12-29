@@ -1,40 +1,32 @@
 import { create } from "zustand";
 import { noteService } from "./service";
-import { Note } from "@/entities/note/types";
-import { requestPermission, verifyPermission } from "@/shared/lib/fileApi";
+import { Note, NoteMeta } from "@/entities/note/types";
 
 interface NoteState {
-  notes: Note[];
+  notes: NoteMeta[];
   getNotes: () => Promise<void>;
-  getNote: (noteId: string) => Promise<Note | void>;
-  hasPermission: boolean;
+  getNote: (noteId: string) => Promise<Note | null>;
 }
 
 export const useNoteStore = create<NoteState>((set, get) => ({
   notes: [],
-  hasPermission: true,
 
   async getNotes() {
     try {
-      if (!get().hasPermission) await requestPermission();
-
       const notes = await noteService.getAll();
       const sortedNotes = [...notes].sort((a, b) => b.updatedAt - a.updatedAt);
 
-      set({ notes: sortedNotes, hasPermission: true });
+      set({ notes: sortedNotes });
     } catch (e) {
-      set({ notes: [], hasPermission: await verifyPermission() });
+      set({ notes: [] });
     }
   },
   async getNote(noteId: string) {
     try {
-      if (!get().hasPermission) await requestPermission();
       const note = await noteService.getByName(noteId);
-
-      set({ hasPermission: true });
       return note;
     } catch (e) {
-      set({ hasPermission: await verifyPermission() });
+      return null;
     }
   },
 }));

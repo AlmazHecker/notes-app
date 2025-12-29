@@ -9,7 +9,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/shared/ui/command";
-import { formatDate, getEscapedHtml } from "@/shared/lib/utils";
+import { formatDate } from "@/shared/lib/utils";
 import { useTranslation } from "react-i18next";
 
 type SearchNotesModalProps = {
@@ -63,8 +63,7 @@ export const SearchNotesModal: FC<SearchNotesModalProps> = ({
                     </p>
                   ) : (
                     <p className="text-xs text-muted-foreground truncate mt-1">
-                      {getEscapedHtml(note.content).slice(0, 100)}
-                      {note.content.length > 100 ? "..." : ""}
+                      {note.snippet}
                     </p>
                   )}
                 </div>

@@ -1,12 +1,11 @@
-import { Note } from "@/entities/note/types";
+import { Note, NoteMeta } from "@/entities/note/types";
 
 export interface NoteStorageStrategy {
-  getByName(noteId: string): Promise<Note | void>;
-  getFileByName(noteId: string): Promise<Blob>;
+  getByName(noteId: string): Promise<Note | null>;
   update(note: Note): Promise<Note>;
   delete(noteId: string): Promise<void>;
-  getAll(): Promise<Note[]>;
-  create(newNote: Omit<Note, "createdAt" | "updatedAt">): Promise<void>;
-  import(noteId: string, noteBlob: Blob): Promise<void>;
-  getTotalSize(): Promise<number>;
+  getAll(): Promise<NoteMeta[]>;
+  create(newNote: Omit<Note, "createdAt" | "updatedAt">): Promise<Note>;
+  import(noteBlob: Blob): Promise<void>;
+  getStorageEstimate(): Promise<StorageEstimate>;
 }

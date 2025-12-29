@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Download, ArrowLeft, Folder } from "lucide-react";
+import { Download, ArrowLeft } from "lucide-react";
 import JSZip from "jszip";
 import { useNoteStore } from "@/entities/note/api";
 
 import { Button } from "@/shared/ui/button";
 import { Checkbox } from "@/shared/ui/checkbox";
-import { formatDate, getEscapedHtml } from "@/shared/lib/utils";
+import { formatDate } from "@/shared/lib/utils";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { noteService } from "@/entities/note/service";
@@ -74,7 +74,7 @@ const ExportNotes: React.FC = () => {
       const zip = new JSZip();
 
       for (const note of notesToExport) {
-        const file = await noteService.getFileByName(note.id);
+        const file = await noteService.export(note.id);
         if (!file) continue;
 
         zip.file(note.id, file);
@@ -110,15 +110,15 @@ const ExportNotes: React.FC = () => {
   }, []);
 
   const renderNotes = () => {
-    if (!notesStore.hasPermission) {
-      return (
-        <div className="flex flex-col items-center justify-center h-full py-12">
-          <p className="text-slate-500 text-center">
-            {t("exportNotes.permissionDenied")}
-          </p>
-        </div>
-      );
-    }
+    // if (!notesStore.hasPermission) {
+    //   return (
+    //     <div className="flex flex-col items-center justify-center h-full py-12">
+    //       <p className="text-slate-500 text-center">
+    //         {t("exportNotes.permissionDenied")}
+    //       </p>
+    //     </div>
+    //   );
+    // }
     return notesStore.notes.length === 0 ? (
       <div className="flex flex-col items-center justify-center h-full py-12">
         <p className="text-slate-500 text-center">{t("exportNotes.noNotes")}</p>
@@ -158,8 +158,7 @@ const ExportNotes: React.FC = () => {
                 </p>
               ) : (
                 <p className="text-xs text-muted-foreground truncate mt-1">
-                  {getEscapedHtml(note.content).slice(0, 100)}
-                  {note.content.length > 100 ? "..." : ""}
+                  {note.snippet}
                 </p>
               )}
             </div>
@@ -184,7 +183,7 @@ const ExportNotes: React.FC = () => {
           <h1 className="text-lg font-medium">{t("exportNotes.title")}</h1>
         </div>
         <div className="flex items-center gap-2">
-          {notesStore.hasPermission || (
+          {/* {notesStore.hasPermission || (
             <>
               <Button
                 variant="outline"
@@ -204,7 +203,7 @@ const ExportNotes: React.FC = () => {
                 <Folder className="h-4 w-4" />
               </Button>
             </>
-          )}
+          )} */}
           <Button
             size="sm"
             onClick={exportNotes}

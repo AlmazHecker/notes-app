@@ -3,15 +3,13 @@ import { LockIcon } from "lucide-react";
 import { FC, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { Note } from "@/entities/note/types";
-import { getEscapedHtml } from "@/shared/lib/utils";
+import { NoteMeta } from "@/entities/note/types";
 
 type NoteListProps = {
-  notes: Note[];
+  notes: NoteMeta[];
 };
 export const NoteList: FC<NoteListProps> = ({ notes }) => {
   const { t } = useTranslation();
-
   const parentRef = useRef(null);
 
   const rowVirtualizer = useVirtualizer({
@@ -48,14 +46,7 @@ export const NoteList: FC<NoteListProps> = ({ notes }) => {
                 {note.isEncrypted && <LockIcon size="10px" />}
               </div>
               <p className="text-sm text-muted-foreground line-clamp-1">
-                {note.isEncrypted ? (
-                  t("notes.encrypted")
-                ) : (
-                  <>
-                    {getEscapedHtml(note.content).slice(0, 100)}
-                    {note.content.length > 100 ? "..." : ""}
-                  </>
-                )}
+                {note.isEncrypted ? t("notes.encrypted") : <>{note.snippet}</>}
               </p>
             </Link>
           );
