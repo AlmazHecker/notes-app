@@ -19,7 +19,7 @@
     "encryptNote": "Encrypt Note",
     "decryptNote": "Decrypt Note",
     "deleteNote": "Delete note",
-    "deleteNoteConfirm": "This note is encrypted. Are you sure you want to delete it?",
+    "deleteNoteConfirm": "Are you sure you want to delete it?",
     "searchInNote": "Search in note..."
   },
   "encryption": {
