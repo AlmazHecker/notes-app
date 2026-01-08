@@ -1,7 +1,7 @@
 {
   "name": "Notes",
   "short_name": "Notes",
-  "description": "Idk",
+  "description": "Notes, stored locally",
   "theme_color": "#ffffff",
   "start_url": "/",
   "id": "/",
@@ -41,7 +41,9 @@
     {
       "action": "/",
       "accept": {
-        "application/json": [".azych"]
+        "application/json": [
+          ".azych"
+        ]
       },
       "icons": [
         {

@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { TextEditor } from "@/shared/ui/text-editor/text-editor";
-import { ArrowLeft, SaveIcon } from "lucide-react";
+import { ArrowLeft, Check, SaveIcon } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import { type Editor } from "@tiptap/react";
 import { useNoteStore } from "@/entities/note/api";
@@ -16,12 +16,12 @@ import { NoteEncryption } from "../lib/NoteEncryption";
 import { EncryptedContent } from "./EncryptedContent";
 import { noteService } from "@/entities/note/service";
 import { useTranslation } from "react-i18next";
-import { MenuBar } from "@/shared/ui/text-editor/menubar";
+import { MenuBar } from "@/shared/ui/text-editor/MenuBar";
 
 const getDefaultNote = () =>
   ({
     content: "",
-    label: "New Note",
+    label: "New note",
     isEncrypted: false,
     id: crypto.randomUUID(),
   }) as Note;
@@ -40,6 +40,8 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
 
   const [note, setNote] = useState<Note | null>(getDefaultNote());
   const [isEncrypted, setIsEncrypted] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const noteStore = useNoteStore();
 
   const handleEncryptionToggle = () => {
@@ -53,23 +55,24 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
     const copy = { ...note };
     copy.content = editor?.getHTML() || "";
 
+    setIsSaving(true);
+
     if (note.isEncrypted) {
       copy.content = await NoteEncryption.encrypt(copy.content, password);
     }
 
     await noteService.update(copy);
-    alert("Note Updated!");
 
+    setLastSaved(new Date());
     setPassword(password);
     noteStore.getNotes();
     navigate(`?noteId=${note?.id}`, { replace: true });
+    setIsSaving(false);
   };
 
   const deleteNote = async () => {
-    if (!note || (note.isEncrypted && !confirm(t("note.deleteNoteConfirm")))) {
-      return;
-    }
-    await noteService.delete(note.id);
+    if (!confirm(t("note.deleteNoteConfirm"))) return;
+    await noteService.delete(note?.id!);
 
     navigate("/");
     noteStore.getNotes();
@@ -100,7 +103,7 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
 
     let note: Note | null = getDefaultNote();
 
-    if (noteId !== "new-note") {
+    if (noteId && noteId !== "new-note") {
       note = await noteStore.getNote(noteId);
     }
     if (!note) return;
@@ -109,8 +112,18 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
     setIsEncrypted(note.isEncrypted);
   };
 
+  const formatLastSaved = () => {
+    if (!lastSaved) return "";
+    const now = new Date();
+    const diff = Math.floor((now.getTime() - lastSaved.getTime()) / 1000);
+
+    if (diff < 60) return "Saved just now";
+    if (diff < 3600) return `Saved ${Math.floor(diff / 60)}m ago`;
+    return `Saved at ${lastSaved.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
+  };
+
   useEffect(() => {
-    if (noteId) getNote(noteId);
+    getNote(noteId);
   }, [noteId]);
 
   if (!note)
@@ -122,11 +135,10 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
 
   return (
     <div className="relative flex-1 flex flex-col pt-0 shadow ">
-      {toggleSearch && (
-        <SearchInput onClose={() => setToggleSearch(false)} editor={editor} />
-      )}
-
       <div className="sticky top-0 pt-4 bg-background z-30 pb-4 md:pb-0">
+        {toggleSearch && (
+          <SearchInput onClose={() => setToggleSearch(false)} editor={editor} />
+        )}
         <div className="px-4 flex items-center justify-between">
           <div className="flex items-center gap-3 w-full">
             <Button
@@ -137,23 +149,29 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
             >
               <ArrowLeft />
             </Button>
-            <input
-              className="w-full text-2xl border-none font-bold border outline-none rounded p-0"
-              value={note.label}
-              onChange={(e) => setNote({ ...note, label: e.target.value })}
-              placeholder="Enter note title"
-              readOnly={isEncrypted}
-            />
+
+            <div className="text-xs text-muted-foreground flex items-center gap-1">
+              {isSaving ? (
+                <span className="animate-pulse">Saving...</span>
+              ) : lastSaved ? (
+                <>
+                  <Check className="w-3 h-3" />
+                  <span>{formatLastSaved()}</span>
+                </>
+              ) : null}
+            </div>
           </div>
 
           <div className="flex gap-3 items-center">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => saveNote(note, password)}
-            >
-              <SaveIcon />
-            </Button>
+            {note.label && (
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => saveNote(note, password)}
+              >
+                <SaveIcon />
+              </Button>
+            )}
 
             <NoteActionsDropdown
               isEncrypted={isEncrypted}
@@ -163,6 +181,16 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
               onSearchClick={() => setToggleSearch(!toggleSearch)}
             />
           </div>
+        </div>
+
+        <div className="px-4 mt-3">
+          <input
+            className="w-full text-2xl border-none font-bold border outline-none rounded p-0"
+            value={note.label}
+            onChange={(e) => setNote({ ...note, label: e.target.value })}
+            placeholder="Enter note title"
+            readOnly={isEncrypted}
+          />
         </div>
 
         <MenuBar editor={editor} />

@@ -50,7 +50,7 @@ export const NoteActionsDropdown: FC<NoteActionsDropdownProps> = ({
             {t("common.search")}
           </DropdownMenuItem>
 
-          {note?.id && (
+          {note?.label && (
             <DropdownMenuItem variant="destructive" onClick={onDeleteClick}>
               <Trash />
               {t("note.deleteNote")}

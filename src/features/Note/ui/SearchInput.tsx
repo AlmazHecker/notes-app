@@ -101,7 +101,7 @@ const SearchInput: FC<SearchInputProps> = ({ editor, onClose }) => {
   }, []);
 
   return (
-    <div className="sticky z-10 top-0 mx-auto left-0 right-0 rounded-lg shadow-md bg-white dark:bg-gray-800 p-2 w-full max-w-md">
+    <div className="z-10 mx-auto rounded-lg shadow-md bg-white dark:bg-gray-800 p-2 w-full max-w-md">
       <div className="flex items-center gap-2">
         <div className="relative flex-1">
           <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">

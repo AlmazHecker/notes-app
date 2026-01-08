@@ -40,19 +40,19 @@ export const getAppManifest = (BASE: string) => {
       },
     ],
 
-    file_handlers: [
-      {
-        action: BASE,
-        accept: { "application/json": [".azych"] },
-        icons: [
-          {
-            src: `${BASE}android-chrome-192.png`,
-            sizes: "192x192",
-            type: "image/png",
-          },
-        ],
-        launch_type: "single-client",
-      },
-    ],
+    // file_handlers: [
+    //   {
+    //     action: BASE,
+    //     accept: { "application/json": [".azych"] },
+    //     icons: [
+    //       {
+    //         src: `${BASE}android-chrome-192.png`,
+    //         sizes: "192x192",
+    //         type: "image/png",
+    //       },
+    //     ],
+    //     launch_type: "single-client",
+    //   },
+    // ],
   };
 };
