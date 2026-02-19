@@ -36,23 +36,5 @@
       "type": "image/png",
       "form_factor": "narrow"
     }
-  ],
-  "file_handlers": [
-    {
-      "action": "/",
-      "accept": {
-        "application/json": [
-          ".azych"
-        ]
-      },
-      "icons": [
-        {
-          "src": "/android-chrome-192.png",
-          "sizes": "192x192",
-          "type": "image/png"
-        }
-      ],
-      "launch_type": "single-client"
-    }
   ]
 }

@@ -7,45 +7,79 @@ const INDEX_FILE = "index.json";
 export class FileSystemNoteStrategy implements NoteStorageStrategy {
   private index: Record<string, NoteMeta> = {};
   private root!: FileSystemDirectoryHandle;
+  private directoryStack: FileSystemDirectoryHandle[] = [];
+  private pathStack: string[] = [];
+  private pathIdStack: string[] = [];
+
+  private get currentDir() {
+    return this.directoryStack[this.directoryStack.length - 1];
+  }
 
   public async initialize() {
     this.root = await navigator.storage.getDirectory();
-    const handle = await this.root.getFileHandle(INDEX_FILE, { create: true });
-    const file = await handle.getFile();
+    this.directoryStack = [this.root];
+    this.pathStack = [];
+    this.pathIdStack = [];
+    await this.loadIndex();
+  }
 
-    // if it's new user - there's no indexing file yet and parse throws error
+  public async initializeWithPathIds(ids: string[]) {
+    await this.initialize();
+    for (const id of ids) {
+      try {
+        await this.cd(id);
+      } catch (e) {
+        // Stop if a folder in the path is missing
+        break;
+      }
+    }
+  }
+
+  private async loadIndex() {
     try {
-      this.index = JSON.parse(await file.text());
+      const handle = await this.currentDir.getFileHandle(INDEX_FILE, {
+        create: true,
+      });
+      const file = await handle.getFile();
+      const text = await file.text();
+      this.index = text ? JSON.parse(text) : {};
     } catch (e) {
       this.index = {};
     }
   }
 
   private async saveIndex() {
-    const handle = await this.root.getFileHandle(INDEX_FILE, { create: true });
+    const handle = await this.currentDir.getFileHandle(INDEX_FILE, {
+      create: true,
+    });
     const writable = await handle.createWritable();
     await writable.write(JSON.stringify(this.index));
     await writable.close();
   }
 
   async create(newNote: Omit<Note, "createdAt" | "updatedAt">): Promise<Note> {
-    return {} as Note;
+    const note: Note = {
+      ...newNote,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+      type: "note",
+    };
+    return this.update(note);
   }
 
   async update(updatedNote: Note) {
-    // this needs to be somehow refactored
     const note = { ...updatedNote, updatedAt: Date.now() };
     const snippet =
       getEscapedHtml(note.content.slice(0, 100)) +
       (note.content.length > 100 ? "..." : "");
 
-    const fileHandle = await this.root.getFileHandle(note.id, {
+    const fileHandle = await this.currentDir.getFileHandle(note.id, {
       create: true,
     });
     const writable = await fileHandle.createWritable();
     const data = note.content;
-    writable.write(data);
-    writable.close();
+    await writable.write(data);
+    await writable.close();
 
     this.index[note.id] = {
       id: note.id,
@@ -55,27 +89,38 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
       createdAt: note.createdAt,
       updatedAt: note.updatedAt,
       snippet,
+      type: "note",
     };
     await this.saveIndex();
     return note;
   }
 
   async delete(noteId: string) {
-    await this.root.removeEntry(noteId);
+    const entry = this.index[noteId];
+    if (!entry) return;
+
+    if (entry.type === "folder") {
+      // @ts-ignore
+      await this.currentDir.removeEntry(noteId, { recursive: true });
+    } else {
+      await this.currentDir.removeEntry(noteId);
+    }
+
     delete this.index[noteId];
     await this.saveIndex();
   }
 
   public async clear() {
     // @ts-ignore
-    return this.root.remove({ recursive: true });
+    await this.root.remove({ recursive: true });
+    await this.initialize();
   }
 
   async getByName(noteId: string): Promise<Note | null> {
     const entry = this.index[noteId];
-    if (!entry) return null;
+    if (!entry || entry.type === "folder") return null;
 
-    const fileHandle = await this.root.getFileHandle(noteId);
+    const fileHandle = await this.currentDir.getFileHandle(noteId);
     const file = await fileHandle.getFile();
 
     const content = await file.text();
@@ -85,6 +130,7 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
   async getAll(): Promise<NoteMeta[]> {
     return Object.values(this.index);
   }
+
   async getStorageEstimate(): Promise<StorageEstimate> {
     return navigator.storage.estimate();
   }
@@ -100,5 +146,64 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
     const note = await this.getByName(noteId);
     if (!note) throw new Error("Note not found");
     return new Blob([JSON.stringify(note)], { type: "application/json" });
+  }
+
+  async cd(folderId: string): Promise<void> {
+    const entry = this.index[folderId];
+    if (!entry || entry.type !== "folder") {
+      throw new Error("Folder not found");
+    }
+
+    const handle = await this.currentDir.getDirectoryHandle(folderId);
+    this.directoryStack.push(handle);
+    this.pathStack.push(entry.label);
+    this.pathIdStack.push(folderId);
+    await this.loadIndex();
+  }
+
+  async goBack(): Promise<void> {
+    if (this.directoryStack.length > 1) {
+      this.directoryStack.pop();
+      this.pathStack.pop();
+      this.pathIdStack.pop();
+      await this.loadIndex();
+    }
+  }
+
+  getCurrentPath(): string[] {
+    return this.pathStack;
+  }
+
+  getPathIds(): string[] {
+    return this.pathIdStack;
+  }
+
+  async createFolder(label: string): Promise<NoteMeta> {
+    const id = crypto.randomUUID();
+    await this.currentDir.getDirectoryHandle(id, { create: true });
+
+    const folderMeta: NoteMeta = {
+      id,
+      label,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+      isEncrypted: false,
+      snippet: "",
+      type: "folder",
+    };
+
+    this.index[id] = folderMeta;
+    await this.saveIndex();
+
+    // Initialize the folder with an empty index
+    const folderHandle = await this.currentDir.getDirectoryHandle(id);
+    const indexHandle = await folderHandle.getFileHandle(INDEX_FILE, {
+      create: true,
+    });
+    const writable = await indexHandle.createWritable();
+    await writable.write(JSON.stringify({}));
+    await writable.close();
+
+    return folderMeta;
   }
 }

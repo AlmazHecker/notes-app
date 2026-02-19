@@ -8,6 +8,7 @@ export type NoteMeta = {
   isEncrypted: boolean;
   tags?: string[];
   snippet: string; // short preview
+  type: "note" | "folder";
 };
 
 export type RawNote = {
