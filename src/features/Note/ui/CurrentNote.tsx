@@ -73,8 +73,7 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
   const deleteNote = async () => {
     if (!confirm(t("note.deleteNoteConfirm"))) return;
     await noteService.delete(note?.id!);
-
-    navigate(window.location.pathname);
+    navigate({ search: "" });
     noteStore.getNotes();
   };
 
@@ -143,7 +142,7 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
         <div className="px-4 flex items-center justify-between">
           <div className="flex items-center gap-3 w-full">
             <Button
-              onClick={() => navigate(location.pathname)}
+              onClick={() => navigate({ search: "" })}
               className="md:hidden flex"
               variant="outline"
               size="icon"

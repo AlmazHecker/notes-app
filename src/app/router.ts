@@ -2,9 +2,9 @@ import { lazy } from "react";
 // const ExportNotes = lazy(() => import("@/pages/ExportNotes"));
 const Index = lazy(() => import("@/pages/Index"));
 const Settings = lazy(() => import("@/pages/Settings"));
-import { createBrowserRouter } from "react-router-dom";
+import { createHashRouter } from "react-router-dom";
 
-export const router = createBrowserRouter(
+export const router = createHashRouter(
   [
     {
       path: "/*",
