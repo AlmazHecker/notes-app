@@ -14,10 +14,6 @@ export const router = createBrowserRouter(
       path: "/settings",
       Component: Settings,
     },
-    {
-      path: "/export",
-      Component: ExportNotes,
-    },
   ],
-  { basename: import.meta.env.BASE_URL }
+  { basename: import.meta.env.BASE_URL },
 );

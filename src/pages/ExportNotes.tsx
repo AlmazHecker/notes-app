@@ -16,7 +16,7 @@ const ExportNotes: React.FC = () => {
 
   const notesStore = useNoteStore();
   const [selectedNotes, setSelectedNotes] = useState<Record<string, boolean>>(
-    {}
+    {},
   );
 
   const [isExporting, setIsExporting] = useState(false);
@@ -30,7 +30,7 @@ const ExportNotes: React.FC = () => {
 
   const toggleAllNotes = () => {
     const allSelected = notesStore.notes.every(
-      (note) => selectedNotes[note.id]
+      (note) => selectedNotes[note.id],
     );
     const newSelection: Record<string, boolean> = {};
 
@@ -63,29 +63,27 @@ const ExportNotes: React.FC = () => {
     try {
       setIsExporting(true);
 
-      const notesToExport = notesStore.notes.filter(
-        (note) => selectedNotes[note.id]
+      const selectedIds = notesStore.notes
+        .filter((note) => selectedNotes[note.id])
+        .map((note) => note.id);
+
+      if (selectedIds.length === 0) return;
+
+      // Selective export is disabled in favor of full backup in Settings
+      alert(
+        "This feature is currently disabled. Use Settings -> Data Management -> Export Data for full backup.",
       );
-      if (notesToExport.length === 0) {
-        setIsExporting(false);
-        return;
-      }
+      return;
+      // const zipBlob = await noteService.exportSelected(selectedIds);
 
-      const zip = new JSZip();
-
-      for (const note of notesToExport) {
-        const file = await noteService.export(note.id);
-        if (!file) continue;
-
-        zip.file(note.id, file);
-      }
-
-      const zipBlob = await zip.generateAsync({ type: "blob" });
+      /*
+      const zipBlob = await noteService.exportSelected(selectedIds);
 
       const timestamp = new Date()
         .toISOString()
         .replace(/[:.]/g, "-")
         .slice(0, 19);
+
       const fileName = `notes_export_${timestamp}.zip`;
 
       const url = URL.createObjectURL(zipBlob);
@@ -96,6 +94,7 @@ const ExportNotes: React.FC = () => {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
+      */
     } finally {
       setIsExporting(false);
     }
