@@ -206,4 +206,54 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
 
     return folderMeta;
   }
+
+  private async updateFolderIndex(
+    folderHandle: FileSystemDirectoryHandle,
+    updateFn: (index: Record<string, NoteMeta>) => void,
+  ) {
+    const indexHandle = await folderHandle.getFileHandle(INDEX_FILE, {
+      create: true,
+    });
+    const file = await indexHandle.getFile();
+    const text = await file.text();
+    const index = text ? JSON.parse(text) : {};
+
+    updateFn(index);
+
+    const writable = await indexHandle.createWritable();
+    await writable.write(JSON.stringify(index));
+    await writable.close();
+  }
+
+  async moveEntry(id: string, targetFolderId: string): Promise<void> {
+    const entry = this.index[id];
+    if (!entry) return;
+
+    if (id === targetFolderId) return;
+
+    let handle: FileSystemFileHandle | FileSystemDirectoryHandle;
+    if (entry.type === "folder") {
+      handle = await this.currentDir.getDirectoryHandle(id);
+    } else {
+      handle = await this.currentDir.getFileHandle(id);
+    }
+
+    const targetDirHandle =
+      await this.currentDir.getDirectoryHandle(targetFolderId);
+
+    // @ts-ignore
+    if (typeof handle.move === "function") {
+      // @ts-ignore
+      await handle.move(targetDirHandle);
+    } else {
+      throw new Error("Your browser does not support moving files in OPFS");
+    }
+
+    delete this.index[id];
+    await this.saveIndex();
+
+    await this.updateFolderIndex(targetDirHandle, (targetIndex) => {
+      targetIndex[id] = { ...entry, updatedAt: Date.now() };
+    });
+  }
 }

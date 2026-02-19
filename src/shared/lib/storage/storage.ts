@@ -14,4 +14,5 @@ export interface NoteStorageStrategy {
   getPathIds(): string[];
   createFolder(label: string): Promise<NoteMeta>;
   initializeWithPathIds(ids: string[]): Promise<void>;
+  moveEntry(id: string, targetFolderId: string): Promise<void>;
 }
