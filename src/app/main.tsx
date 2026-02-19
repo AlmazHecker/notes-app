@@ -11,8 +11,10 @@ const root = ReactDOM.createRoot(document.getElementById("root")!);
 const bootstrapApp = async () => {
   await navigator.storage.persist();
 
-  const hashPath = location.hash.replace(/^#/, ""); // it turns out the hash routing has it's own property on location
-  const folderPath = hashPath.split("/").filter(Boolean);
+  const hash = location.hash.replace(/^#/, ""); // it turns out the hash routing has it's own property on location
+  const url = new URL(hash, "http://dummy");
+  const folderPath = url.pathname.split("/").filter(Boolean);
+
   await noteService.initializeWithPathIds(folderPath);
 };
 
