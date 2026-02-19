@@ -1,5 +1,5 @@
 import { useEffect, FC } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useNoteStore } from "@/entities/note/api";
 import { NoteMeta } from "@/entities/note/types";
 import {
@@ -23,7 +23,6 @@ export const SearchNotesModal: FC<SearchNotesModalProps> = ({
   setOpen,
 }) => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const { notes, getNotes, cdInto, pathIds } = useNoteStore();
   const [searchParams, setSearchParams] = useSearchParams();
 
