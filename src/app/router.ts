@@ -15,5 +15,5 @@ export const router = createHashRouter(
       Component: Settings,
     },
   ],
-  { basename: import.meta.env.BASE_URL },
+  // { basename: import.meta.env.BASE_URL },
 );
