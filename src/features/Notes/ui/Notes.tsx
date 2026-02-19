@@ -12,16 +12,15 @@ import { useNoteStore } from "@/entities/note/api";
 import { NoteList } from "./NoteList";
 import { SearchNotesModal } from "../../SearchNotes/ui/SearchNotesModal";
 import { useTranslation } from "react-i18next";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export const Notes = () => {
   const { t } = useTranslation();
   const notesStore = useNoteStore();
-  const [isLoading, setIsLoading] = useState(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
   const location = useLocation();
+  const [isLoading, setIsLoading] = useState(false);
 
   const getNotes = async () => {
     try {
@@ -38,10 +37,8 @@ export const Notes = () => {
   }, [location.pathname]);
 
   const updatePathParams = (newPathIds: string[]) => {
-    const noteId = searchParams.get("noteId");
     const path = newPathIds.length > 0 ? `/${newPathIds.join("/")}` : "/";
-    const query = noteId ? `?noteId=${noteId}` : "";
-    navigate(`${path}${query}`);
+    navigate(path);
   };
 
   const handleCdInto = async (id: string) => {

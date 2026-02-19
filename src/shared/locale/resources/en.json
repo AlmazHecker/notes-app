@@ -22,6 +22,7 @@
     "decryptNote": "Decrypt Note",
     "deleteNote": "Delete note",
     "deleteNoteConfirm": "Are you sure you want to delete it?",
+    "deleteFolder": "Delete folder",
     "searchInNote": "Search in note..."
   },
   "encryption": {

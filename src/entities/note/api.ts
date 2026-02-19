@@ -35,20 +35,13 @@ export const useNoteStore = create<NoteState>((set, get) => ({
     }
   },
   async getNote(noteId: string) {
-    try {
-      const note = await noteService.getByName(noteId);
-      return note;
-    } catch (e) {
-      return null;
-    }
+    return noteService.getByName(noteId);
   },
   async cdInto(folderId: string) {
     await noteService.cd(folderId);
-    await get().getNotes();
   },
   async goBack() {
     await noteService.goBack();
-    await get().getNotes();
   },
   async deleteEntry(id: string) {
     await noteService.delete(id);

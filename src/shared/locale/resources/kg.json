@@ -19,6 +19,7 @@
     "encryptNote": "Жазууну шифрлөө",
     "decryptNote": "Жазууну чечүү",
     "deleteNote": "Жазууну өчүрүү",
+    "deleteFolder": "Папканы өчүрүү",
     "searchInNote": "Жазуудан издөө..."
   },
   "encryption": {

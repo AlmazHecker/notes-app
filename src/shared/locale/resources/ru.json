@@ -21,6 +21,7 @@
     "encryptNote": "Зашифровать заметку",
     "decryptNote": "Расшифровать заметку",
     "deleteNote": "Удалить заметку",
+    "deleteFolder": "Удалить папку",
     "searchInNote": "Поиск в заметке..."
   },
   "encryption": {

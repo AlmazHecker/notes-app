@@ -100,7 +100,11 @@ export const NoteList: FC<NoteListProps> = ({ notes, onCdInto }) => {
                   onClick={(e) => handleDelete(e, note.id)}
                 >
                   <Trash2 className="mr-2 h-4 w-4" />
-                  <span>{t("note.deleteNote")}</span>
+                  <span>
+                    {note.type === "folder"
+                      ? t("note.deleteFolder")
+                      : t("note.deleteNote")}
+                  </span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -111,7 +115,7 @@ export const NoteList: FC<NoteListProps> = ({ notes, onCdInto }) => {
 
             return (
               <div
-                key={note.id} // use note.id instead of index
+                key={note.id}
                 onClick={() => onCdInto(note.id)}
                 onDragOver={(e) => {
                   e.preventDefault();

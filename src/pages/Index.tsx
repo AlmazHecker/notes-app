@@ -22,7 +22,7 @@ const Index = () => {
           className="
             w-full md:w-1/2
             flex-shrink-0
-            overflow-auto min-w-[250px] md:max-w-[80%] md:h-full
+            overflow-y-scroll min-w-[250px] md:max-w-[80%] md:h-full
             space-y-4 p-4 pt-0
           "
         >
@@ -35,7 +35,7 @@ const Index = () => {
         ></div>
 
         <div
-          className="w-full md:w-auto md:flex-1 flex flex-col flex-shrink-0 overflow-y-auto"
+          className="w-full md:w-auto md:flex-1 flex flex-col flex-shrink-0 overflow-y-scroll"
           id={LAYOUT_SELECTORS.right}
         >
           <NoteView />

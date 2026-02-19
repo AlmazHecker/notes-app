@@ -19,6 +19,7 @@
     "encryptNote": "メモを暗号化",
     "decryptNote": "メモを復号",
     "deleteNote": "メモを削除",
+    "deleteFolder": "フォルダーを削除",
     "searchInNote": "メモ内を検索..."
   },
   "encryption": {

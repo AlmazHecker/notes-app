@@ -38,7 +38,7 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
   const [modal, setModal] = useState<"enter" | "set" | "">("");
   const [password, setPassword] = useState("");
 
-  const [note, setNote] = useState<Note | null>(getDefaultNote());
+  const [note, setNote] = useState<Note | null>(null);
   const [isEncrypted, setIsEncrypted] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
@@ -97,10 +97,10 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
 
   const getNote = async (noteId: string) => {
     // for mobile smooth experience
-    if (window.innerWidth <= 768) {
-      setNote(null);
+    if (window.innerWidth <= 768 && !noteId) {
+      setTimeout(() => setNote(null), 300); // 300 - to sync with slide in animation duration
+      return;
     }
-
     let note: Note | null = getDefaultNote();
 
     if (noteId && noteId !== "new-note") {
