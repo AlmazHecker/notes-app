@@ -11,7 +11,8 @@ const root = ReactDOM.createRoot(document.getElementById("root")!);
 
 const bootstrapApp = async () => {
   await navigator.storage.persist();
-  await noteService.initialize();
+  const folderPath = window.location.pathname.split("/").filter(Boolean);
+  await noteService.initializeWithPathIds(folderPath);
 };
 
 bootstrapApp().then(() =>
@@ -21,8 +22,8 @@ bootstrapApp().then(() =>
       <Layout>
         <RouterProvider router={router} />
       </Layout>
-    </React.StrictMode>
-  )
+    </React.StrictMode>,
+  ),
 );
 
 if ("serviceWorker" in navigator && !import.meta.env.DEV) {

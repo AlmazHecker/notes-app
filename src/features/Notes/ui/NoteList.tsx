@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import { FC, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { NoteMeta } from "@/entities/note/types";
 import { useNoteStore } from "@/entities/note/api";
 import { cn } from "@/shared/lib/utils";
@@ -28,7 +28,6 @@ type NoteListProps = {
 export const NoteList: FC<NoteListProps> = ({ notes, onCdInto }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
   const parentRef = useRef(null);
   const { moveNote, deleteEntry, renameEntry } = useNoteStore();
 
@@ -62,9 +61,7 @@ export const NoteList: FC<NoteListProps> = ({ notes, onCdInto }) => {
   };
 
   const handleNoteClick = (id: string) => {
-    const params = new URLSearchParams(searchParams);
-    params.set("noteId", id);
-    navigate(`?${params.toString()}`);
+    return navigate(`?noteId=${id}`);
   };
 
   return (

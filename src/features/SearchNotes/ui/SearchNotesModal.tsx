@@ -1,5 +1,5 @@
 import { useEffect, FC } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { useNoteStore } from "@/entities/note/api";
 import { NoteMeta } from "@/entities/note/types";
 import {
@@ -25,6 +25,7 @@ export const SearchNotesModal: FC<SearchNotesModalProps> = ({
   const { t } = useTranslation();
   const { notes, getNotes, cdInto, pathIds } = useNoteStore();
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (open) getNotes();
@@ -33,14 +34,10 @@ export const SearchNotesModal: FC<SearchNotesModalProps> = ({
   const handleSelectNote = async (note: NoteMeta) => {
     if (note.type === "folder") {
       await cdInto(note.id);
-      const params = new URLSearchParams(searchParams);
-      params.set("path", [...pathIds, note.id].join(","));
-      params.delete("noteId");
-      setSearchParams(params);
+      const newPath = `/${[...pathIds, note.id].join("/")}`;
+      navigate(newPath);
     } else {
-      const params = new URLSearchParams(searchParams);
-      params.set("noteId", note.id);
-      setSearchParams(params);
+      navigate(`?noteId=${note.id}`);
     }
     setOpen(false);
   };

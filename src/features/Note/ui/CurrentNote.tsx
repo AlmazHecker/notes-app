@@ -74,7 +74,7 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
     if (!confirm(t("note.deleteNoteConfirm"))) return;
     await noteService.delete(note?.id!);
 
-    navigate("/");
+    navigate(window.location.pathname);
     noteStore.getNotes();
   };
 
@@ -106,6 +106,7 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
     if (noteId && noteId !== "new-note") {
       note = await noteStore.getNote(noteId);
     }
+
     if (!note) return;
 
     setNote(note);
