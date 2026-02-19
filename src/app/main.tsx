@@ -11,7 +11,8 @@ const root = ReactDOM.createRoot(document.getElementById("root")!);
 const bootstrapApp = async () => {
   await navigator.storage.persist();
 
-  const folderPath = window.location.pathname.split("/").filter(Boolean);
+  const hashPath = location.hash.replace(/^#/, ""); // it turns out the hash routing has it's own property on location
+  const folderPath = hashPath.split("/").filter(Boolean);
   await noteService.initializeWithPathIds(folderPath);
 };
 
