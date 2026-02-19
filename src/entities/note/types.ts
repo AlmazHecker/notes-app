@@ -1,4 +1,4 @@
-export type Note = Omit<NoteMeta, "offset" | "length"> & RawNote;
+export type Note = NoteMeta & RawNote;
 
 export type NoteMeta = {
   id: string;
