@@ -1,5 +1,11 @@
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { LockIcon, FolderIcon, Trash2, MoreVertical } from "lucide-react";
+import {
+  LockIcon,
+  FolderIcon,
+  Trash2,
+  MoreVertical,
+  Pencil,
+} from "lucide-react";
 import { FC, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -24,8 +30,10 @@ export const NoteList: FC<NoteListProps> = ({ notes, onCdInto }) => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const parentRef = useRef(null);
-  const { moveNote, deleteEntry } = useNoteStore();
+  const { moveNote, deleteEntry, renameEntry } = useNoteStore();
+
   const [dragOverId, setDragOverId] = useState<string | null>(null);
+  const draggedNoteId = useRef<string | null>(null);
 
   const rowVirtualizer = useVirtualizer({
     count: notes.length,
@@ -38,6 +46,18 @@ export const NoteList: FC<NoteListProps> = ({ notes, onCdInto }) => {
     e.stopPropagation();
     if (confirm(t("note.deleteNoteConfirm"))) {
       await deleteEntry(id);
+    }
+  };
+
+  const handleRename = async (
+    e: React.MouseEvent,
+    id: string,
+    label: string,
+  ) => {
+    e.stopPropagation();
+    const newLabel = prompt(t("notes.newFolder"), label);
+    if (newLabel && newLabel !== label) {
+      await renameEntry(id, newLabel);
     }
   };
 
@@ -71,7 +91,16 @@ export const NoteList: FC<NoteListProps> = ({ notes, onCdInto }) => {
                   <MoreVertical size={16} />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
+              <DropdownMenuContent
+                align="end"
+                className="w-(--radix-dropdown-menu-content-available-width)"
+              >
+                <DropdownMenuItem
+                  onClick={(e) => handleRename(e, note.id, note.label)}
+                >
+                  <Pencil className="mr-2 h-4 w-4" />
+                  <span>{t("common.edit")}</span>
+                </DropdownMenuItem>
                 <DropdownMenuItem
                   variant="destructive"
                   onClick={(e) => handleDelete(e, note.id)}
@@ -88,7 +117,7 @@ export const NoteList: FC<NoteListProps> = ({ notes, onCdInto }) => {
 
             return (
               <div
-                key={virtualRow.index}
+                key={note.id} // use note.id instead of index
                 onClick={() => onCdInto(note.id)}
                 onDragOver={(e) => {
                   e.preventDefault();
@@ -97,11 +126,12 @@ export const NoteList: FC<NoteListProps> = ({ notes, onCdInto }) => {
                 onDragLeave={() => setDragOverId(null)}
                 onDrop={async (e) => {
                   e.preventDefault();
-                  setDragOverId(null);
-                  const noteId = e.dataTransfer.getData("noteId");
+                  const noteId = draggedNoteId.current;
                   if (noteId && noteId !== note.id) {
                     await moveNote(noteId, note.id);
                   }
+                  setDragOverId(null);
+                  draggedNoteId.current = null;
                 }}
                 className={cn(
                   "absolute w-full p-4 rounded-md border text-left cursor-pointer transition-colors group flex items-center justify-between",
@@ -128,11 +158,10 @@ export const NoteList: FC<NoteListProps> = ({ notes, onCdInto }) => {
 
           return (
             <div
-              key={virtualRow.index}
-              draggable="true"
-              onDragStart={(e) => {
-                e.dataTransfer.setData("noteId", note.id);
-                e.dataTransfer.effectAllowed = "move";
+              key={note.id}
+              draggable
+              onDragStart={() => {
+                draggedNoteId.current = note.id;
               }}
               onClick={() => handleNoteClick(note.id)}
               className="absolute w-full p-4 rounded-md border hover:bg-accent transition-colors group cursor-pointer flex items-center justify-between"

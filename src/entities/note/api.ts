@@ -14,6 +14,7 @@ interface NoteState {
   setPath: (ids: string[]) => Promise<void>;
   moveNote: (noteId: string, targetFolderId: string) => Promise<void>;
   deleteEntry: (id: string) => Promise<void>;
+  renameEntry: (id: string, newLabel: string) => Promise<void>;
 }
 
 export const useNoteStore = create<NoteState>((set, get) => ({
@@ -51,6 +52,10 @@ export const useNoteStore = create<NoteState>((set, get) => ({
   },
   async deleteEntry(id: string) {
     await noteService.delete(id);
+    await get().getNotes();
+  },
+  async renameEntry(id: string, newLabel: string) {
+    await noteService.renameEntry(id, newLabel);
     await get().getNotes();
   },
   async createFolder(label: string) {

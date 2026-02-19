@@ -318,6 +318,14 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
     });
   }
 
+  async renameEntry(id: string, newLabel: string): Promise<void> {
+    const entry = this.index[id];
+    if (!entry) return;
+
+    this.index[id] = { ...entry, label: newLabel, updatedAt: Date.now() };
+    await this.saveIndex();
+  }
+
   async exportFull(): Promise<Blob> {
     const zip = new JSZip();
     await NoteZipTransfer.zipDirectory(this.root, zip);
