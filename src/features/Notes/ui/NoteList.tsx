@@ -1,11 +1,18 @@
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { LockIcon, FolderIcon } from "lucide-react";
+import { LockIcon, FolderIcon, Trash2, MoreVertical } from "lucide-react";
 import { FC, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { NoteMeta } from "@/entities/note/types";
 import { useNoteStore } from "@/entities/note/api";
 import { cn } from "@/shared/lib/utils";
+import { Button } from "@/shared/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/shared/ui/dropdown-menu";
 
 type NoteListProps = {
   notes: NoteMeta[];
@@ -14,8 +21,10 @@ type NoteListProps = {
 
 export const NoteList: FC<NoteListProps> = ({ notes, onCdInto }) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const parentRef = useRef(null);
-  const { moveNote } = useNoteStore();
+  const { moveNote, deleteEntry } = useNoteStore();
   const [dragOverId, setDragOverId] = useState<string | null>(null);
 
   const rowVirtualizer = useVirtualizer({
@@ -24,6 +33,19 @@ export const NoteList: FC<NoteListProps> = ({ notes, onCdInto }) => {
     estimateSize: () => 100,
     overscan: 5,
   });
+
+  const handleDelete = async (e: React.MouseEvent, id: string) => {
+    e.stopPropagation();
+    if (confirm(t("note.deleteNoteConfirm"))) {
+      await deleteEntry(id);
+    }
+  };
+
+  const handleNoteClick = (id: string) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("noteId", id);
+    navigate(`?${params.toString()}`);
+  };
 
   return (
     <div ref={parentRef} className="overflow-auto">
@@ -37,11 +59,35 @@ export const NoteList: FC<NoteListProps> = ({ notes, onCdInto }) => {
         {rowVirtualizer.getVirtualItems().map((virtualRow) => {
           const note = notes[virtualRow.index];
 
+          const actions = (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="h-8 w-8 cursor-pointer"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <MoreVertical size={16} />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem
+                  variant="destructive"
+                  onClick={(e) => handleDelete(e, note.id)}
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  <span>{t("note.deleteNote")}</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          );
+
           if (note.type === "folder") {
             const isDragOver = dragOverId === note.id;
 
             return (
-              <button
+              <div
                 key={virtualRow.index}
                 onClick={() => onCdInto(note.id)}
                 onDragOver={(e) => {
@@ -58,7 +104,7 @@ export const NoteList: FC<NoteListProps> = ({ notes, onCdInto }) => {
                   }
                 }}
                 className={cn(
-                  "absolute w-full p-4 rounded-md border text-left cursor-pointer transition-colors",
+                  "absolute w-full p-4 rounded-md border text-left cursor-pointer transition-colors group flex items-center justify-between",
                   isDragOver ? "bg-accent border-primary" : "hover:bg-accent",
                 )}
                 style={{
@@ -66,40 +112,50 @@ export const NoteList: FC<NoteListProps> = ({ notes, onCdInto }) => {
                   top: 0,
                 }}
               >
-                <div className="flex items-center gap-2">
-                  <FolderIcon size="18px" className="text-primary" />
-                  <h3 className="font-semibold">{note.label}</h3>
+                <div className="flex flex-col flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <FolderIcon size="18px" className="text-primary" />
+                    <h3 className="font-semibold truncate">{note.label}</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground line-clamp-1">
+                    {t("notes.folder")}
+                  </p>
                 </div>
-                <p className="text-sm text-muted-foreground line-clamp-1">
-                  {t("notes.folder")}
-                </p>
-              </button>
+                {actions}
+              </div>
             );
           }
 
           return (
-            <Link
-              to={`?noteId=${note.id}`}
+            <div
               key={virtualRow.index}
               draggable="true"
               onDragStart={(e) => {
                 e.dataTransfer.setData("noteId", note.id);
                 e.dataTransfer.effectAllowed = "move";
               }}
-              className="absolute w-full p-4 rounded-md border hover:bg-accent transition-colors"
+              onClick={() => handleNoteClick(note.id)}
+              className="absolute w-full p-4 rounded-md border hover:bg-accent transition-colors group cursor-pointer flex items-center justify-between"
               style={{
                 transform: `translateY(${virtualRow.start}px)`,
                 top: 0,
               }}
             >
-              <div className="flex items-center gap-1">
-                <h3 className="font-semibold">{note.label}</h3>
-                {note.isEncrypted && <LockIcon size="10px" />}
+              <div className="flex flex-col flex-1 min-w-0">
+                <div className="flex items-center gap-1">
+                  <h3 className="font-semibold truncate">{note.label}</h3>
+                  {note.isEncrypted && <LockIcon size="10px" />}
+                </div>
+                <p className="text-sm text-muted-foreground line-clamp-1">
+                  {note.isEncrypted ? (
+                    t("notes.encrypted")
+                  ) : (
+                    <>{note.snippet}</>
+                  )}
+                </p>
               </div>
-              <p className="text-sm text-muted-foreground line-clamp-1">
-                {note.isEncrypted ? t("notes.encrypted") : <>{note.snippet}</>}
-              </p>
-            </Link>
+              {actions}
+            </div>
           );
         })}
       </div>
