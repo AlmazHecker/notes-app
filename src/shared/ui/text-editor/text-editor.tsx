@@ -58,7 +58,7 @@ export const TextEditor: FC<TextEditorProps> = ({
       content: value,
       editable,
     },
-    [editable, value]
+    [editable, value],
   );
 
   useImperativeHandle(ref, () => editor!, [editor]);
@@ -66,7 +66,7 @@ export const TextEditor: FC<TextEditorProps> = ({
   return (
     <>
       <EditorContent
-        className="p-4 pt-0 md:pt-4 editor-content"
+        className="p-4 pt-0 md:pt-4 editor-content flex-1 flex flex-col"
         onClick={() => editor?.chain().focus()}
         editor={editor}
       />
