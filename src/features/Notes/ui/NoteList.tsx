@@ -91,10 +91,7 @@ export const NoteList: FC<NoteListProps> = ({ notes, onCdInto }) => {
                   <MoreVertical size={16} />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="end"
-                className="w-(--radix-dropdown-menu-content-available-width)"
-              >
+              <DropdownMenuContent align="end">
                 <DropdownMenuItem
                   onClick={(e) => handleRename(e, note.id, note.label)}
                 >
