@@ -1,6 +1,8 @@
+import JSZip from "jszip";
 import { getEscapedHtml } from "../utils";
 import { NoteStorageStrategy } from "./storage";
 import { Note, NoteMeta } from "@/entities/note/types";
+import { NoteZipTransfer } from "./NoteZipTransfer";
 
 const INDEX_FILE = "index.json";
 
@@ -135,17 +137,76 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
     return navigator.storage.estimate();
   }
 
-  async import(note: Blob) {
-    const noteData: Note = JSON.parse(await note.text());
-    if (!noteData.id) throw new Error("Imported note must have an id");
-
-    await this.update(noteData);
+  async import(blob: Blob) {
+    try {
+      const zip = await JSZip.loadAsync(blob);
+      await this.mergeImport(zip, this.root, "");
+      await this.loadIndex();
+    } catch (e) {
+      try {
+        const text = await blob.text();
+        const noteData: Note = JSON.parse(text);
+        if (!noteData.id) throw new Error("Invalid note data");
+        await this.update(noteData);
+      } catch (legacyErr) {
+        console.error("Import failed:", legacyErr);
+        throw new Error("Failed to import notes");
+      }
+    }
   }
 
-  async export(noteId: string) {
-    const note = await this.getByName(noteId);
-    if (!note) throw new Error("Note not found");
-    return new Blob([JSON.stringify(note)], { type: "application/json" });
+  private async mergeImport(
+    zip: JSZip,
+    targetDir: FileSystemDirectoryHandle,
+    zipPath: string,
+  ) {
+    const prefix = zipPath ? zipPath + "/" : "";
+    const entries = Object.keys(zip.files).filter((path) => {
+      if (!path.startsWith(prefix)) return false;
+      const relative = path.slice(prefix.length);
+      if (!relative || relative === "/") return false;
+      const parts = relative.split("/");
+      return parts.length === 1 || (parts.length === 2 && parts[1] === "");
+    });
+
+    for (const entryPath of entries) {
+      const entry = zip.files[entryPath];
+      const name = entryPath.slice(prefix.length).replace(/\/$/, "");
+
+      if (entry.dir) {
+        const subDirHandle = await targetDir.getDirectoryHandle(name, {
+          create: true,
+        });
+        await this.mergeImport(zip, subDirHandle, entryPath.replace(/\/$/, ""));
+      } else if (name === INDEX_FILE) {
+        const zipIndex: Record<string, NoteMeta> = JSON.parse(
+          await entry.async("text"),
+        );
+        let localIndex: Record<string, NoteMeta> = {};
+        try {
+          const handle = await targetDir.getFileHandle(INDEX_FILE);
+          const file = await handle.getFile();
+          const text = await file.text();
+          localIndex = text ? JSON.parse(text) : {};
+        } catch (e) {}
+
+        const mergedIndex = { ...localIndex, ...zipIndex };
+        const handle = await targetDir.getFileHandle(INDEX_FILE, {
+          create: true,
+        });
+        const writable = await handle.createWritable();
+        await writable.write(JSON.stringify(mergedIndex));
+        await writable.close();
+      } else {
+        const blob = await entry.async("blob");
+        const fileHandle = await targetDir.getFileHandle(name, {
+          create: true,
+        });
+        const writable = await fileHandle.createWritable();
+        await writable.write(blob);
+        await writable.close();
+      }
+    }
   }
 
   async cd(folderId: string): Promise<void> {
@@ -255,5 +316,11 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
     await this.updateFolderIndex(targetDirHandle, (targetIndex) => {
       targetIndex[id] = { ...entry, updatedAt: Date.now() };
     });
+  }
+
+  async exportFull(): Promise<Blob> {
+    const zip = new JSZip();
+    await NoteZipTransfer.zipDirectory(this.root, zip);
+    return await zip.generateAsync({ type: "blob" });
   }
 }

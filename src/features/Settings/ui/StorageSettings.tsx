@@ -36,8 +36,21 @@ const StorageSettings = () => {
     }
   }
 
-  const goToExport = () => {
-    return navigate("/export");
+  const handleExport = async () => {
+    try {
+      const blob = await noteService.exportFull();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `notes_backup_${new Date().toISOString().split("T")[0]}.zip`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Export failed:", err);
+      alert("Export failed!");
+    }
   };
 
   const deleteNotes = async () => {
@@ -56,20 +69,14 @@ const StorageSettings = () => {
     try {
       const input = document.createElement("input");
       input.type = "file";
-      input.accept = ".zip";
+      input.accept = ".zip, .json";
 
       input.onchange = async (event: Event) => {
         const target = event.target as HTMLInputElement;
         const file = target.files?.[0];
         if (!file) return;
 
-        const zip = await JSZip.loadAsync(file);
-
-        for await (const [filename, zipEntry] of Object.entries(zip.files)) {
-          if (zipEntry.dir) continue;
-          const file = await zipEntry.async("blob");
-          await noteService.import(file);
-        }
+        await noteService.import(file);
 
         alert("Notes imported successfully!");
         loadFolderSize();
@@ -127,7 +134,7 @@ const StorageSettings = () => {
             <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
               {t("settings.dataManagement.downloadDescription")}
             </p>
-            <Button variant="outline" onClick={goToExport}>
+            <Button variant="outline" onClick={handleExport}>
               {t("settings.dataManagement.exportButton")}
             </Button>
           </div>
