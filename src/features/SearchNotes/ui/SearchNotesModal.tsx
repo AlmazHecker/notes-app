@@ -1,6 +1,7 @@
 import { useEffect, FC } from "react";
-import { useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useNoteStore } from "@/entities/note/api";
+import { NoteMeta } from "@/entities/note/types";
 import {
   CommandDialog,
   CommandEmpty,
@@ -22,15 +23,25 @@ export const SearchNotesModal: FC<SearchNotesModalProps> = ({
   setOpen,
 }) => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
-  const { notes, getNotes } = useNoteStore();
+  const { notes, getNotes, cdInto, pathIds } = useNoteStore();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     if (open) getNotes();
   }, [open]);
 
-  const handleSelectNote = (noteId: string) => {
-    navigate(`?noteId=${noteId}`);
+  const handleSelectNote = async (note: NoteMeta) => {
+    if (note.type === "folder") {
+      await cdInto(note.id);
+      const params = new URLSearchParams(searchParams);
+      params.set("path", [...pathIds, note.id].join(","));
+      params.delete("noteId");
+      setSearchParams(params);
+    } else {
+      const params = new URLSearchParams(searchParams);
+      params.set("noteId", note.id);
+      setSearchParams(params);
+    }
     setOpen(false);
   };
 
@@ -47,7 +58,7 @@ export const SearchNotesModal: FC<SearchNotesModalProps> = ({
             {notes.map((note) => (
               <CommandItem
                 key={note.id}
-                onSelect={() => handleSelectNote(note.id)}
+                onSelect={() => handleSelectNote(note)}
                 className="cursor-pointer"
               >
                 <div className="flex flex-col w-full">

@@ -11,7 +11,9 @@
     "empty": "No notes saved yet.",
     "notFound": "No notes found",
     "searchNotes": "Search notes...",
-    "notes": "Notes"
+    "notes": "Notes",
+    "folder": "Folder",
+    "newFolder": "New Folder"
   },
   "note": {
     "title": "Note Preferences",
@@ -53,7 +55,8 @@
     "previous": "Previous",
     "next": "Next",
     "save": "Save",
-    "edit": "Edit"
+    "edit": "Edit",
+    "back": "Back"
   },
   "settings": {
     "appearance": {

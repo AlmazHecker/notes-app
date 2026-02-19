@@ -1,4 +1,4 @@
-export type Note = Omit<NoteMeta, "offset" | "length"> & RawNote;
+export type Note = NoteMeta & RawNote;
 
 export type NoteMeta = {
   id: string;
@@ -8,6 +8,7 @@ export type NoteMeta = {
   isEncrypted: boolean;
   tags?: string[];
   snippet: string; // short preview
+  type: "note" | "folder";
 };
 
 export type RawNote = {
