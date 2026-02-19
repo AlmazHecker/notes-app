@@ -6,11 +6,11 @@ import UserPreferenceProvider from "./UserPreferenceProvider";
 import "@/shared/locale/i18next";
 import Layout from "@/widgets/Layout";
 import { noteService } from "@/entities/note/service";
-
 const root = ReactDOM.createRoot(document.getElementById("root")!);
 
 const bootstrapApp = async () => {
   await navigator.storage.persist();
+
   const folderPath = window.location.pathname.split("/").filter(Boolean);
   await noteService.initializeWithPathIds(folderPath);
 };

@@ -143,7 +143,7 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
         <div className="px-4 flex items-center justify-between">
           <div className="flex items-center gap-3 w-full">
             <Button
-              onClick={() => navigate("/")}
+              onClick={() => navigate(location.pathname)}
               className="md:hidden flex"
               variant="outline"
               size="icon"

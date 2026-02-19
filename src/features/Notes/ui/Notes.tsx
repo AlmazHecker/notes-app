@@ -12,7 +12,7 @@ import { useNoteStore } from "@/entities/note/api";
 import { NoteList } from "./NoteList";
 import { SearchNotesModal } from "../../SearchNotes/ui/SearchNotesModal";
 import { useTranslation } from "react-i18next";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 export const Notes = () => {
   const { t } = useTranslation();
@@ -20,20 +20,14 @@ export const Notes = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const navigate = useNavigate();
-  const params = useParams();
   const [searchParams] = useSearchParams();
-
-  // const folderPath = params["*"]?.split("/").filter(Boolean) || [];
-  // console.log(params);
+  const location = useLocation();
 
   const getNotes = async () => {
     try {
       setIsLoading(true);
-      // if (folderPath.length > 0 && notesStore.pathIds.length === 0) {
-      //   await notesStore.setPath(folderPath);
-      // } else {
-      await notesStore.getNotes();
-      // }
+      const folderPath = location.pathname.split("/").filter(Boolean);
+      await notesStore.setPath(folderPath);
     } finally {
       setIsLoading(false);
     }
@@ -41,7 +35,7 @@ export const Notes = () => {
 
   useEffect(() => {
     getNotes();
-  }, []);
+  }, [location.pathname]);
 
   const updatePathParams = (newPathIds: string[]) => {
     const noteId = searchParams.get("noteId");
