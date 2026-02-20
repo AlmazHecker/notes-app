@@ -156,6 +156,7 @@ pre {
 .editor-content .ProseMirror {
   flex: 1;
   outline: none;
+  padding-bottom: calc(var(--keyboard-height, 0px) + 60px);
 }
 
 .editor-content .ProseMirror blockquote {

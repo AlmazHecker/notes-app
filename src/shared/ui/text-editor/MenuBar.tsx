@@ -20,20 +20,50 @@ export const MenuBar: FC<{ editor: Editor | null }> = ({ editor }) => {
   const [keyboardOffset, setKeyboardOffset] = useState(-100);
 
   useEffect(() => {
+    const virtualKeyboard = (navigator as any).virtualKeyboard;
+
     const updatePosition = () => {
-      if (window.visualViewport) {
-        const offset =
+      let offset = -100;
+      let height = 0;
+
+      // 1. Try VirtualKeyboard API (Modern Chromium)
+      if (virtualKeyboard?.boundingRect) {
+        height = virtualKeyboard.boundingRect.height;
+        if (height > 0) {
+          offset = height - 45;
+        }
+      }
+
+      // 2. Fallback to VisualViewport (Safari iOS, older Chromium)
+      if (offset === -100 && window.visualViewport) {
+        height =
           window.innerHeight -
           window.visualViewport.offsetTop -
           window.visualViewport.height;
-        setKeyboardOffset(offset > 0 ? offset - 45 : -100);
+        if (height > 0) {
+          offset = height - 45;
+        }
       }
+
+      setKeyboardOffset(offset);
+      document.documentElement.style.setProperty(
+        "--keyboard-height",
+        `${height > 0 ? height : 0}px`,
+      );
     };
 
+    if (virtualKeyboard) {
+      virtualKeyboard.addEventListener("geometrychange", updatePosition);
+    }
     window.visualViewport?.addEventListener("resize", updatePosition);
     window.addEventListener("scroll", updatePosition);
 
+    updatePosition();
+
     return () => {
+      if (virtualKeyboard) {
+        virtualKeyboard.removeEventListener("geometrychange", updatePosition);
+      }
       window.visualViewport?.removeEventListener("resize", updatePosition);
       window.removeEventListener("scroll", updatePosition);
     };

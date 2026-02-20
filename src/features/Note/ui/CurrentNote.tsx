@@ -95,7 +95,6 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
   };
 
   const getNote = async (noteId: string) => {
-    // for mobile smooth experience
     if (window.innerWidth <= 768 && !noteId) {
       setTimeout(() => setNote(null), 300); // 300 - to sync with slide in animation duration
       return;
@@ -123,6 +122,10 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
   };
 
   useEffect(() => {
+    // Enable VirtualKeyboard API overlay if available
+    if ((navigator as any).virtualKeyboard) {
+      (navigator as any).virtualKeyboard.overlaysContent = true;
+    }
     getNote(noteId);
   }, [noteId]);
 
