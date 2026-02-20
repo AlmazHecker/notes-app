@@ -67,10 +67,7 @@ export const NoteList: FC<NoteListProps> = ({ notes, onCdInto }) => {
   return (
     <div ref={parentRef} className="overflow-auto">
       <div
-        style={{
-          height: rowVirtualizer.getTotalSize(),
-          position: "relative",
-        }}
+        style={{ height: rowVirtualizer.getTotalSize(), position: "relative" }}
         className="relative"
       >
         {rowVirtualizer.getVirtualItems().map((virtualRow) => {

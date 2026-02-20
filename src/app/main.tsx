@@ -5,7 +5,7 @@ import { router } from "./router";
 import UserPreferenceProvider from "./UserPreferenceProvider";
 import "@/shared/locale/i18next";
 import Layout from "@/widgets/Layout";
-import { noteService } from "@/entities/note/service";
+import { useNoteStore } from "@/entities/note/api";
 const root = ReactDOM.createRoot(document.getElementById("root")!);
 
 const bootstrapApp = async () => {
@@ -15,7 +15,7 @@ const bootstrapApp = async () => {
   const url = new URL(hash, "http://dummy");
   const folderPath = url.pathname.split("/").filter(Boolean);
 
-  await noteService.initializeWithPathIds(folderPath);
+  await useNoteStore.getState().setPath(folderPath);
 };
 
 bootstrapApp().then(() =>

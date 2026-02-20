@@ -8,12 +8,8 @@ export interface NoteStorageStrategy {
   create(newNote: Omit<Note, "createdAt" | "updatedAt">): Promise<Note>;
   import(noteBlob: Blob): Promise<void>;
   getStorageEstimate(): Promise<StorageEstimate>;
-  cd(folderId: string): Promise<void>;
-  goBack(): Promise<void>;
-  getCurrentPath(): string[];
-  getPathIds(): string[];
   createFolder(label: string): Promise<NoteMeta>;
-  initializeWithPathIds(ids: string[]): Promise<void>;
+  initialize(ids: string[]): Promise<string>;
   moveEntry(id: string, targetFolderId: string): Promise<void>;
   renameEntry(id: string, newLabel: string): Promise<void>;
   exportFull(): Promise<Blob>;

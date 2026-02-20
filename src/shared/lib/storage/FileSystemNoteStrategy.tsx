@@ -10,31 +10,27 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
   private index: Record<string, NoteMeta> = {};
   private root!: FileSystemDirectoryHandle;
   private directoryStack: FileSystemDirectoryHandle[] = [];
-  private pathStack: string[] = [];
-  private pathIdStack: string[] = [];
 
   private get currentDir() {
     return this.directoryStack[this.directoryStack.length - 1];
   }
 
-  public async initialize() {
+  public async initialize(ids: string[]): Promise<string> {
     this.root = await navigator.storage.getDirectory();
     this.directoryStack = [this.root];
-    this.pathStack = [];
-    this.pathIdStack = [];
-    await this.loadIndex();
-  }
 
-  public async initializeWithPathIds(ids: string[]) {
-    await this.initialize();
     for (const id of ids) {
       try {
-        await this.cd(id);
+        const handle = await this.currentDir.getDirectoryHandle(id);
+        this.directoryStack.push(handle);
       } catch (e) {
-        // Stop if a folder in the path is missing
         break;
       }
     }
+
+    await this.loadIndex();
+
+    return this.index[this.currentDir.name]?.label;
   }
 
   private async loadIndex() {
@@ -102,7 +98,6 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
     if (!entry) return;
 
     if (entry.type === "folder") {
-      // @ts-ignore
       await this.currentDir.removeEntry(noteId, { recursive: true });
     } else {
       await this.currentDir.removeEntry(noteId);
@@ -115,7 +110,7 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
   public async clear() {
     // @ts-ignore
     await this.root.remove({ recursive: true });
-    await this.initialize();
+    await this.initialize([]);
   }
 
   async getByName(noteId: string): Promise<Note | null> {
@@ -207,36 +202,6 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
         await writable.close();
       }
     }
-  }
-
-  async cd(folderId: string): Promise<void> {
-    const entry = this.index[folderId];
-    if (!entry || entry.type !== "folder") {
-      throw new Error("Folder not found");
-    }
-
-    const handle = await this.currentDir.getDirectoryHandle(folderId);
-    this.directoryStack.push(handle);
-    this.pathStack.push(entry.label);
-    this.pathIdStack.push(folderId);
-    await this.loadIndex();
-  }
-
-  async goBack(): Promise<void> {
-    if (this.directoryStack.length > 1) {
-      this.directoryStack.pop();
-      this.pathStack.pop();
-      this.pathIdStack.pop();
-      await this.loadIndex();
-    }
-  }
-
-  getCurrentPath(): string[] {
-    return this.pathStack;
-  }
-
-  getPathIds(): string[] {
-    return this.pathIdStack;
   }
 
   async createFolder(label: string): Promise<NoteMeta> {

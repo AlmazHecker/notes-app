@@ -25,8 +25,9 @@ export const Notes = () => {
   const getNotes = async () => {
     try {
       setIsLoading(true);
-      const folderPath = location.pathname.split("/").filter(Boolean);
-      await notesStore.setPath(folderPath);
+      const folderIds = location.pathname.split("/").filter(Boolean);
+      await notesStore.setPath(folderIds);
+      await notesStore.getNotes();
     } finally {
       setIsLoading(false);
     }
@@ -36,19 +37,14 @@ export const Notes = () => {
     getNotes();
   }, [location.pathname]);
 
-  const updatePathParams = (newPathIds: string[]) => {
-    const path = newPathIds.length > 0 ? `/${newPathIds.join("/")}` : "/";
-    navigate(path);
-  };
-
   const handleCdInto = async (id: string) => {
-    await notesStore.cdInto(id);
-    updatePathParams(notesStore.pathIds);
+    notesStore.pathIds.push(id);
+    navigate("/" + notesStore.pathIds.join("/"));
   };
 
   const handleGoBack = async () => {
-    await notesStore.goBack();
-    updatePathParams(notesStore.pathIds);
+    notesStore.pathIds.pop();
+    navigate("/" + notesStore.pathIds.join("/"));
   };
 
   const handleCreateFolder = async () => {
@@ -62,20 +58,13 @@ export const Notes = () => {
     <div className="flex flex-col sticky top-0 bg-background z-10 pb-4">
       <div className="flex justify-between items-center py-4">
         <div className="flex items-center gap-2">
-          {notesStore.path.length > 0 && (
-            <Button
-              size="icon"
-              variant="ghost"
-              onClick={handleGoBack}
-              className="mr-2"
-            >
+          {notesStore.pathIds.length > 0 && (
+            <Button size="icon" variant="ghost" onClick={handleGoBack}>
               <ArrowLeft />
             </Button>
           )}
           <h2 className="text-xl font-bold">
-            {notesStore.path.length > 0
-              ? notesStore.path[notesStore.path.length - 1]
-              : t("notes.title")}
+            {notesStore.dir ? notesStore.dir : t("notes.title")}
           </h2>
         </div>
         <div className="flex items-center gap-3">
@@ -97,17 +86,17 @@ export const Notes = () => {
           </Link>
         </div>
       </div>
-      {notesStore.path.length > 0 && (
+      {/* {notesStore.directoryStack.length > 1 && (
         <div className="text-xs text-muted-foreground flex items-center gap-1 overflow-x-auto whitespace-nowrap animate-in fade-in slide-in-from-top-1 duration-300">
           <span>{t("notes.notes")}</span>
-          {notesStore.path.map((p, i) => (
+          {notesStore.directoryStack.map((p, i) => (
             <span key={i} className="flex items-center gap-1">
               <span>/</span>
-              <span>{p}</span>
+              <span>{p.name}</span>
             </span>
           ))}
         </div>
-      )}
+      )} */}
     </div>
   );
 
@@ -140,6 +129,7 @@ export const Notes = () => {
       <SearchNotesModal
         open={isSearchModalOpen}
         setOpen={setIsSearchModalOpen}
+        onCdInto={handleCdInto}
       />
     </>
   );
