@@ -45,6 +45,7 @@ export const NoteList: FC<NoteListProps> = ({ notes, onCdInto }) => {
     e.stopPropagation();
     if (confirm(t("note.deleteNoteConfirm"))) {
       await deleteEntry(id);
+      navigate({ search: "" });
     }
   };
 
