@@ -73,7 +73,7 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
   const deleteNote = async () => {
     if (!confirm(t("note.deleteNoteConfirm"))) return;
     await noteService.delete(note?.id!);
-    navigate(-1);
+    navigate({ search: "" });
     noteStore.getNotes();
   };
 
