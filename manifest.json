@@ -2,7 +2,6 @@
   "name": "Notes",
   "short_name": "Notes",
   "description": "Notes, stored locally",
-  "theme_color": "#ffffff",
   "start_url": "/notes-app/",
   "id": "/notes-app/",
   "display": "standalone",
