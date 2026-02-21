@@ -25,22 +25,26 @@ const UserPreferenceProvider: React.FC = () => {
     const isDarkPreferred = () =>
       window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-    const setBodyClass = (isDark: boolean) => {
+    const setBodyClassAndMeta = (isDark: boolean) => {
       document.body.classList.toggle("dark", isDark);
       document.body.classList.toggle("light", !isDark);
+
+      const themeColor = isDark ? "oklch(0.147 0.004 49.25)" : "oklch(1 0 0)";
+      const meta = document.querySelector("meta[name='theme-color']");
+      if (meta) meta.setAttribute("content", themeColor);
     };
 
     const applyTheme = () => {
-      if (userPreferences.theme === "light") setBodyClass(false);
-      else if (userPreferences.theme === "dark") setBodyClass(true);
-      else setBodyClass(isDarkPreferred());
+      if (userPreferences.theme === "light") setBodyClassAndMeta(false);
+      else if (userPreferences.theme === "dark") setBodyClassAndMeta(true);
+      else setBodyClassAndMeta(isDarkPreferred());
     };
 
     applyTheme();
 
     const media = window.matchMedia("(prefers-color-scheme: dark)");
     const listener = (e: MediaQueryListEvent) => {
-      if (userPreferences.theme === "system") setBodyClass(e.matches);
+      if (userPreferences.theme === "system") setBodyClassAndMeta(e.matches);
     };
 
     if (userPreferences.theme === "system") {

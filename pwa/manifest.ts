@@ -3,7 +3,6 @@ export const getAppManifest = (BASE: string) => {
     name: "Notes",
     short_name: "Notes",
     description: "Notes, stored locally",
-    theme_color: "#ffffff",
     start_url: BASE,
     id: BASE,
     display: "standalone",
