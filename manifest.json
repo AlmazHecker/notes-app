@@ -63,7 +63,7 @@
       "name": "Settings",
       "short_name": "Settings",
       "description": "Go to settings page",
-      "url": "/notes-app/settings",
+      "url": "/notes-app//#/settings",
       "icons": [
         {
           "src": "/notes-app/icons/settings-96x96.png",
