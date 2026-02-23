@@ -11,9 +11,9 @@ self.addEventListener("activate", (event) => {
       Promise.all(
         keys.map((key) => {
           if (key !== CACHE_NAME) return caches.delete(key);
-        })
-      )
-    )
+        }),
+      ),
+    ),
   );
   self.clients.claim();
 });
@@ -35,6 +35,6 @@ self.addEventListener("fetch", (event) => {
         .catch(() => {
           console.log("prob smth went wrong :)");
         });
-    })
+    }),
   );
 });
