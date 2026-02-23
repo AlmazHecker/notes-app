@@ -44,5 +44,19 @@
       "type": "image/png",
       "form_factor": "narrow"
     }
+  ],
+  "shortcuts": [
+    {
+      "name": "New Note",
+      "short_name": "New Note",
+      "description": "Create a new note",
+      "url": "/#/?noteId=new-note",
+      "icons": [
+        {
+          "src": "/notes-app/icons/plus-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
   ]
 }
