@@ -120,7 +120,9 @@ const ExportNotes: React.FC = () => {
     // }
     return notesStore.notes.length === 0 ? (
       <div className="flex flex-col items-center justify-center h-full py-12">
-        <p className="text-slate-500 text-center">{t("exportNotes.noNotes")}</p>
+        <p className="text-muted-foreground text-center">
+          {t("exportNotes.noNotes")}
+        </p>
       </div>
     ) : (
       <div className="h-[calc(100vh-11rem)]">

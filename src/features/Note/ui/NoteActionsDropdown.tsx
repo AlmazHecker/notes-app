@@ -41,7 +41,7 @@ export const NoteActionsDropdown: FC<NoteActionsDropdownProps> = ({
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem disabled={isEncrypted} onClick={onEncryptionClick}>
-            {note.isEncrypted ? <Lock className="text-blue-500" /> : <Unlock />}
+            {note.isEncrypted ? <Lock className="text-info" /> : <Unlock />}
             {note.isEncrypted ? t("note.decryptNote") : t("note.encryptNote")}
           </DropdownMenuItem>
 

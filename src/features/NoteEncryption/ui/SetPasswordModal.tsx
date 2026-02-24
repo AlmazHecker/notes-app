@@ -48,7 +48,7 @@ export const SetPasswordModal = ({
 
     if (password.length < 12) {
       const isConfirmed = confirm(
-        t("encryption.setNotePassword.validation.minLimitWarning")
+        t("encryption.setNotePassword.validation.minLimitWarning"),
       );
       if (!isConfirmed) return;
     }
@@ -114,13 +114,13 @@ export const SetPasswordModal = ({
           </div>
 
           {showWarning && (
-            <p className="text-yellow-600 text-sm">
+            <p className="text-warning text-sm">
               {t("encryption.setNotePassword.validation.minLimitMessage")}
             </p>
           )}
 
           {passwordError && (
-            <p className="text-red-500 text-sm">{passwordError}</p>
+            <p className="text-destructive text-sm">{passwordError}</p>
           )}
         </form>
         <DialogFooter>

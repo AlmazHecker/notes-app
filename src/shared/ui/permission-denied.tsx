@@ -14,7 +14,7 @@ export const PermissionDenied: FC<PermissionDeniedProps> = ({
   const { t } = useTranslation();
   return (
     <div className={`flex flex-col items-start gap-4 ${containerClassName}`}>
-      <p className="text-red-500">{t("fileApi.permissionDenied")}</p>
+      <p className="text-destructive">{t("fileApi.permissionDenied")}</p>
       <p>
         If this is your first time setting a folder, create an empty one and
         select it. Otherwise, choose an existing folder where your notes are

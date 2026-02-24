@@ -75,7 +75,9 @@ export const EnterPasswordModal = ({
             />
           </div>
           {passwordError && (
-            <p className="text-red-500 text-sm text-center">{passwordError}</p>
+            <p className="text-destructive text-sm text-center">
+              {passwordError}
+            </p>
           )}
         </form>
         <DialogFooter>

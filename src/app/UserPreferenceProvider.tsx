@@ -1,5 +1,9 @@
 import { isCyrillic } from "@/shared/lib/utils";
-import { useUserPreferences } from "@/shared/hooks/useUserPreferences";
+import {
+  THEME_CLASSES,
+  type Theme,
+  useUserPreferences,
+} from "@/shared/hooks/useUserPreferences";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -25,26 +29,29 @@ const UserPreferenceProvider: React.FC = () => {
     const isDarkPreferred = () =>
       window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-    const setBodyClassAndMeta = (isDark: boolean) => {
-      document.body.classList.toggle("dark", isDark);
-      document.body.classList.toggle("light", !isDark);
+    const applyTheme = (theme: Theme) => {
+      document.body.classList.remove(...THEME_CLASSES);
 
-      const themeColor = isDark ? "oklch(0.147 0.004 49.25)" : "oklch(1 0 0)";
-      const meta = document.querySelector("meta[name='theme-color']");
-      if (meta) meta.setAttribute("content", themeColor);
+      const effectiveTheme =
+        theme === "system" ? (isDarkPreferred() ? "dark" : "light") : theme;
+
+      document.body.classList.add(effectiveTheme);
+
+      // smooth syncing
+      requestAnimationFrame(() => {
+        const bgColor = getComputedStyle(document.body).backgroundColor;
+        const meta = document.querySelector("meta[name='theme-color']");
+        if (meta && bgColor) {
+          meta.setAttribute("content", bgColor);
+        }
+      });
     };
 
-    const applyTheme = () => {
-      if (userPreferences.theme === "light") setBodyClassAndMeta(false);
-      else if (userPreferences.theme === "dark") setBodyClassAndMeta(true);
-      else setBodyClassAndMeta(isDarkPreferred());
-    };
-
-    applyTheme();
+    applyTheme(userPreferences.theme);
 
     const media = window.matchMedia("(prefers-color-scheme: dark)");
-    const listener = (e: MediaQueryListEvent) => {
-      if (userPreferences.theme === "system") setBodyClassAndMeta(e.matches);
+    const listener = () => {
+      if (userPreferences.theme === "system") applyTheme("system");
     };
 
     if (userPreferences.theme === "system") {

@@ -127,11 +127,11 @@ const StorageSettings = () => {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800">
+          <div className="p-4 rounded-lg bg-info/10 border border-info/20">
             <h3 className="font-medium mb-2">
               {t("settings.dataManagement.downloadTitle")}
             </h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+            <p className="text-sm text-muted-foreground mb-4">
               {t("settings.dataManagement.downloadDescription")}
             </p>
             <Button variant="outline" onClick={handleExport}>
@@ -139,11 +139,11 @@ const StorageSettings = () => {
             </Button>
           </div>
 
-          <div className="p-4 rounded-lg bg-blue-50 dark:bg-yellow-900/20 border border-blue-100 dark:border-yellow-800">
+          <div className="p-4 rounded-lg bg-warning/10 border border-warning/20">
             <h3 className="font-medium mb-2">
               {t("settings.dataManagement.importTitle")}
             </h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+            <p className="text-sm text-muted-foreground mb-4">
               {t("settings.dataManagement.importDescription")}
             </p>
             <Button variant="outline" onClick={importNotes}>
@@ -151,11 +151,11 @@ const StorageSettings = () => {
             </Button>
           </div>
 
-          <div className="p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800">
-            <h3 className="font-medium mb-2 text-red-600 dark:text-red-400">
+          <div className="p-4 rounded-lg bg-destructive/10 border border-destructive/20">
+            <h3 className="font-medium mb-2 text-destructive">
               {t("settings.dataManagement.deleteTitle")}
             </h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+            <p className="text-sm text-muted-foreground mb-4">
               {t("settings.dataManagement.deleteDescription")}
             </p>
             <Button variant="destructive" onClick={deleteNotes}>

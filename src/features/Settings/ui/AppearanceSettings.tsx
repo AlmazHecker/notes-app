@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/shared/ui/card";
-import { ArrowLeft, Laptop, Moon, Sun } from "lucide-react";
+import { ArrowLeft, Laptop, Moon, Sun, Zap } from "lucide-react";
 import {
   FontSizeLevel,
   Theme,
@@ -50,19 +50,19 @@ const AppearanceSettings: React.FC<AppearanceSettingsProps> = () => {
                   key={value}
                   className={`relative cursor-pointer rounded-lg border-2 ${
                     userPreferences.theme === value
-                      ? "border-blue-500"
-                      : "border-gray-200 dark:border-gray-800"
+                      ? "border-primary"
+                      : "border-border"
                   } p-4 flex flex-col items-center`}
                   onClick={() => userPreferences.setTheme(value as Theme)}
                 >
                   <div
-                    className={`aspect-square w-4/5 rounded-md border border-gray-200 mb-2 flex items-center justify-center ${bg}`}
+                    className={`aspect-square w-4/5 rounded-md border border-border mb-2 flex items-center justify-center ${bg}`}
                   >
                     {icon}
                   </div>
                   <span className="text-sm font-medium">{label}</span>
                   {userPreferences.theme === value && (
-                    <div className="absolute top-2 right-2 w-4 h-4 bg-blue-500 rounded-full"></div>
+                    <div className="absolute top-2 right-2 w-4 h-4 bg-primary rounded-full"></div>
                   )}
                 </div>
               ))}
@@ -84,7 +84,7 @@ const AppearanceSettings: React.FC<AppearanceSettingsProps> = () => {
                   value={userPreferences.fontSize}
                   onChange={(e) =>
                     userPreferences.setFontSize(
-                      Number(e.target.value) as FontSizeLevel
+                      Number(e.target.value) as FontSizeLevel,
                     )
                   }
                   className="mx-4 w-full"
@@ -123,6 +123,18 @@ const getThemes = (t: TFunction) => {
       value: "system",
       icon: <Laptop size={24} className="text-blue-500" />,
       bg: "bg-gradient-to-r from-white to-gray-900",
+    },
+    {
+      label: "Forest",
+      value: "forest",
+      icon: <Sun size={24} className="text-green-600" />,
+      bg: "bg-green-100",
+    },
+    {
+      label: "Cyberpunk",
+      value: "cyberpunk",
+      icon: <Zap size={24} className="text-fuchsia-500" />,
+      bg: "bg-fuchsia-950",
     },
   ];
 };

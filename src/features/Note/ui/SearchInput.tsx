@@ -101,15 +101,15 @@ const SearchInput: FC<SearchInputProps> = ({ editor, onClose }) => {
   }, []);
 
   return (
-    <div className="z-10 mx-auto rounded-lg shadow-md bg-white dark:bg-gray-800 p-2 w-full max-w-md">
+    <div className="z-10 mx-auto rounded-lg shadow-md bg-white dark:bg-secondary p-2 w-full max-w-md">
       <div className="flex items-center gap-2">
         <div className="relative flex-1">
-          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">
             <Search size={18} />
           </div>
           <Input
             ref={inputRef}
-            className="pl-10 pr-10 py-2 w-full rounded-md border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="pl-10 pr-10 py-2 w-full rounded-md border border-border focus:ring-2 focus:ring-primary focus:border-transparent"
             placeholder={t("note.searchInNote")}
             value={searchTerm}
             onChange={handleSearchChange}
@@ -124,7 +124,7 @@ const SearchInput: FC<SearchInputProps> = ({ editor, onClose }) => {
           {searchTerm && (
             <button
               onClick={handleClearSearch}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
             >
               <X size={18} />
             </button>
@@ -132,7 +132,7 @@ const SearchInput: FC<SearchInputProps> = ({ editor, onClose }) => {
         </div>
         <button
           onClick={handleCloseClick}
-          className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
+          className="p-2 text-muted-foreground hover:text-foreground rounded-full hover:bg-accent"
           aria-label="Close search"
         >
           <X size={20} />
@@ -141,19 +141,17 @@ const SearchInput: FC<SearchInputProps> = ({ editor, onClose }) => {
 
       {searchTerm && (
         <div className="flex items-center justify-between mt-2 px-2">
-          <span className="text-sm text-gray-500 dark:text-gray-400">
-            {resultsInfo}
-          </span>
+          <span className="text-sm text-muted-foreground">{resultsInfo}</span>
           <div className="flex gap-2">
             <button
               onClick={handlePrevResult}
-              className="p-1 text-sm bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300"
+              className="p-1 text-sm bg-secondary rounded hover:bg-accent text-foreground"
             >
               {t("common.previous")}
             </button>
             <button
               onClick={handleNextResult}
-              className="p-1 text-sm bg-blue-500 rounded hover:bg-blue-600 text-white"
+              className="p-1 text-sm bg-primary rounded hover:bg-primary/90 text-primary-foreground"
             >
               {t("common.next")}
             </button>

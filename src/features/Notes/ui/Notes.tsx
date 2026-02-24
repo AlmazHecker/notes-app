@@ -55,15 +55,15 @@ export const Notes = () => {
   };
 
   const sharedContent = (
-    <div className="flex flex-col sticky top-0 bg-background z-10 pb-4">
+    <div className="flex flex-col sticky top-0 bg-background z-10">
       <div className="flex justify-between items-center py-4">
         <div className="flex items-center gap-2">
           {notesStore.pathIds.length > 0 && (
-            <Button size="icon" variant="ghost" onClick={handleGoBack}>
+            <Button size="icon" variant="outline" onClick={handleGoBack}>
               <ArrowLeft />
             </Button>
           )}
-          <h2 className="text-xl font-bold">
+          <h2 className="text-lg md:text-xl font-bold">
             {notesStore.dir ? notesStore.dir : t("notes.title")}
           </h2>
         </div>
