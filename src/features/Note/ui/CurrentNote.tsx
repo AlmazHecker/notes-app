@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { TextEditor } from "@/shared/ui/text-editor/text-editor";
 import { ArrowLeft, Check, SaveIcon } from "lucide-react";
 import { Button } from "@/shared/ui/button";
@@ -126,6 +126,14 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
     e.target.style.height = e.target.scrollHeight + "px";
   };
 
+  const titleRef = useRef<HTMLTextAreaElement>(null);
+  // initial height adjustment for title
+  useEffect(() => {
+    if (!titleRef.current) return;
+    titleRef.current.style.height = "auto";
+    titleRef.current.style.height = titleRef.current.scrollHeight + "px";
+  }, [note?.label]);
+
   useEffect(() => {
     // Enable VirtualKeyboard API overlay if available
     if ((navigator as any).virtualKeyboard) {
@@ -193,7 +201,8 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
 
         <div className="px-4 mt-3">
           <textarea
-            className="w-full text-2xl border-none font-bold border outline-none p-0 resize-none"
+            ref={titleRef}
+            className="w-full h-auto text-2xl border-none font-bold border outline-none p-0 resize-none"
             value={note.label}
             onChange={(e) => setNote({ ...note, label: e.target.value })}
             placeholder="Enter note title"
