@@ -121,6 +121,11 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
     return `Saved at ${lastSaved.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
   };
 
+  const handleTextareaResize = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    e.target.style.height = "auto";
+    e.target.style.height = e.target.scrollHeight + "px";
+  };
+
   useEffect(() => {
     // Enable VirtualKeyboard API overlay if available
     if ((navigator as any).virtualKeyboard) {
@@ -187,12 +192,14 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
         </div>
 
         <div className="px-4 mt-3">
-          <input
-            className="w-full text-2xl border-none font-bold border outline-none rounded p-0"
+          <textarea
+            className="w-full text-2xl border-none font-bold border outline-none p-0 resize-none"
             value={note.label}
             onChange={(e) => setNote({ ...note, label: e.target.value })}
             placeholder="Enter note title"
             readOnly={isEncrypted}
+            rows={1}
+            onInput={handleTextareaResize}
           />
         </div>
 

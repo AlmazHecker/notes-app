@@ -55,22 +55,10 @@ export const getAppManifest = (BASE: string) => {
         name: "New Note",
         short_name: "New Note",
         description: "Create a new note",
-        url: `${BASE}?noteId=new-note`,
+        url: `${BASE}#/?noteId=new-note`,
         icons: [
           {
             src: `${BASE}icons/plus-96x96.png`,
-            sizes: "96x96",
-          },
-        ],
-      },
-      {
-        name: "Settings",
-        short_name: "Settings",
-        description: "Go to settings page",
-        url: `${BASE}#/settings`,
-        icons: [
-          {
-            src: `${BASE}icons/settings-96x96.png`,
             sizes: "96x96",
           },
         ],
