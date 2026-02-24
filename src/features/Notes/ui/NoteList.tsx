@@ -90,14 +90,14 @@ export const NoteList: FC<NoteListProps> = ({ notes, onCdInto }) => {
                 <DropdownMenuItem
                   onClick={(e) => handleRename(e, note.id, note.label)}
                 >
-                  <Pencil className="mr-2 h-4 w-4" />
+                  <Pencil />
                   <span>{t("common.edit")}</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   variant="destructive"
                   onClick={(e) => handleDelete(e, note.id)}
                 >
-                  <Trash2 className="mr-2 h-4 w-4" />
+                  <Trash2 />
                   <span>
                     {note.type === "folder"
                       ? t("note.deleteFolder")
@@ -112,7 +112,7 @@ export const NoteList: FC<NoteListProps> = ({ notes, onCdInto }) => {
             const isDragOver = dragOverId === note.id;
 
             return (
-              <div
+              <button
                 key={note.id}
                 onClick={() => onCdInto(note.id)}
                 onDragOver={(e) => {
@@ -130,7 +130,7 @@ export const NoteList: FC<NoteListProps> = ({ notes, onCdInto }) => {
                   draggedNoteId.current = null;
                 }}
                 className={cn(
-                  "absolute w-full p-4 rounded-md border text-left cursor-pointer transition-colors group flex items-center justify-between",
+                  "text-left absolute w-full p-4 rounded-md border text-left cursor-pointer transition-colors group flex items-center justify-between",
                   isDragOver ? "bg-accent border-primary" : "hover:bg-accent",
                 )}
                 style={{
@@ -148,19 +148,19 @@ export const NoteList: FC<NoteListProps> = ({ notes, onCdInto }) => {
                   </p>
                 </div>
                 {actions}
-              </div>
+              </button>
             );
           }
 
           return (
-            <div
+            <button
               key={note.id}
               draggable
               onDragStart={() => {
                 draggedNoteId.current = note.id;
               }}
               onClick={() => handleNoteClick(note.id)}
-              className="absolute w-full p-4 rounded-md border hover:bg-accent transition-colors group cursor-pointer flex items-center justify-between"
+              className="text-left absolute w-full p-4 rounded-md border hover:bg-accent transition-colors group cursor-pointer flex items-center justify-between"
               style={{
                 transform: `translateY(${virtualRow.start}px)`,
                 top: 0,
@@ -180,7 +180,7 @@ export const NoteList: FC<NoteListProps> = ({ notes, onCdInto }) => {
                 </p>
               </div>
               {actions}
-            </div>
+            </button>
           );
         })}
       </div>
