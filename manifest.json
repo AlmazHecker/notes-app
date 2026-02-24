@@ -55,22 +55,10 @@
       "name": "New Note",
       "short_name": "New Note",
       "description": "Create a new note",
-      "url": "/notes-app/?noteId=new-note",
+      "url": "/notes-app/#/?noteId=new-note",
       "icons": [
         {
           "src": "/notes-app/icons/plus-96x96.png",
-          "sizes": "96x96"
-        }
-      ]
-    },
-    {
-      "name": "Settings",
-      "short_name": "Settings",
-      "description": "Go to settings page",
-      "url": "/notes-app/#/settings",
-      "icons": [
-        {
-          "src": "/notes-app/icons/settings-96x96.png",
           "sizes": "96x96"
         }
       ]
