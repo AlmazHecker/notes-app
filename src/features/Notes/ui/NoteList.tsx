@@ -130,7 +130,7 @@ export const NoteList: FC<NoteListProps> = ({ notes, onCdInto }) => {
                   draggedNoteId.current = null;
                 }}
                 className={cn(
-                  "text-left absolute w-full p-4 rounded-md border text-left cursor-pointer transition-colors group flex items-center justify-between",
+                  "absolute w-full p-4 rounded-md border text-left cursor-pointer transition-colors group flex items-center justify-between",
                   isDragOver ? "bg-accent border-primary" : "hover:bg-accent",
                 )}
                 style={{
