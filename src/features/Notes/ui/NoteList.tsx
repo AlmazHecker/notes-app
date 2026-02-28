@@ -112,7 +112,9 @@ export const NoteList: FC<NoteListProps> = ({ notes, onCdInto }) => {
             const isDragOver = dragOverId === note.id;
 
             return (
-              <button
+              <div
+                role="button"
+                tabIndex={0}
                 key={note.id}
                 onClick={() => onCdInto(note.id)}
                 onDragOver={(e) => {
@@ -148,12 +150,14 @@ export const NoteList: FC<NoteListProps> = ({ notes, onCdInto }) => {
                   </p>
                 </div>
                 {actions}
-              </button>
+              </div>
             );
           }
 
           return (
-            <button
+            <div
+              role="button"
+              tabIndex={0}
               key={note.id}
               draggable
               onDragStart={() => {
@@ -180,7 +184,7 @@ export const NoteList: FC<NoteListProps> = ({ notes, onCdInto }) => {
                 </p>
               </div>
               {actions}
-            </button>
+            </div>
           );
         })}
       </div>
