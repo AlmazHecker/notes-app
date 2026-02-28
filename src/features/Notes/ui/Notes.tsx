@@ -86,17 +86,6 @@ export const Notes = () => {
           </Link>
         </div>
       </div>
-      {/* {notesStore.directoryStack.length > 1 && (
-        <div className="text-xs text-muted-foreground flex items-center gap-1 overflow-x-auto whitespace-nowrap animate-in fade-in slide-in-from-top-1 duration-300">
-          <span>{t("notes.notes")}</span>
-          {notesStore.directoryStack.map((p, i) => (
-            <span key={i} className="flex items-center gap-1">
-              <span>/</span>
-              <span>{p.name}</span>
-            </span>
-          ))}
-        </div>
-      )} */}
     </div>
   );
 
@@ -131,6 +120,14 @@ export const Notes = () => {
         setOpen={setIsSearchModalOpen}
         onCdInto={handleCdInto}
       />
+
+      <Link
+        to="?noteId=new-note"
+        className="w-14 h-14 fixed bottom-6 right-6 md:hidden z-50 bg-primary text-primary-foreground rounded-full shadow-lg flex items-center justify-center hover:bg-primary/90 transition-all active:scale-95 border border-primary-foreground/10"
+        size="icon"
+      >
+        <Plus className="size-8" />
+      </Link>
     </>
   );
 };
