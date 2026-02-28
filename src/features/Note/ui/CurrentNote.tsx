@@ -41,6 +41,7 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
   const [note, setNote] = useState<Note | null>(null);
   const [isEncrypted, setIsEncrypted] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isLoadingContent, setIsLoadingContent] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const noteStore = useNoteStore();
 
@@ -99,16 +100,21 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
       setTimeout(() => setNote(null), 300); // 300 - to sync with slide in animation duration
       return;
     }
-    let note: Note | null = getDefaultNote();
+    setIsLoadingContent(true);
+    try {
+      let note: Note | null = getDefaultNote();
 
-    if (noteId && noteId !== "new-note") {
-      note = await noteStore.getNote(noteId);
+      if (noteId && noteId !== "new-note") {
+        note = await noteStore.getNote(noteId);
+      }
+
+      if (!note) return;
+
+      setNote(note);
+      setIsEncrypted(note.isEncrypted);
+    } finally {
+      setIsLoadingContent(false);
     }
-
-    if (!note) return;
-
-    setNote(note);
-    setIsEncrypted(note.isEncrypted);
   };
 
   const formatLastSaved = () => {
@@ -141,6 +147,14 @@ export const CurrentNote: FC<CurrentNoteProps> = ({ noteId }) => {
     }
     getNote(noteId);
   }, [noteId]);
+
+  if (isLoadingContent)
+    return (
+      <div className="flex flex-col items-center justify-center h-full">
+        <div className="h-12 w-12 animate-spin rounded-full border-4 border-t-primary border-muted" />
+        <p className="mt-2 text-muted-foreground">{t("common.loading")}</p>
+      </div>
+    );
 
   if (!note)
     return (
