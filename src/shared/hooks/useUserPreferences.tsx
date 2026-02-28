@@ -1,8 +1,7 @@
 import { create } from "zustand";
+import { ThemeId } from "@/shared/model/themes";
 
-export const THEME_CLASSES = ["light", "dark", "forest", "cyberpunk"] as const;
-
-export type Theme = (typeof THEME_CLASSES)[number] | "system";
+export type Theme = ThemeId;
 export type FontSizeLevel = 1 | 2 | 3 | 4 | 5;
 export type DateFormat =
   | "MM/DD/YYYY"

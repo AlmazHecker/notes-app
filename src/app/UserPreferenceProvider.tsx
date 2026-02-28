@@ -1,11 +1,11 @@
 import { isCyrillic } from "@/shared/lib/utils";
 import {
-  THEME_CLASSES,
   type Theme,
   useUserPreferences,
 } from "@/shared/hooks/useUserPreferences";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { THEMES } from "@/shared/model/themes";
 
 const UserPreferenceProvider: React.FC = () => {
   const userPreferences = useUserPreferences();
@@ -30,7 +30,7 @@ const UserPreferenceProvider: React.FC = () => {
       window.matchMedia("(prefers-color-scheme: dark)").matches;
 
     const applyTheme = (theme: Theme) => {
-      document.body.classList.remove(...THEME_CLASSES);
+      document.body.classList.remove(...THEMES.map((t) => t.id));
 
       const effectiveTheme =
         theme === "system" ? (isDarkPreferred() ? "dark" : "light") : theme;

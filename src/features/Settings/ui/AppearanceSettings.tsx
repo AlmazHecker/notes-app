@@ -5,12 +5,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/shared/ui/card";
-import { ArrowLeft, Laptop, Moon, Sun, Zap } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import {
   FontSizeLevel,
   Theme,
   useUserPreferences,
 } from "@/shared/hooks/useUserPreferences";
+import { THEMES } from "@/shared/model/themes";
 import React from "react";
 import { Link } from "@/shared/ui/link";
 import { useTranslation } from "react-i18next";
@@ -45,15 +46,15 @@ const AppearanceSettings: React.FC<AppearanceSettingsProps> = () => {
               {t("settings.appearance.mode")}
             </h3>
             <div className="grid grid-cols-3 gap-4">
-              {getThemes(t).map(({ label, value, icon, bg }) => (
+              {THEMES.map(({ label, id, icon, bg }) => (
                 <div
-                  key={value}
+                  key={id}
                   className={`relative cursor-pointer rounded-lg border-2 ${
-                    userPreferences.theme === value
+                    userPreferences.theme === id
                       ? "border-primary"
                       : "border-border"
                   } p-4 flex flex-col items-center`}
-                  onClick={() => userPreferences.setTheme(value as Theme)}
+                  onClick={() => userPreferences.setTheme(id as Theme)}
                 >
                   <div
                     className={`aspect-square w-4/5 rounded-md border border-border mb-2 flex items-center justify-center ${bg}`}
@@ -61,7 +62,7 @@ const AppearanceSettings: React.FC<AppearanceSettingsProps> = () => {
                     {icon}
                   </div>
                   <span className="text-sm font-medium">{label}</span>
-                  {userPreferences.theme === value && (
+                  {userPreferences.theme === id && (
                     <div className="absolute top-2 right-2 w-4 h-4 bg-primary rounded-full"></div>
                   )}
                 </div>
@@ -103,38 +104,3 @@ const AppearanceSettings: React.FC<AppearanceSettingsProps> = () => {
 };
 
 export default AppearanceSettings;
-
-const getThemes = (t: TFunction) => {
-  return [
-    {
-      label: t("settings.appearance.modes.light"),
-      value: "light",
-      icon: <Sun size={24} className="text-yellow-500" />,
-      bg: "bg-white",
-    },
-    {
-      label: t("settings.appearance.modes.dark"),
-      value: "dark",
-      icon: <Moon size={24} className="text-gray-400" />,
-      bg: "bg-gray-900",
-    },
-    {
-      label: t("settings.appearance.modes.system"),
-      value: "system",
-      icon: <Laptop size={24} className="text-blue-500" />,
-      bg: "bg-gradient-to-r from-white to-gray-900",
-    },
-    {
-      label: "Forest",
-      value: "forest",
-      icon: <Sun size={24} className="text-green-600" />,
-      bg: "bg-green-100",
-    },
-    {
-      label: "Cyberpunk",
-      value: "cyberpunk",
-      icon: <Zap size={24} className="text-fuchsia-500" />,
-      bg: "bg-fuchsia-950",
-    },
-  ];
-};
