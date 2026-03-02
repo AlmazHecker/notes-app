@@ -4,7 +4,7 @@ import { RouterProvider } from "react-router-dom";
 import { router } from "./router";
 import UserPreferenceProvider from "./UserPreferenceProvider";
 import "@/shared/locale/i18next";
-import Layout from "@/widgets/Layout";
+// import Layout from "@/widgets/Layout";
 import { useNoteStore } from "@/entities/note/api";
 const root = ReactDOM.createRoot(document.getElementById("root")!);
 
@@ -22,9 +22,9 @@ bootstrapApp().then(() =>
   root.render(
     <React.StrictMode>
       <UserPreferenceProvider />
-      <Layout>
-        <RouterProvider router={router} />
-      </Layout>
+      {/* <Layout> */}
+      <RouterProvider router={router} />
+      {/* </Layout> */}
     </React.StrictMode>,
   ),
 );
