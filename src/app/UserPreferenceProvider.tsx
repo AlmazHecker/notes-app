@@ -5,7 +5,8 @@ import {
 } from "@/shared/hooks/useUserPreferences";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { THEMES } from "@/shared/model/themes";
+import { THEMES } from "@/shared/model/theme/themes";
+import { THEME_VARIABLE_KEYS } from "@/shared/model/theme/theme";
 
 const UserPreferenceProvider: React.FC = () => {
   const userPreferences = useUserPreferences();
@@ -32,10 +33,22 @@ const UserPreferenceProvider: React.FC = () => {
     const applyTheme = (theme: Theme) => {
       document.body.classList.remove(...THEMES.map((t) => t.id));
 
-      const effectiveTheme =
+      const effectiveThemeId =
         theme === "system" ? (isDarkPreferred() ? "dark" : "light") : theme;
 
-      document.body.classList.add(effectiveTheme);
+      document.body.classList.add(effectiveThemeId);
+
+      const themeDef = THEMES.find((t) => t.id === effectiveThemeId);
+
+      THEME_VARIABLE_KEYS.forEach((v) =>
+        document.documentElement.style.removeProperty(v),
+      );
+
+      if (themeDef?.variables) {
+        Object.entries(themeDef.variables).forEach(([key, value]) => {
+          document.documentElement.style.setProperty(key, value);
+        });
+      }
 
       // smooth syncing
       requestAnimationFrame(() => {

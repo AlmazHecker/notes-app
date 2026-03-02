@@ -11,7 +11,7 @@ import {
   Theme,
   useUserPreferences,
 } from "@/shared/hooks/useUserPreferences";
-import { THEMES } from "@/shared/model/themes";
+import { THEMES } from "@/shared/model/theme/themes";
 import React from "react";
 import { Link } from "@/shared/ui/link";
 import { useTranslation } from "react-i18next";

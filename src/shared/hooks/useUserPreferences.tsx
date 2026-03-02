@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { ThemeId } from "@/shared/model/themes";
+import { ThemeId } from "@/shared/model/theme/themes";
 
 export type Theme = ThemeId;
 export type FontSizeLevel = 1 | 2 | 3 | 4 | 5;

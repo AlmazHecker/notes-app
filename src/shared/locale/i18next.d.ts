@@ -1,6 +1,6 @@
-import kgJSON from "@/shared/locale/resources/kg.json";
-import ruJSON from "@/shared/locale/resources/ru.json";
-import enJSON from "@/shared/locale/resources/en.json";
+import kgJSON from "./resources/kg.json";
+import ruJSON from "./resources/ru.json";
+import enJSON from "./resources/en.json";
 
 import "i18next";
 
