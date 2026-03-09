@@ -30,7 +30,7 @@ export const MenuBar: FC<{ editor: Editor | null }> = ({ editor }) => {
       if (virtualKeyboard?.boundingRect) {
         height = virtualKeyboard.boundingRect.height;
         if (height > 0) {
-          offset = height - 45;
+          offset = height;
         }
       }
 
