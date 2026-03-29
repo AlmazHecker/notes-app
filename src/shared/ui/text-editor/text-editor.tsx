@@ -2,8 +2,7 @@ import "./styles.css";
 
 import { Editor, EditorContent } from "@tiptap/react";
 import Document from "@tiptap/extension-document";
-import { Ref, useImperativeHandle, type FC } from "react";
-import { useEditor } from "@tiptap/react";
+import { type FC } from "react";
 
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
 import Heading from "@tiptap/extension-heading";
@@ -23,7 +22,7 @@ import SearchAndReplace from "./extensions/searchAndReplace";
 const lowlight = createLowlight(all);
 lowlight.register({});
 
-const extensions = [
+export const EDITOR_EXTENSIONS = [
   Heading,
   Document,
   Text,
@@ -41,28 +40,10 @@ const extensions = [
 ];
 
 type TextEditorProps = {
-  value?: string;
-  ref: Ref<Editor | null>;
-  editable?: boolean;
+  editor: Editor;
 };
 
-export const TextEditor: FC<TextEditorProps> = ({
-  editable = true,
-  value,
-  ref,
-}) => {
-  const editor = useEditor(
-    {
-      immediatelyRender: false,
-      extensions,
-      content: value,
-      editable,
-    },
-    [editable, value],
-  );
-
-  useImperativeHandle(ref, () => editor!, [editor]);
-
+export const TextEditor: FC<TextEditorProps> = ({ editor }) => {
   return (
     <>
       <EditorContent

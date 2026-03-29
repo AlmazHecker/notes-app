@@ -1,7 +1,8 @@
-import { Note, NoteMeta } from "@/entities/note/types";
+import { Note, NoteMeta, RawNoteContent } from "@/entities/note/types";
 
 export interface NoteStorageStrategy {
-  getByName(noteId: string): Promise<Note | null>;
+  getMeta(noteId: string): Promise<NoteMeta | null>;
+  getContent(noteId: string): Promise<RawNoteContent>;
   update(note: Note): Promise<Note>;
   delete(noteId: string): Promise<void>;
   getAll(): Promise<NoteMeta[]>;

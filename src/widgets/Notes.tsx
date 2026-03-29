@@ -9,8 +9,8 @@ import {
 } from "lucide-react";
 import { Link } from "@/shared/ui/link";
 import { useNoteStore } from "@/entities/note/api";
-import { NoteList } from "./NoteList";
-import { SearchNotesModal } from "../../SearchNotes/ui/SearchNotesModal";
+import { NoteList } from "../features/note-list/ui/note-list";
+import { SearchNotesModal } from "../features/SearchNotes/ui/SearchNotesModal";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 

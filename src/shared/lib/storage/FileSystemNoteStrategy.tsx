@@ -1,7 +1,6 @@
 import JSZip from "jszip";
-import { getEscapedHtml } from "../utils";
 import { NoteStorageStrategy } from "./storage";
-import { Note, NoteMeta } from "@/entities/note/types";
+import { Note, NoteMeta, RawNoteContent } from "@/entities/note/types";
 import { NoteZipTransfer } from "./NoteZipTransfer";
 
 const INDEX_FILE = "index.json";
@@ -67,9 +66,7 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
 
   async update(updatedNote: Note) {
     const note = { ...updatedNote, updatedAt: Date.now() };
-    const snippet =
-      getEscapedHtml(note.content.slice(0, 100)) +
-      (note.content.length > 100 ? "..." : "");
+    // let snippet = "";
 
     const fileHandle = await this.currentDir.getFileHandle(note.id, {
       create: true,
@@ -86,7 +83,7 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
       isEncrypted: note.isEncrypted,
       createdAt: note.createdAt,
       updatedAt: note.updatedAt,
-      snippet,
+      snippet: note.snippet,
       type: "note",
     };
     await this.saveIndex();
@@ -113,15 +110,14 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
     await this.initialize([]);
   }
 
-  async getByName(noteId: string): Promise<Note | null> {
-    const entry = this.index[noteId];
-    if (!entry || entry.type === "folder") return null;
+  async getMeta(noteId: string): Promise<NoteMeta> {
+    return this.index[noteId];
+  }
+  async getContent(noteId: string): Promise<RawNoteContent> {
+    const file = await (await this.currentDir.getFileHandle(noteId)).getFile();
+    const content = await file.arrayBuffer();
 
-    const fileHandle = await this.currentDir.getFileHandle(noteId);
-    const file = await fileHandle.getFile();
-
-    const content = await file.text();
-    return { ...entry, content };
+    return new Uint8Array(content);
   }
 
   async getAll(): Promise<NoteMeta[]> {

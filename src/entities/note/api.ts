@@ -1,13 +1,12 @@
 import { create } from "zustand";
 import { noteService } from "./service";
-import { Note, NoteMeta } from "@/entities/note/types";
+import { NoteMeta } from "@/entities/note/types";
 
 interface NoteState {
   notes: NoteMeta[];
   pathIds: string[];
   dir: string;
   getNotes: () => Promise<void>;
-  getNote: (noteId: string) => Promise<Note | null>;
   createFolder: (label: string) => Promise<void>;
   setPath: (ids: string[]) => Promise<void>;
   moveNote: (noteId: string, targetFolderId: string) => Promise<void>;
@@ -29,9 +28,6 @@ export const useNoteStore = create<NoteState>((set, get) => ({
     } catch (e) {
       set({ notes: [] });
     }
-  },
-  async getNote(noteId: string) {
-    return noteService.getByName(noteId);
   },
   async deleteEntry(id: string) {
     await noteService.delete(id);

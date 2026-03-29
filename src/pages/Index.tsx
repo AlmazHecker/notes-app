@@ -1,6 +1,6 @@
 import { LAYOUT_SELECTORS } from "@/features/Note/ui/DraggableLayout";
-import { NoteView } from "@/features/Note/ui/NoteView";
-import { Notes } from "@/features/Notes/ui/Notes";
+import { CurrentNote } from "@/widgets/CurrentNote";
+import { Notes } from "@/widgets/Notes";
 import { useSearchParams } from "react-router-dom";
 
 const Index = () => {
@@ -38,7 +38,7 @@ const Index = () => {
           className="w-full md:w-auto md:flex-1 flex flex-col flex-shrink-0 overflow-y-scroll"
           id={LAYOUT_SELECTORS.right}
         >
-          <NoteView />
+          <CurrentNote />
         </div>
       </div>
     </div>
