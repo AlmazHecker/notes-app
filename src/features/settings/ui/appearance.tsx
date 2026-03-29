@@ -10,7 +10,7 @@ import {
   FontSizeLevel,
   Theme,
   useUserPreferences,
-} from "@/shared/hooks/useUserPreferences";
+} from "@/shared/hooks/use-user-preferences";
 import { THEMES } from "@/shared/model/theme/themes";
 import React from "react";
 import { Link } from "@/shared/ui/link";

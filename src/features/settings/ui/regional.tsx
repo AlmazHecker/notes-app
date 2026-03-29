@@ -15,7 +15,7 @@ import {
   SelectValue,
 } from "@/shared/ui/select";
 
-import { useUserPreferences } from "@/shared/hooks/useUserPreferences";
+import { useUserPreferences } from "@/shared/hooks/use-user-preferences";
 import { useTranslation } from "react-i18next";
 import { isCyrillic } from "@/shared/lib/utils";
 

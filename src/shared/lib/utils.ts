@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { useUserPreferences } from "@/shared/hooks/useUserPreferences";
+import { useUserPreferences } from "@/shared/hooks/use-user-preferences";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

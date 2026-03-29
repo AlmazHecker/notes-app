@@ -1,26 +1,39 @@
 {
   "name": "Notes",
+  "id": "notes-app",
   "short_name": "Notes",
   "description": "Notes, stored locally",
-  "theme_color": "#ffffff",
   "start_url": "/",
-  "id": "/",
   "display": "standalone",
+  "categories": [
+    "productivity",
+    "utilities"
+  ],
+  "scope": "/",
   "icons": [
     {
-      "src": "/android-chrome-144.png",
-      "sizes": "144x144",
-      "type": "image/png"
+      "src": "/android-chrome-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "/android-chrome-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "/android-chrome-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/android-chrome-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
   "screenshots": [
@@ -36,5 +49,22 @@
       "type": "image/png",
       "form_factor": "narrow"
     }
-  ]
+  ],
+  "shortcuts": [
+    {
+      "name": "New Note",
+      "short_name": "New Note",
+      "description": "Create a new note",
+      "url": "/#/?noteId=new-note",
+      "icons": [
+        {
+          "src": "/icons/plus-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "edge_side_panel": {
+    "preferred_width": 480
+  }
 }

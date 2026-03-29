@@ -5,20 +5,20 @@ import {
 } from "@/shared/ui/text-editor/text-editor";
 import { useEditor } from "@tiptap/react";
 import { useNoteStore } from "@/entities/note/api";
-import ExpandPane from "../features/Note/ui/ExpandPane";
-import { SetPasswordModal } from "../features/NoteEncryption/ui/SetPasswordModal";
-import { EnterPasswordModal } from "../features/NoteEncryption/ui/EnterPasswordModal";
-import DraggableLayout from "@/features/Note/ui/DraggableLayout";
+import ExpandPane from "../features/draggable-layout/ui/expand-pane";
+import { SetPasswordModal } from "../features/note-encryption/ui/set-password-modal";
+import { EnterPasswordModal } from "../features/note-encryption/ui/enter-password-modal";
+import DraggableLayout from "@/features/draggable-layout/ui/draggable-layout";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Note, NoteMeta } from "@/entities/note/types";
-import { NoteEncryption } from "../features/Note/lib/NoteEncryption";
-import { EncryptedContent } from "../features/Note/ui/EncryptedContent";
+import { NoteEncryption } from "../features/note-encryption/lib/note-encryption";
+import { EncryptedContent } from "../shared/ui/encrypted-content";
 import { noteService } from "@/entities/note/service";
 import { useTranslation } from "react-i18next";
 import { MenuBar } from "@/shared/ui/text-editor/MenuBar";
 import { getEscapedHtml } from "@/shared/lib/utils";
-import { Title } from "../features/Note/ui/Title";
-import { Header } from "../features/Note/ui/Header";
+import { Title } from "../features/view-note/ui/note-title";
+import { Header } from "../features/view-note/ui/note-header";
 
 const getDefaultNote = () =>
   ({

@@ -1,7 +1,7 @@
 import JSZip from "jszip";
 import { NoteStorageStrategy } from "./storage";
 import { Note, NoteMeta, RawNoteContent } from "@/entities/note/types";
-import { NoteZipTransfer } from "./NoteZipTransfer";
+import { NoteZipTransfer } from "./note-zip-transfer";
 
 const INDEX_FILE = "index.json";
 

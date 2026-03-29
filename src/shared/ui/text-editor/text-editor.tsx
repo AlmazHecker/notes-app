@@ -17,7 +17,7 @@ import Italic from "@tiptap/extension-italic";
 import Blockquote from "@tiptap/extension-blockquote";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { createLowlight, all } from "lowlight";
-import SearchAndReplace from "./extensions/searchAndReplace";
+import SearchAndReplace from "./extensions/search-and-replace";
 
 const lowlight = createLowlight(all);
 lowlight.register({});

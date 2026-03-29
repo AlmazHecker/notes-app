@@ -2,7 +2,7 @@ import { isCyrillic } from "@/shared/lib/utils";
 import {
   type Theme,
   useUserPreferences,
-} from "@/shared/hooks/useUserPreferences";
+} from "@/shared/hooks/use-user-preferences";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { THEMES } from "@/shared/model/theme/themes";

@@ -1,7 +1,7 @@
 import { lazy } from "react";
 // const ExportNotes = lazy(() => import("@/pages/ExportNotes"));
-const Index = lazy(() => import("@/pages/Index"));
-const Settings = lazy(() => import("@/pages/Settings"));
+const Index = lazy(() => import("@/pages"));
+const Settings = lazy(() => import("@/pages/settings"));
 import { createHashRouter } from "react-router-dom";
 
 export const router = createHashRouter(

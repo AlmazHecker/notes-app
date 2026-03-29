@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useMediaQuery } from "@/shared/hooks/useMediaQuery";
+import { useMediaQuery } from "@/shared/hooks/use-media-query";
 
 export const LAYOUT_SELECTORS = {
   divider: "divider",
@@ -29,12 +29,12 @@ export default function DraggableLayout() {
       leftPane.classList.remove(
         "transition-all",
         "duration-300",
-        "ease-in-out"
+        "ease-in-out",
       );
       rightPane.classList.remove(
         "transition-all",
         "duration-300",
-        "ease-in-out"
+        "ease-in-out",
       );
       divider.classList.remove("transition-opacity", "duration-300");
     }

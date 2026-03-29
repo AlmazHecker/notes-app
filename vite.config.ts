@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import path from "path";
-import { dynamicManifestPlugin } from "./vite-plugins/dynamicManifest";
+import { dynamicManifestPlugin } from "./vite-plugins/dynamic-manifest";
 import { getAppManifest } from "./pwa/manifest";
 
 export default defineConfig(({ mode }) => {

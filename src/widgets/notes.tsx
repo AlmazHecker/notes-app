@@ -10,7 +10,7 @@ import {
 import { Link } from "@/shared/ui/link";
 import { useNoteStore } from "@/entities/note/api";
 import { NoteList } from "../features/note-list/ui/note-list";
-import { SearchNotesModal } from "../features/SearchNotes/ui/SearchNotesModal";
+import { SearchNotesModal } from "../features/search-notes/ui/search-notes-modal";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 

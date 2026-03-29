@@ -1,7 +1,7 @@
 import React from "react";
-import AppearanceSettings from "@/features/Settings/ui/AppearanceSettings";
-import RegionalSettings from "@/features/Settings/ui/RegionalSettings";
-import StorageSettings from "@/features/Settings/ui/StorageSettings";
+import AppearanceSettings from "@/features/settings/ui/appearance";
+import RegionalSettings from "@/features/settings/ui/regional";
+import StorageSettings from "@/features/settings/ui/storage";
 
 type SettingsProps = {
   // Define your props here

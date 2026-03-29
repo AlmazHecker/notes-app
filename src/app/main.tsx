@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./router";
-import UserPreferenceProvider from "./UserPreferenceProvider";
+import UserPreferenceProvider from "./user-prefernce-provider";
 import "@/shared/locale/i18next";
 // import Layout from "@/widgets/Layout";
 import { useNoteStore } from "@/entities/note/api";
