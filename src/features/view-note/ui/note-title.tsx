@@ -1,4 +1,10 @@
-import { ChangeEventHandler, FC, useEffect, useRef } from "react";
+import {
+  ChangeEventHandler,
+  FC,
+  InputEventHandler,
+  useEffect,
+  useRef,
+} from "react";
 
 type Props = {
   title: string;
@@ -7,9 +13,10 @@ type Props = {
 };
 
 export const Title: FC<Props> = ({ setTitle, title, isEncrypted }) => {
-  const handleTextareaResize = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    e.target.style.height = "auto";
-    e.target.style.height = e.target.scrollHeight + "px";
+  const handleTextareaResize: InputEventHandler<HTMLTextAreaElement> = (e) => {
+    const target = e.currentTarget;
+    target.style.height = "auto";
+    target.style.height = target.scrollHeight + "px";
   };
 
   const titleRef = useRef<HTMLTextAreaElement>(null);
