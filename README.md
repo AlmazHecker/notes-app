@@ -4,11 +4,13 @@ Simple notes app based on OPFS(Origin Private File System) with optional end-to-
 
 ## Features
 
-- **Local Storage**: Notes are stored directly on the user's device using the OPFS
-- **Note Encryption**: Secure your sensitive notes with AES-256 encryption
+- **Local Storage**: Notes and folders are stored directly on the user's device using the OPFS
+- **Folder Organization**: Group items into folders for better structure
+- **Note Encryption**: Secure your sensitive files with AES-256-GCM encryption and Argon2id key derivation
 - **Resizable Panes**: Fully adjustable interface layout
 - **Rich Text Editing**: Powered by Tiptap editor for a great writing experience
-- **Simple Interface**: Clean, intuitive UI for managing notes
+- **Simple Interface**: Clean, intuitive UI for managing files and folders
+- **Import & Export**: Backup or transfer your notes and folders with easy import/export support
 
 ## Installation
 
@@ -49,8 +51,9 @@ Simple notes app based on OPFS(Origin Private File System) with optional end-to-
 ### Security Implementation
 
 - **AES-GCM 256-bit** encryption via Web Crypto API
-- **PBKDF2** key derivation with 100,000 iterations
-- **Unique initialization vectors** for each encryption
+- **Argon2id** key derivation (via hash-wasm)
+- **Unique initialization vectors** (12 bytes) and **salts** (16 bytes) for each encryption
+- **Magic header validation** to ensure successful decryption
 - **No plaintext storage** of sensitive data
 
 ## Technical Details
@@ -81,58 +84,69 @@ opfs/
 
 ### Index (`index.json`)
 
-Maps note IDs to metadata:
+Maps entry IDs to metadata:
 
 ```json
 {
   "note-id": {
     "id": "note-id",
+    "type": "file",
     "label": "Note Title",
     "createdAt": 1234567890,
     "updatedAt": 1234567890,
     "isEncrypted": false,
     "tags": [],
     "snippet": "Short content preview..."
+  },
+  "folder-id": {
+    "id": "folder-id",
+    "type": "folder",
+    "label": "My Folder",
+    "createdAt": 1234567890,
+    "updatedAt": 1234567890,
+    "isEncrypted": false
   }
 }
 ```
 
 Used for:
 
-- Fast note listing
+- Fast entry listing and folder organization
 - Sorting and filtering
 - Rendering previews without loading full content
 
 ### Note Files
 
-Each note file contains **only raw content**:
-
-```ts
-{
-  content: string;
-}
-```
-
-Loaded **on demand** when opening a note.
+Each note file containing raw content is loaded **on demand** when opening a note. Encrypted contents are often handled as `Uint8Array`.
 
 ### Data Model
 
 ```ts
-export type Note = NoteEntry & RawNote;
-
-export type NoteEntry = {
+export type BaseEntry = {
   id: string;
   label: string;
   createdAt: number;
   updatedAt: number;
   isEncrypted: boolean;
-  tags?: string[];
-  snippet: string;
 };
 
-export type RawNote = {
-  content: string;
+export type FolderEntry = BaseEntry & {
+  type: "folder";
 };
+
+export type NoteEntry = BaseEntry & {
+  type: "file";
+  snippet: string;
+  tags?: string[];
+};
+
+export type Entry = FolderEntry | NoteEntry;
+
+export type Note = NoteEntry & {
+  content: RawNoteContent;
+};
+
+export type RawNoteContent = Uint8Array<ArrayBuffer>;
 ```
 
 ## Future Features
