@@ -22,7 +22,13 @@ export const useEntryStore = create<EntryState>((set, get) => ({
   async getEntries() {
     try {
       const entries = await noteService.getAll();
-      const sorted = [...entries].sort((a, b) => b.updatedAt - a.updatedAt);
+      // folders first
+      const sorted = [...entries].sort((a, b) => {
+        if (a.type !== b.type) {
+          return a.type === "folder" ? -1 : 1;
+        }
+        return b.updatedAt - a.updatedAt;
+      });
 
       set({ entries: sorted });
     } catch (e) {
