@@ -1,7 +1,6 @@
 import { useEffect, FC } from "react";
 import { useNavigate } from "react-router-dom";
-import { useNoteStore } from "@/entities/note/api";
-import { NoteMeta } from "@/entities/note/types";
+import { useEntryStore } from "@/entities/entry/api";
 import {
   CommandDialog,
   CommandEmpty,
@@ -12,6 +11,7 @@ import {
 } from "@/shared/ui/command";
 import { formatDate } from "@/shared/lib/utils";
 import { useTranslation } from "react-i18next";
+import { Entry } from "@/entities/entry/types";
 
 type SearchNotesModalProps = {
   open: boolean;
@@ -25,18 +25,18 @@ export const SearchNotesModal: FC<SearchNotesModalProps> = ({
   onCdInto,
 }) => {
   const { t } = useTranslation();
-  const { notes, getNotes, pathIds } = useNoteStore();
+  const { entries, getEntries } = useEntryStore();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (open) getNotes();
+    if (open) getEntries();
   }, [open]);
 
-  const handleSelectNote = async (note: NoteMeta) => {
-    if (note.type === "folder") {
-      onCdInto(note.id);
+  const handleSelectNote = async (entry: Entry) => {
+    if (entry.type === "folder") {
+      onCdInto(entry.id);
     } else {
-      navigate(`?noteId=${note.id}`);
+      navigate(`?noteId=${entry.id}`);
     }
     setOpen(false);
   };
@@ -51,7 +51,7 @@ export const SearchNotesModal: FC<SearchNotesModalProps> = ({
         <CommandList>
           <CommandEmpty>{t("notes.notFound")}</CommandEmpty>
           <CommandGroup heading={t("notes.notes")}>
-            {notes.map((note) => (
+            {entries.map((note) => (
               <CommandItem
                 key={note.id}
                 onSelect={() => handleSelectNote(note)}
@@ -70,7 +70,7 @@ export const SearchNotesModal: FC<SearchNotesModalProps> = ({
                     </p>
                   ) : (
                     <p className="text-xs text-muted-foreground truncate mt-1">
-                      {note.snippet}
+                      {note.type === "file" && note.snippet}
                     </p>
                   )}
                 </div>

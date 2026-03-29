@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { Download, ArrowLeft } from "lucide-react";
-import JSZip from "jszip";
-import { useNoteStore } from "@/entities/note/api";
+import { useEntryStore } from "@/entities/entry/api";
 
 import { Button } from "@/shared/ui/button";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { formatDate } from "@/shared/lib/utils";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { noteService } from "@/entities/note/service";
 
 const ExportNotes: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const notesStore = useNoteStore();
+  const entryStore = useEntryStore();
   const [selectedNotes, setSelectedNotes] = useState<Record<string, boolean>>(
     {},
   );
@@ -29,12 +27,12 @@ const ExportNotes: React.FC = () => {
   };
 
   const toggleAllNotes = () => {
-    const allSelected = notesStore.notes.every(
+    const allSelected = entryStore.entries.every(
       (note) => selectedNotes[note.id],
     );
     const newSelection: Record<string, boolean> = {};
 
-    notesStore.notes.forEach((note) => {
+    entryStore.entries.forEach((note) => {
       newSelection[note.id] = !allSelected;
     });
 
@@ -42,12 +40,12 @@ const ExportNotes: React.FC = () => {
   };
 
   const getSelectedCount = () => {
-    return notesStore.notes.filter((note) => selectedNotes[note.id]).length;
+    return entryStore.entries.filter((note) => selectedNotes[note.id]).length;
   };
 
   // const getNotes = async () => {
   //   try {
-  //     const notes = await notesStore.getNotes();
+  //     const notes = await entryStore.getEntries();
 
   //     const initialSelection: Record<string, boolean> = {};
   //     notes.forEach((note) => {
@@ -63,7 +61,7 @@ const ExportNotes: React.FC = () => {
     try {
       setIsExporting(true);
 
-      const selectedIds = notesStore.notes
+      const selectedIds = entryStore.entries
         .filter((note) => selectedNotes[note.id])
         .map((note) => note.id);
 
@@ -105,11 +103,11 @@ const ExportNotes: React.FC = () => {
   };
 
   useEffect(() => {
-    notesStore.getNotes();
+    entryStore.getEntries();
   }, []);
 
   const renderNotes = () => {
-    // if (!notesStore.hasPermission) {
+    // if (!entryStore.hasPermission) {
     //   return (
     //     <div className="flex flex-col items-center justify-center h-full py-12">
     //       <p className="text-slate-500 text-center">
@@ -118,7 +116,7 @@ const ExportNotes: React.FC = () => {
     //     </div>
     //   );
     // }
-    return notesStore.notes.length === 0 ? (
+    return entryStore.entries.length === 0 ? (
       <div className="flex flex-col items-center justify-center h-full py-12">
         <p className="text-muted-foreground text-center">
           {t("exportNotes.noNotes")}
@@ -129,18 +127,18 @@ const ExportNotes: React.FC = () => {
         <div className="flex items-center gap-3 mb-3">
           <Checkbox
             id="toggle-select"
-            checked={notesStore.notes.every((note) => selectedNotes[note.id])}
+            checked={entryStore.entries.every((note) => selectedNotes[note.id])}
             onCheckedChange={toggleAllNotes}
           />
           <label className="text-sm font-medium" htmlFor="toggle-select">
-            {notesStore.notes.every((note) => selectedNotes[note.id])
+            {entryStore.entries.every((note) => selectedNotes[note.id])
               ? t("exportNotes.deselectAll")
               : t("exportNotes.selectAll")}
           </label>
         </div>
 
         <div className="space-y-2 mb-20">
-          {notesStore.notes.map((note) => (
+          {entryStore.entries.map((note) => (
             <div
               key={note.id}
               className="bg-card p-5 rounded-md cursor-pointer transition-colors flex flex-col w-full"
@@ -159,7 +157,7 @@ const ExportNotes: React.FC = () => {
                 </p>
               ) : (
                 <p className="text-xs text-muted-foreground truncate mt-1">
-                  {note.snippet}
+                  {note.type === "file" && note.snippet}
                 </p>
               )}
             </div>
@@ -184,12 +182,12 @@ const ExportNotes: React.FC = () => {
           <h1 className="text-lg font-medium">{t("exportNotes.title")}</h1>
         </div>
         <div className="flex items-center gap-2">
-          {/* {notesStore.hasPermission || (
+          {/* {entryStore.hasPermission || (
             <>
               <Button
                 variant="outline"
                 size="sm"
-                onClick={notesStore.getNotes}
+                onClick={entryStore.getNotes}
                 className="hidden sm:flex items-center"
               >
                 <Folder className="mr-2 h-4 w-4" />
@@ -198,7 +196,7 @@ const ExportNotes: React.FC = () => {
               <Button
                 variant="outline"
                 size="icon"
-                onClick={notesStore.getNotes}
+                onClick={entryStore.getNotes}
                 className="sm:hidden"
               >
                 <Folder className="h-4 w-4" />

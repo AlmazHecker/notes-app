@@ -9,8 +9,8 @@ import {
 import { FC, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { NoteMeta } from "@/entities/note/types";
-import { useNoteStore } from "@/entities/note/api";
+import { NoteEntry } from "@/entities/note/types";
+import { useEntryStore } from "@/entities/entry/api";
 import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/button";
 import {
@@ -19,23 +19,24 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/shared/ui/dropdown-menu";
+import { Entry } from "@/entities/entry/types";
 
-type NoteListProps = {
-  notes: NoteMeta[];
+type Props = {
+  entries: Entry[];
   onCdInto: (folderId: string) => void;
 };
 
-export const NoteList: FC<NoteListProps> = ({ notes, onCdInto }) => {
+export const EntryList: FC<Props> = ({ entries, onCdInto }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const parentRef = useRef(null);
-  const { moveNote, deleteEntry, renameEntry } = useNoteStore();
+  const { moveNote, deleteEntry, renameEntry } = useEntryStore();
 
   const [dragOverId, setDragOverId] = useState<string | null>(null);
   const draggedNoteId = useRef<string | null>(null);
 
   const rowVirtualizer = useVirtualizer({
-    count: notes.length,
+    count: entries.length,
     getScrollElement: () => parentRef.current,
     estimateSize: () => 100,
     overscan: 5,
@@ -72,7 +73,7 @@ export const NoteList: FC<NoteListProps> = ({ notes, onCdInto }) => {
         className="relative"
       >
         {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-          const note = notes[virtualRow.index];
+          const note = entries[virtualRow.index];
 
           const actions = (
             <DropdownMenu>

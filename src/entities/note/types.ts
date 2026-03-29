@@ -1,14 +1,13 @@
-import { Entry } from "../entry/types";
+import { BaseEntry } from "../entry/types";
 
-export type Note = NoteMeta & {
+export type Note = NoteEntry & {
   content: RawNoteContent;
 };
 
-// this should be refactored
-export interface NoteMeta extends Entry {
-  snippet: string; // short preview
-  type: "note" | "folder";
+export type NoteEntry = BaseEntry & {
+  type: "file";
+  snippet: string;
   tags?: string[];
-}
+};
 
 export type RawNoteContent = Uint8Array<ArrayBuffer>;

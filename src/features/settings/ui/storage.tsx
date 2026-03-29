@@ -1,5 +1,5 @@
-import { useNoteStore } from "@/entities/note/api";
-import { noteService } from "@/entities/note/service";
+import { useEntryStore } from "@/entities/entry/api";
+import { noteService } from "@/entities/entry/service";
 import { formatSize } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/button";
 import {
@@ -19,7 +19,7 @@ const StorageSettings = () => {
 
   const navigate = useNavigate();
 
-  const notesStore = useNoteStore();
+  const entryStore = useEntryStore();
   const [storage, setStorage] = useState<StorageEstimate | null>(null);
   const used = storage?.usage ?? 0;
   const quota = storage?.quota ?? 0;
@@ -30,7 +30,7 @@ const StorageSettings = () => {
     try {
       const estimate = await noteService.getStorageEstimate();
       setStorage(estimate);
-      notesStore.getNotes();
+      entryStore.getEntries();
     } catch (err) {
       console.error("Failed to load folder size:", err);
     }

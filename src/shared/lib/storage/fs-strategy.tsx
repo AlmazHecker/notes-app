@@ -1,12 +1,14 @@
 import JSZip from "jszip";
 import { NoteStorageStrategy } from "./storage";
-import { Note, NoteMeta, RawNoteContent } from "@/entities/note/types";
+import { Note, NoteEntry, RawNoteContent } from "@/entities/note/types";
 import { NoteZipTransfer } from "./note-zip-transfer";
+import { Entry } from "@/entities/entry/types";
+import { FolderEntry } from "@/entities/folder/types";
 
 const INDEX_FILE = "index.json";
 
 export class FileSystemNoteStrategy implements NoteStorageStrategy {
-  private index: Record<string, NoteMeta> = {};
+  private index: Record<string, Entry> = {};
   private root!: FileSystemDirectoryHandle;
   private directoryStack: FileSystemDirectoryHandle[] = [];
 
@@ -59,7 +61,7 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
       ...newNote,
       createdAt: Date.now(),
       updatedAt: Date.now(),
-      type: "note",
+      type: "file",
     };
     return this.update(note);
   }
@@ -84,7 +86,7 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
       createdAt: note.createdAt,
       updatedAt: note.updatedAt,
       snippet: note.snippet,
-      type: "note",
+      type: "file",
     };
     await this.saveIndex();
     return note;
@@ -110,7 +112,7 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
     await this.initialize([]);
   }
 
-  async getMeta(noteId: string): Promise<NoteMeta> {
+  async getMeta(noteId: string): Promise<Entry> {
     return this.index[noteId];
   }
   async getContent(noteId: string): Promise<RawNoteContent> {
@@ -120,7 +122,7 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
     return new Uint8Array(content);
   }
 
-  async getAll(): Promise<NoteMeta[]> {
+  async getAll(): Promise<Entry[]> {
     return Object.values(this.index);
   }
 
@@ -170,10 +172,10 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
         });
         await this.mergeImport(zip, subDirHandle, entryPath.replace(/\/$/, ""));
       } else if (name === INDEX_FILE) {
-        const zipIndex: Record<string, NoteMeta> = JSON.parse(
+        const zipIndex: Record<string, NoteEntry> = JSON.parse(
           await entry.async("text"),
         );
-        let localIndex: Record<string, NoteMeta> = {};
+        let localIndex: Record<string, NoteEntry> = {};
         try {
           const handle = await targetDir.getFileHandle(INDEX_FILE);
           const file = await handle.getFile();
@@ -200,17 +202,16 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
     }
   }
 
-  async createFolder(label: string): Promise<NoteMeta> {
+  async createFolder(label: string): Promise<FolderEntry> {
     const id = crypto.randomUUID();
     await this.currentDir.getDirectoryHandle(id, { create: true });
 
-    const folderMeta: NoteMeta = {
+    const folderMeta: Entry = {
       id,
       label,
       createdAt: Date.now(),
       updatedAt: Date.now(),
       isEncrypted: false,
-      snippet: "",
       type: "folder",
     };
 
@@ -231,7 +232,7 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
 
   private async updateFolderIndex(
     folderHandle: FileSystemDirectoryHandle,
-    updateFn: (index: Record<string, NoteMeta>) => void,
+    updateFn: (index: Record<string, Entry>) => void,
   ) {
     const indexHandle = await folderHandle.getFileHandle(INDEX_FILE, {
       create: true,
@@ -247,7 +248,7 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
     await writable.close();
   }
 
-  async moveEntry(id: string, targetFolderId: string): Promise<void> {
+  async move(id: string, targetFolderId: string): Promise<void> {
     const entry = this.index[id];
     if (!entry) return;
 
@@ -279,7 +280,7 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
     });
   }
 
-  async renameEntry(id: string, newLabel: string): Promise<void> {
+  async rename(id: string, newLabel: string): Promise<void> {
     const entry = this.index[id];
     if (!entry) return;
 

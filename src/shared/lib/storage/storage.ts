@@ -1,17 +1,19 @@
-import { Note, NoteMeta, RawNoteContent } from "@/entities/note/types";
+import { Entry } from "@/entities/entry/types";
+import { FolderEntry } from "@/entities/folder/types";
+import { Note, RawNoteContent } from "@/entities/note/types";
 
 export interface NoteStorageStrategy {
-  getMeta(noteId: string): Promise<NoteMeta | null>;
+  getMeta(noteId: string): Promise<Entry | null>;
   getContent(noteId: string): Promise<RawNoteContent>;
+  create(newNote: Omit<Note, "createdAt" | "updatedAt">): Promise<Note>;
   update(note: Note): Promise<Note>;
   delete(noteId: string): Promise<void>;
-  getAll(): Promise<NoteMeta[]>;
-  create(newNote: Omit<Note, "createdAt" | "updatedAt">): Promise<Note>;
+  move(id: string, targetFolderId: string): Promise<void>;
+  rename(id: string, newLabel: string): Promise<void>;
+  getAll(): Promise<Entry[]>;
   import(noteBlob: Blob): Promise<void>;
   getStorageEstimate(): Promise<StorageEstimate>;
-  createFolder(label: string): Promise<NoteMeta>;
+  createFolder(label: string): Promise<FolderEntry>;
   initialize(ids: string[]): Promise<string>;
-  moveEntry(id: string, targetFolderId: string): Promise<void>;
-  renameEntry(id: string, newLabel: string): Promise<void>;
   exportFull(): Promise<Blob>;
 }

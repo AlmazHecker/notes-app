@@ -11,11 +11,11 @@ import {
 import { Lock, MenuIcon, Search, Trash, Unlock } from "lucide-react";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { NoteMeta } from "@/entities/note/types";
+import { NoteEntry } from "@/entities/note/types";
 
 type NoteActionsDropdownProps = {
   isEncrypted: boolean;
-  note: NoteMeta;
+  note: NoteEntry;
   onEncryptionClick: () => void;
   onDeleteClick: () => void;
   onSearchClick: () => void;

@@ -4,14 +4,14 @@ import { FC, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchInput from "../../../shared/ui/text-editor/search-input";
 import { NoteActionsDropdown } from "./note-actions-dropdown";
-import { NoteMeta } from "@/entities/note/types";
+import { NoteEntry } from "@/entities/note/types";
 import { Editor } from "@tiptap/react";
 
 type Props = {
   saveNote: () => void;
   deleteNote: () => void;
   toggleEncryption: () => void;
-  note: NoteMeta;
+  note: NoteEntry;
   isEncrypted: boolean;
 
   lastSaved: Date | null;

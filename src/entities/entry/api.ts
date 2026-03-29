@@ -1,12 +1,12 @@
 import { create } from "zustand";
 import { noteService } from "./service";
-import { NoteMeta } from "@/entities/note/types";
+import { Entry } from "./types";
 
-interface NoteState {
-  notes: NoteMeta[];
+interface EntryState {
+  entries: Entry[];
   pathIds: string[];
   dir: string;
-  getNotes: () => Promise<void>;
+  getEntries: () => Promise<void>;
   createFolder: (label: string) => Promise<void>;
   setPath: (ids: string[]) => Promise<void>;
   moveNote: (noteId: string, targetFolderId: string) => Promise<void>;
@@ -14,39 +14,39 @@ interface NoteState {
   renameEntry: (id: string, newLabel: string) => Promise<void>;
 }
 
-export const useNoteStore = create<NoteState>((set, get) => ({
-  notes: [],
+export const useEntryStore = create<EntryState>((set, get) => ({
+  entries: [],
   path: [],
   pathIds: [],
   dir: "",
-  async getNotes() {
+  async getEntries() {
     try {
-      const notes = await noteService.getAll();
-      const sortedNotes = [...notes].sort((a, b) => b.updatedAt - a.updatedAt);
+      const entries = await noteService.getAll();
+      const sorted = [...entries].sort((a, b) => b.updatedAt - a.updatedAt);
 
-      set({ notes: sortedNotes });
+      set({ entries: sorted });
     } catch (e) {
-      set({ notes: [] });
+      set({ entries: [] });
     }
   },
   async deleteEntry(id: string) {
     await noteService.delete(id);
-    await get().getNotes();
+    await get().getEntries();
   },
   async renameEntry(id: string, newLabel: string) {
-    await noteService.renameEntry(id, newLabel);
-    await get().getNotes();
+    await noteService.rename(id, newLabel);
+    await get().getEntries();
   },
   async createFolder(label: string) {
     await noteService.createFolder(label);
-    await get().getNotes();
+    await get().getEntries();
   },
   async setPath(ids: string[]) {
     const currentDir = await noteService.initialize(ids);
     set({ pathIds: ids, dir: currentDir });
   },
   async moveNote(noteId: string, targetFolderId: string) {
-    await noteService.moveEntry(noteId, targetFolderId);
-    await get().getNotes();
+    await noteService.move(noteId, targetFolderId);
+    await get().getEntries();
   },
 }));

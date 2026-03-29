@@ -118,9 +118,9 @@ Loaded **on demand** when opening a note.
 ### Data Model
 
 ```ts
-export type Note = NoteMeta & RawNote;
+export type Note = NoteEntry & RawNote;
 
-export type NoteMeta = {
+export type NoteEntry = {
   id: string;
   label: string;
   createdAt: number;

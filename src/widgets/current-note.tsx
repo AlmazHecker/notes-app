@@ -4,16 +4,16 @@ import {
   TextEditor,
 } from "@/shared/ui/text-editor/text-editor";
 import { useEditor } from "@tiptap/react";
-import { useNoteStore } from "@/entities/note/api";
+import { useEntryStore } from "@/entities/entry/api";
 import ExpandPane from "../features/draggable-layout/ui/expand-pane";
 import { SetPasswordModal } from "../features/note-encryption/ui/set-password-modal";
 import { EnterPasswordModal } from "../features/note-encryption/ui/enter-password-modal";
 import DraggableLayout from "@/features/draggable-layout/ui/draggable-layout";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Note, NoteMeta } from "@/entities/note/types";
+import { Note, NoteEntry } from "@/entities/note/types";
 import { NoteEncryption } from "../features/note-encryption/lib/note-encryption";
 import { EncryptedContent } from "../shared/ui/encrypted-content";
-import { noteService } from "@/entities/note/service";
+import { noteService } from "@/entities/entry/service";
 import { useTranslation } from "react-i18next";
 import { MenuBar } from "@/shared/ui/text-editor/MenuBar";
 import { getEscapedHtml } from "@/shared/lib/utils";
@@ -25,7 +25,7 @@ const getDefaultNote = () =>
     label: "New note",
     isEncrypted: false,
     id: crypto.randomUUID(),
-  }) as NoteMeta;
+  }) as NoteEntry;
 
 export const CurrentNote = () => {
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ export const CurrentNote = () => {
   const [modal, setModal] = useState<"enter" | "set" | "">("");
   const passwordRef = useRef("");
 
-  const noteRef = useRef<NoteMeta>(null);
+  const noteRef = useRef<NoteEntry>(null);
 
   const [isEncrypted, setIsEncrypted] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -76,7 +76,7 @@ export const CurrentNote = () => {
     await noteService.update(copy);
 
     setLastSaved(new Date());
-    useNoteStore.getState().getNotes();
+    useEntryStore.getState().getEntries();
     navigate(`?noteId=${noteRef.current.id}`, { replace: true });
     setIsSaving(false);
   };
@@ -85,7 +85,7 @@ export const CurrentNote = () => {
     if (!confirm(t("note.deleteNoteConfirm"))) return;
     await noteService.delete(noteRef.current?.id!);
     navigate({ search: "" });
-    useNoteStore.getState().getNotes();
+    useEntryStore.getState().getEntries();
   };
 
   const encryptNote = async (password: string) => {
@@ -119,10 +119,10 @@ export const CurrentNote = () => {
     }
     setIsLoadingContent(true);
     try {
-      let note: NoteMeta = getDefaultNote();
+      let note: NoteEntry = getDefaultNote();
 
       if (noteId && noteId !== "new-note") {
-        note = await noteService.getMeta(noteId);
+        note = (await noteService.getMeta(noteId)) as NoteEntry;
         if (!note.isEncrypted) {
           const noteContent = await noteService.getContent(noteId);
           editor?.commands.setContent(new TextDecoder().decode(noteContent));
