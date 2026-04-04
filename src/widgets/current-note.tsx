@@ -36,7 +36,7 @@ export const CurrentNote = () => {
   const [modal, setModal] = useState<"enter" | "set" | "">("");
   const passwordRef = useRef("");
 
-  const noteRef = useRef<NoteEntry>(null);
+  const noteRef = useRef<NoteEntry>(getDefaultNote());
 
   const [isEncrypted, setIsEncrypted] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -114,7 +114,7 @@ export const CurrentNote = () => {
   };
   const getNote = async (noteId: string) => {
     if (window.innerWidth <= 768 && !noteId) {
-      setTimeout(() => (noteRef.current = null), 300); // 300 - to sync with slide in animation duration
+      setTimeout(() => (noteRef.current = getDefaultNote()), 300); // 300 - to sync with slide in animation duration
       return;
     }
     setIsLoadingContent(true);
