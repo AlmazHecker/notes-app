@@ -10,6 +10,10 @@ export const getEscapedHtml = (html: string) => {
   return html.replace(/<[^>]*>/g, "");
 };
 
+export const isSmallScreen = () => {
+  return window.innerWidth <= 768;
+};
+
 export const formatDate = (timestamp: number): string => {
   const { dateFormat } = useUserPreferences.getState();
 

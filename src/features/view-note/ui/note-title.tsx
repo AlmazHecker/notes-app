@@ -1,3 +1,4 @@
+import { isSmallScreen } from "@/shared/lib/utils";
 import {
   ChangeEventHandler,
   FC,
@@ -7,12 +8,12 @@ import {
 } from "react";
 
 type Props = {
-  title: string;
-  setTitle: ChangeEventHandler<HTMLTextAreaElement>;
+  value: string;
+  setValue: ChangeEventHandler<HTMLTextAreaElement>;
   isEncrypted: boolean;
 };
 
-export const Title: FC<Props> = ({ setTitle, title, isEncrypted }) => {
+export const Title: FC<Props> = ({ value, setValue, isEncrypted }) => {
   const handleTextareaResize: InputEventHandler<HTMLTextAreaElement> = (e) => {
     const target = e.currentTarget;
     target.style.height = "auto";
@@ -20,12 +21,17 @@ export const Title: FC<Props> = ({ setTitle, title, isEncrypted }) => {
   };
 
   const titleRef = useRef<HTMLTextAreaElement>(null);
-  // initial height adjustment for title
   useEffect(() => {
-    if (!titleRef.current) return;
-    titleRef.current.style.height = "auto";
-    titleRef.current.style.height = titleRef.current.scrollHeight + "px";
-  }, [title]);
+    const title = titleRef.current;
+    if (!title) return;
+    title.value = value;
+    title.style.height = "auto";
+    title.style.height = title.scrollHeight + "px";
+    if (!isSmallScreen()) {
+      title.focus();
+      title.setSelectionRange(title.value.length, title.value.length);
+    }
+  }, [value]);
 
   useEffect(() => {
     // Enable VirtualKeyboard API overlay if available
@@ -39,8 +45,7 @@ export const Title: FC<Props> = ({ setTitle, title, isEncrypted }) => {
       <textarea
         ref={titleRef}
         className="w-full h-auto text-2xl border-none font-bold border outline-none p-0 resize-none"
-        defaultValue={title}
-        onChange={setTitle}
+        onChange={setValue}
         placeholder="Enter note title"
         readOnly={isEncrypted}
         rows={1}

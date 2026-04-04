@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useState, useRef } from "react";
 import {
   EDITOR_EXTENSIONS,
   TextEditor,
@@ -16,7 +16,7 @@ import { EncryptedContent } from "../shared/ui/encrypted-content";
 import { noteService } from "@/entities/entry/service";
 import { useTranslation } from "react-i18next";
 import { MenuBar } from "@/shared/ui/text-editor/MenuBar";
-import { getEscapedHtml } from "@/shared/lib/utils";
+import { getEscapedHtml, isSmallScreen } from "@/shared/lib/utils";
 import { Title } from "../features/view-note/ui/note-title";
 import { Header } from "../features/view-note/ui/note-header";
 
@@ -36,7 +36,7 @@ export const CurrentNote = () => {
   const [modal, setModal] = useState<"enter" | "set" | "">("");
   const passwordRef = useRef("");
 
-  const noteRef = useRef<NoteEntry>(getDefaultNote());
+  const [note, setNote] = useState<NoteEntry | null>(getDefaultNote());
 
   const [isEncrypted, setIsEncrypted] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -49,22 +49,22 @@ export const CurrentNote = () => {
   );
 
   const toggleEncryption = () => {
-    if (noteRef.current?.isEncrypted) {
+    if (note?.isEncrypted) {
       return decryptNote();
     }
     return setModal("set");
   };
 
   const saveNote = async () => {
-    if (!noteRef.current) return;
+    if (!note) return;
 
-    const copy: Note = { ...noteRef.current, content: new Uint8Array() };
+    const copy: Note = { ...note, content: new Uint8Array() };
     const noteContent = editor?.getHTML() || "";
 
     setIsSaving(true);
     const password = passwordRef.current;
 
-    if (noteRef.current.isEncrypted) {
+    if (note.isEncrypted) {
       copy.content = await NoteEncryption.encrypt(noteContent, password);
     } else {
       copy.snippet =
@@ -77,28 +77,28 @@ export const CurrentNote = () => {
 
     setLastSaved(new Date());
     useEntryStore.getState().getEntries();
-    navigate(`?noteId=${noteRef.current.id}`, { replace: true });
+    navigate(`?noteId=${note.id}`, { replace: true });
     setIsSaving(false);
   };
 
   const deleteNote = async () => {
     if (!confirm(t("note.deleteNoteConfirm"))) return;
-    await noteService.delete(noteRef.current?.id!);
+    await noteService.delete(note?.id!);
     navigate({ search: "" });
     useEntryStore.getState().getEntries();
   };
 
   const encryptNote = async (password: string) => {
-    if (!noteRef.current) return;
+    if (!note) return;
     passwordRef.current = password;
-    noteRef.current.isEncrypted = true;
+    note.isEncrypted = true;
 
     await saveNote();
   };
 
   const decryptNote = async () => {
-    if (!noteRef.current) return;
-    noteRef.current.isEncrypted = false;
+    if (!note) return;
+    note.isEncrypted = false;
     passwordRef.current = "";
 
     await saveNote();
@@ -112,9 +112,10 @@ export const CurrentNote = () => {
     setIsEncrypted(false);
     passwordRef.current = password;
   };
+
   const getNote = async (noteId: string) => {
     if (window.innerWidth <= 768 && !noteId) {
-      setTimeout(() => (noteRef.current = getDefaultNote()), 300); // 300 - to sync with slide in animation duration
+      setTimeout(() => setNote(getDefaultNote()), 300); // 300 - to sync with slide in animation duration
       return;
     }
     setIsLoadingContent(true);
@@ -131,13 +132,12 @@ export const CurrentNote = () => {
 
       if (!note) return;
 
-      noteRef.current = note;
+      setNote(note);
       setIsEncrypted(note.isEncrypted);
     } finally {
       setIsLoadingContent(false);
     }
   };
-
   useEffect(() => {
     getNote(noteId);
   }, [noteId]);
@@ -150,7 +150,7 @@ export const CurrentNote = () => {
       </div>
     );
 
-  if (!noteRef.current)
+  if (!note)
     return (
       <div className="flex items-center justify-center h-full text-muted-foreground">
         Note not found
@@ -164,7 +164,7 @@ export const CurrentNote = () => {
           deleteNote={deleteNote}
           saveNote={saveNote}
           toggleEncryption={toggleEncryption}
-          note={noteRef.current}
+          note={note}
           isSaving={isSaving}
           lastSaved={lastSaved}
           editor={editor}
@@ -173,10 +173,10 @@ export const CurrentNote = () => {
 
         <Title
           isEncrypted={isEncrypted}
-          title={noteRef.current.label}
-          setTitle={(e) => {
-            if (!noteRef.current) return;
-            noteRef.current.label = e.target.value;
+          value={note.label}
+          setValue={(e) => {
+            if (!note) return;
+            note.label = e.target.value;
           }}
         />
 
