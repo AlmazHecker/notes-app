@@ -11,7 +11,7 @@ import {
   encrypt,
 } from "@/features/note-encryption/lib/note-encryption";
 import { getEscapedHtml } from "@/shared/lib/utils";
-import { MenuBar } from "@/shared/ui/text-editor/MenuBar";
+import { MenuBar } from "@/shared/ui/text-editor/menu-bar";
 import {
   EDITOR_EXTENSIONS,
   TextEditor,
