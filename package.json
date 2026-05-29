@@ -9,7 +9,9 @@
     "preview": "vite preview",
     "analyze-bundle": "npx vite-bundle-visualizer",
     "deploy:gh-pages": "npm run build:gh-pages && npx gh-pages -d dist",
-    "build:gh-pages": "vite build --mode gh-pages"
+    "build:gh-pages": "vite build --mode gh-pages",
+    "lint": "biome check . --write",
+    "format": "biome format . --write"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.3.3",
@@ -54,6 +56,7 @@
     "zustand": "^5.0.12"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.4.16",
     "@types/node": "^25.5.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",

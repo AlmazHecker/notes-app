@@ -1,4 +1,6 @@
-import { useState, useEffect, FormEvent } from "react";
+import { type FormEvent, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { Button } from "@/shared/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -9,9 +11,6 @@ import {
 } from "@/shared/ui/dialog";
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
-import { Button } from "@/shared/ui/button";
-
-import { useTranslation } from "react-i18next";
 
 type SetPasswordModalProps = {
   onSubmit: (password: string) => Promise<void>;

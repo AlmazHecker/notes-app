@@ -6,6 +6,7 @@ import UserPreferenceProvider from "./user-prefernce-provider";
 import "@/shared/locale/i18next";
 // import Layout from "@/widgets/Layout";
 import { useEntryStore } from "@/entities/entry/api";
+
 const root = ReactDOM.createRoot(document.getElementById("root")!);
 
 const bootstrapApp = async () => {

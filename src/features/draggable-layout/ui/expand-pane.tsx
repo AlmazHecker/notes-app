@@ -1,7 +1,7 @@
-import { Button } from "@/shared/ui/button";
-
 import { Expand, Minimize2 } from "lucide-react";
-import React, { useState } from "react";
+import type React from "react";
+import { useState } from "react";
+import { Button } from "@/shared/ui/button";
 
 const ExpandPane: React.FC = () => {
   const [isExpanded, setIsExpanded] = useState(false);

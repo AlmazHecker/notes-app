@@ -61,7 +61,7 @@
 }
 
 .geist-mono {
-  font-family: "Geist Mono";
+  font-family: "Geist Mono", sans-serif;
 }
 
 @layer base {

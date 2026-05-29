@@ -1,3 +1,7 @@
+import { Lock, MenuIcon, Search, Trash, Unlock } from "lucide-react";
+import type { FC } from "react";
+import { useTranslation } from "react-i18next";
+import type { NoteEntry } from "@/entities/note/types";
 import { Button } from "@/shared/ui/button";
 import {
   DropdownMenu,
@@ -8,10 +12,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/shared/ui/dropdown-menu";
-import { Lock, MenuIcon, Search, Trash, Unlock } from "lucide-react";
-import { FC } from "react";
-import { useTranslation } from "react-i18next";
-import { NoteEntry } from "@/entities/note/types";
 
 type NoteActionsDropdownProps = {
   isEncrypted: boolean;

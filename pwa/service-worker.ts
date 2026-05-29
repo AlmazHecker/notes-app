@@ -7,13 +7,13 @@ self.addEventListener("install", () => {
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(
-        keys.map((key) => {
-          if (key !== CACHE_NAME) return caches.delete(key);
-        }),
+    caches
+      .keys()
+      .then((keys) =>
+        Promise.all(
+          keys.map((key) => key !== CACHE_NAME && caches.delete(key)),
+        ),
       ),
-    ),
   );
   self.clients.claim();
 });
@@ -24,7 +24,7 @@ self.addEventListener("fetch", (event) => {
       if (cached) return cached;
       return fetch(event.request)
         .then((response) => {
-          if (!response || response.status !== 200 || response.type !== "basic")
+          if (response?.status !== 200 || response.type !== "basic")
             return response;
           const responseClone = response.clone();
           caches.open(CACHE_NAME).then((cache) => {
@@ -33,6 +33,7 @@ self.addEventListener("fetch", (event) => {
           return response;
         })
         .catch(() => {
+          // biome-ignore lint/suspicious/noConsole: <pwa caching failed>
           console.log("prob smth went wrong :)");
         });
     }),

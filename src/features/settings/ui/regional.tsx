@@ -1,4 +1,6 @@
-import React from "react";
+import { useTranslation } from "react-i18next";
+import { useUserPreferences } from "@/shared/hooks/use-user-preferences";
+import { isCyrillic } from "@/shared/lib/utils";
 import {
   Card,
   CardContent,
@@ -15,13 +17,7 @@ import {
   SelectValue,
 } from "@/shared/ui/select";
 
-import { useUserPreferences } from "@/shared/hooks/use-user-preferences";
-import { useTranslation } from "react-i18next";
-import { isCyrillic } from "@/shared/lib/utils";
-
-type RegionalSettingsProps = {};
-
-const RegionalSettings: React.FC<RegionalSettingsProps> = () => {
+const RegionalSettings = () => {
   const { t } = useTranslation();
   const { language, dateFormat, setLanguage, setDateFormat } =
     useUserPreferences();

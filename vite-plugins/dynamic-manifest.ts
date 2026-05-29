@@ -1,11 +1,11 @@
-import fs from "fs";
-import path from "path";
-import { Plugin } from "vite";
+import fs from "node:fs";
+import path from "node:path";
+import type { Plugin } from "vite";
 
 // custom vite plugin to dynamically create manifest.json
 export function dynamicManifestPlugin(
   manifest: object,
-  filename = "manifest.json"
+  filename = "manifest.json",
 ) {
   const plugin: Plugin = {
     name: "dynamic-manifest-writer",

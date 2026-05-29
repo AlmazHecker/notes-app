@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { noteService } from "./service";
-import { Entry } from "./types";
+import type { Entry } from "./types";
 
 interface EntryState {
   entries: Entry[];
@@ -31,7 +31,7 @@ export const useEntryStore = create<EntryState>((set, get) => ({
       });
 
       set({ entries: sorted });
-    } catch (e) {
+    } catch (_e) {
       set({ entries: [] });
     }
   },

@@ -1,12 +1,13 @@
-import { isCyrillic } from "@/shared/lib/utils";
+import type React from "react";
+import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import {
   type Theme,
   useUserPreferences,
 } from "@/shared/hooks/use-user-preferences";
-import React, { useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import { THEMES } from "@/shared/model/theme/themes";
+import { isCyrillic } from "@/shared/lib/utils";
 import { THEME_VARIABLE_KEYS } from "@/shared/model/theme/theme";
+import { THEMES } from "@/shared/model/theme/themes";
 
 const UserPreferenceProvider: React.FC = () => {
   const userPreferences = useUserPreferences();

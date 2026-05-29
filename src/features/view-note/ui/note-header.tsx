@@ -1,11 +1,11 @@
-import { Button } from "@/shared/ui/button";
+import type { Editor } from "@tiptap/react";
 import { ArrowLeft, Check, SaveIcon } from "lucide-react";
-import { FC, useState } from "react";
+import { type FC, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import type { NoteEntry } from "@/entities/note/types";
+import { Button } from "@/shared/ui/button";
 import SearchInput from "../../../shared/ui/text-editor/search-input";
 import { NoteActionsDropdown } from "./note-actions-dropdown";
-import { NoteEntry } from "@/entities/note/types";
-import { Editor } from "@tiptap/react";
 
 type Props = {
   saveNote: () => void;

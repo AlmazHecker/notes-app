@@ -1,18 +1,18 @@
-import { useEffect, useState } from "react";
-import { Button } from "@/shared/ui/button";
 import {
+  ArrowLeft,
+  FolderPlus,
   Plus,
   SearchIcon,
   Settings,
-  ArrowLeft,
-  FolderPlus,
 } from "lucide-react";
-import { Link } from "@/shared/ui/link";
-import { useEntryStore } from "@/entities/entry/api";
-import { EntryList } from "../features/entry-list/ui/entry-list";
-import { SearchNotesModal } from "../features/search-notes/ui/search-notes-modal";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useEntryStore } from "@/entities/entry/api";
+import { Button } from "@/shared/ui/button";
+import { Link } from "@/shared/ui/link";
+import { EntryList } from "../features/entry-list/ui/entry-list";
+import { SearchNotesModal } from "../features/search-notes/ui/search-notes-modal";
 
 export const Notes = () => {
   const { t } = useTranslation();
@@ -39,12 +39,12 @@ export const Notes = () => {
 
   const handleCdInto = async (id: string) => {
     entryStore.pathIds.push(id);
-    navigate("/" + entryStore.pathIds.join("/"));
+    navigate(`/${entryStore.pathIds.join("/")}`);
   };
 
   const handleGoBack = async () => {
     entryStore.pathIds.pop();
-    navigate("/" + entryStore.pathIds.join("/"));
+    navigate(`/${entryStore.pathIds.join("/")}`);
   };
 
   const handleCreateFolder = async () => {

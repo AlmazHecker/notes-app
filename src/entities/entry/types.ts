@@ -1,5 +1,5 @@
-import { FolderEntry } from "../folder/types";
-import { NoteEntry } from "../note/types";
+import type { FolderEntry } from "../folder/types";
+import type { NoteEntry } from "../note/types";
 
 export type BaseEntry = {
   id: string;

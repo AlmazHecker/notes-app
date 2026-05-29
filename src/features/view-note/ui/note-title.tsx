@@ -1,11 +1,11 @@
-import { isSmallScreen } from "@/shared/lib/utils";
 import {
-  ChangeEventHandler,
-  FC,
-  InputEventHandler,
+  type ChangeEventHandler,
+  type FC,
+  type InputEventHandler,
   useEffect,
   useRef,
 } from "react";
+import { isSmallScreen } from "@/shared/lib/utils";
 
 type Props = {
   value: string;
@@ -17,7 +17,7 @@ export const Title: FC<Props> = ({ value, setValue, isEncrypted }) => {
   const handleTextareaResize: InputEventHandler<HTMLTextAreaElement> = (e) => {
     const target = e.currentTarget;
     target.style.height = "auto";
-    target.style.height = target.scrollHeight + "px";
+    target.style.height = `${target.scrollHeight}px`;
   };
 
   const titleRef = useRef<HTMLTextAreaElement>(null);
@@ -26,7 +26,7 @@ export const Title: FC<Props> = ({ value, setValue, isEncrypted }) => {
     if (!title) return;
     title.value = value;
     title.style.height = "auto";
-    title.style.height = title.scrollHeight + "px";
+    title.style.height = `${title.scrollHeight}px`;
     if (!isSmallScreen()) {
       title.focus();
       title.setSelectionRange(title.value.length, title.value.length);
@@ -35,8 +35,8 @@ export const Title: FC<Props> = ({ value, setValue, isEncrypted }) => {
 
   useEffect(() => {
     // Enable VirtualKeyboard API overlay if available
-    if ((navigator as any).virtualKeyboard) {
-      (navigator as any).virtualKeyboard.overlaysContent = true;
+    if (navigator.virtualKeyboard) {
+      navigator.virtualKeyboard.overlaysContent = true;
     }
   }, []);
 

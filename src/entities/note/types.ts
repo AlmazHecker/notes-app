@@ -1,4 +1,4 @@
-import { BaseEntry } from "../entry/types";
+import type { BaseEntry } from "../entry/types";
 
 export type Note = NoteEntry & {
   content: RawNoteContent;

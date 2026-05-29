@@ -1,26 +1,26 @@
-import { Editor } from "@tiptap/react";
-import { useEffect, useState, type FC } from "react";
+import type { Editor } from "@tiptap/react";
 import {
-  Undo,
-  Redo,
   Bold,
-  Italic,
+  Code2,
   Heading1,
   Heading2,
   Heading3,
+  Italic,
   List,
   ListOrdered,
-  Quote,
-  Code2,
   Minus,
+  Quote,
+  Redo,
+  Undo,
 } from "lucide-react";
+import { type FC, useEffect, useState } from "react";
 import "./menubar.css";
 
 export const MenuBar: FC<{ editor: Editor | null }> = ({ editor }) => {
   const [keyboardOffset, setKeyboardOffset] = useState(-100);
 
   useEffect(() => {
-    const virtualKeyboard = (navigator as any).virtualKeyboard;
+    const virtualKeyboard = navigator.virtualKeyboard;
 
     const updatePosition = () => {
       let offset = -100;

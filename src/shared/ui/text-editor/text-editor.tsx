@@ -1,22 +1,21 @@
 import "./styles.css";
 
-import { Editor, EditorContent } from "@tiptap/react";
+import Blockquote from "@tiptap/extension-blockquote";
+import Bold from "@tiptap/extension-bold";
+import BulletList from "@tiptap/extension-bullet-list";
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import Document from "@tiptap/extension-document";
-import { type FC } from "react";
-
-import HorizontalRule from "@tiptap/extension-horizontal-rule";
 import Heading from "@tiptap/extension-heading";
-import Text from "@tiptap/extension-text";
+import History from "@tiptap/extension-history";
+import HorizontalRule from "@tiptap/extension-horizontal-rule";
+import Italic from "@tiptap/extension-italic";
 import ListItem from "@tiptap/extension-list-item";
 import OrderedList from "@tiptap/extension-ordered-list";
-import BulletList from "@tiptap/extension-bullet-list";
 import Paragraph from "@tiptap/extension-paragraph";
-import Bold from "@tiptap/extension-bold";
-import History from "@tiptap/extension-history";
-import Italic from "@tiptap/extension-italic";
-import Blockquote from "@tiptap/extension-blockquote";
-import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
-import { createLowlight, all } from "lowlight";
+import Text from "@tiptap/extension-text";
+import { type Editor, EditorContent } from "@tiptap/react";
+import { all, createLowlight } from "lowlight";
+import type { FC } from "react";
 import SearchAndReplace from "./extensions/search-and-replace";
 
 const lowlight = createLowlight(all);
@@ -45,12 +44,10 @@ type TextEditorProps = {
 
 export const TextEditor: FC<TextEditorProps> = ({ editor }) => {
   return (
-    <>
-      <EditorContent
-        className="p-4 pt-0 md:pt-4 editor-content flex-1 flex flex-col"
-        onClick={() => editor?.chain().focus()}
-        editor={editor}
-      />
-    </>
+    <EditorContent
+      className="p-4 pt-0 md:pt-4 editor-content flex-1 flex flex-col"
+      onClick={() => editor?.chain().focus()}
+      editor={editor}
+    />
   );
 };

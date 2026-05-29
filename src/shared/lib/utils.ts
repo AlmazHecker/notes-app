@@ -1,4 +1,4 @@
-import { clsx, type ClassValue } from "clsx";
+import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { useUserPreferences } from "@/shared/hooks/use-user-preferences";
 
@@ -29,7 +29,6 @@ export const formatDate = (timestamp: number): string => {
       return `${day}.${month}.${year}`;
     case "YYYY-MM-DD":
       return `${year}-${month}-${day}`;
-    case "MM/DD/YYYY":
     default:
       return `${month}/${day}/${year}`;
   }
@@ -39,7 +38,7 @@ export const formatSize = (bytes: number): string => {
   if (bytes === 0) return "0 B";
   const sizes = ["B", "KB", "MB", "GB", "TB"];
   const i = Math.floor(Math.log(bytes) / Math.log(1024));
-  return `${(bytes / Math.pow(1024, i)).toFixed(1)} ${sizes[i]}`;
+  return `${(bytes / 1024 ** i).toFixed(1)} ${sizes[i]}`;
 };
 
 export const isCyrillic = (lng: string) => ["ru", "kg"].includes(lng);

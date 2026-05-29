@@ -1,16 +1,16 @@
 import { useVirtualizer } from "@tanstack/react-virtual";
 import {
-  LockIcon,
   FolderIcon,
-  Trash2,
+  LockIcon,
   MoreVertical,
   Pencil,
+  Trash2,
 } from "lucide-react";
-import { FC, useRef, useState } from "react";
+import { type FC, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { NoteEntry } from "@/entities/note/types";
 import { useEntryStore } from "@/entities/entry/api";
+import type { Entry } from "@/entities/entry/types";
 import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/button";
 import {
@@ -19,7 +19,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/shared/ui/dropdown-menu";
-import { Entry } from "@/entities/entry/types";
 
 type Props = {
   entries: Entry[];
@@ -113,8 +112,7 @@ export const EntryList: FC<Props> = ({ entries, onCdInto }) => {
             const isDragOver = dragOverId === note.id;
 
             return (
-              <div
-                role="button"
+              <button
                 tabIndex={0}
                 key={note.id}
                 onClick={() => onCdInto(note.id)}
@@ -151,13 +149,12 @@ export const EntryList: FC<Props> = ({ entries, onCdInto }) => {
                   </p>
                 </div>
                 {actions}
-              </div>
+              </button>
             );
           }
 
           return (
-            <div
-              role="button"
+            <button
               tabIndex={0}
               key={note.id}
               draggable
@@ -177,15 +174,11 @@ export const EntryList: FC<Props> = ({ entries, onCdInto }) => {
                   {note.isEncrypted && <LockIcon size="10px" />}
                 </div>
                 <p className="text-sm text-muted-foreground line-clamp-1">
-                  {note.isEncrypted ? (
-                    t("notes.encrypted")
-                  ) : (
-                    <>{note.snippet}</>
-                  )}
+                  {note.isEncrypted ? t("notes.encrypted") : note.snippet}
                 </p>
               </div>
               {actions}
-            </div>
+            </button>
           );
         })}
       </div>

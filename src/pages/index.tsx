@@ -1,7 +1,7 @@
+import { useSearchParams } from "react-router-dom";
 import { LAYOUT_SELECTORS } from "@/features/draggable-layout/ui/draggable-layout";
 import { CurrentNote } from "@/widgets/current-note";
 import { Notes } from "@/widgets/notes";
-import { useSearchParams } from "react-router-dom";
 
 const Index = () => {
   const [searchParams] = useSearchParams();

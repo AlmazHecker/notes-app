@@ -1,6 +1,6 @@
-import { Button } from "@/shared/ui/button";
 import { LockIcon } from "lucide-react";
-import { FC } from "react";
+import type { FC } from "react";
+import { Button } from "@/shared/ui/button";
 
 type EncryptedContentProps = {
   onDecrypt: () => void;

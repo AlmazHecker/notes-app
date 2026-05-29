@@ -1,4 +1,6 @@
-import { FormEvent, useState } from "react";
+import { type FormEvent, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { Button } from "@/shared/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -9,9 +11,6 @@ import {
 } from "@/shared/ui/dialog";
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
-import { Button } from "@/shared/ui/button";
-
-import { useTranslation } from "react-i18next";
 
 type EnterPasswordModalProps = {
   onSubmit: (password: string) => Promise<void>;
@@ -36,7 +35,7 @@ export const EnterPasswordModal = ({
       setPasswordError("");
       await onSubmit(password);
       handleClose();
-    } catch (e) {
+    } catch (_e) {
       setPasswordError(t("encryption.enterNotePassword.wrongPassword"));
     }
   };

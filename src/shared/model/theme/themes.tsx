@@ -1,5 +1,5 @@
 import { Laptop, Moon, Sun, Zap } from "lucide-react";
-import { ThemeDefinition } from "./theme";
+import type { ThemeDefinition } from "./theme";
 
 export const THEMES: ThemeDefinition[] = [
   {

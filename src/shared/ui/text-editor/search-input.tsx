@@ -1,8 +1,9 @@
-import React, { FC, useState, useEffect, useRef } from "react";
-import { Editor, Range } from "@tiptap/react";
-import { Input } from "@/shared/ui/input";
+import type { Editor, Range } from "@tiptap/react";
 import { Search, X } from "lucide-react";
+import type React from "react";
+import { type FC, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Input } from "@/shared/ui/input";
 
 type SearchInputProps = {
   editor: Editor | null;

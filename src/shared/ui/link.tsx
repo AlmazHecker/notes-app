@@ -1,9 +1,10 @@
-import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
-import { buttonVariants } from "./button";
 import type { VariantProps } from "class-variance-authority";
-import { cn } from "@/shared/lib/utils";
+import type * as React from "react";
 import { Link as RouterLink } from "react-router-dom";
+import { cn } from "@/shared/lib/utils";
+import { buttonVariants } from "./button";
+
 function Link({
   className,
   variant,
@@ -25,4 +26,4 @@ function Link({
   );
 }
 
-export { Link, buttonVariants };
+export { buttonVariants, Link };

@@ -1,6 +1,6 @@
-import { Entry } from "@/entities/entry/types";
-import { FolderEntry } from "@/entities/folder/types";
-import { Note, RawNoteContent } from "@/entities/note/types";
+import type { Entry } from "@/entities/entry/types";
+import type { FolderEntry } from "@/entities/folder/types";
+import type { Note, RawNoteContent } from "@/entities/note/types";
 
 export interface NoteStorageStrategy {
   getMeta(noteId: string): Promise<Entry | null>;

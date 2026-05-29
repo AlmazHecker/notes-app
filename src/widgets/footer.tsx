@@ -15,6 +15,7 @@ export default function Footer() {
             <img
               src={`${import.meta.env.BASE_URL}github.svg`}
               className="mr-2 size-5"
+              alt="GitHub"
             />
             <span>Source code</span>
           </a>

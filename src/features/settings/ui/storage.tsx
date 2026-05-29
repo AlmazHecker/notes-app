@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useEntryStore } from "@/entities/entry/api";
 import { noteService } from "@/entities/entry/service";
 import { formatSize } from "@/shared/lib/utils";
@@ -9,15 +11,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/shared/ui/card";
-import JSZip from "jszip";
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
 
 const StorageSettings = () => {
   const { t } = useTranslation();
-
-  const navigate = useNavigate();
 
   const entryStore = useEntryStore();
   const [storage, setStorage] = useState<StorageEstimate | null>(null);
@@ -61,7 +57,7 @@ const StorageSettings = () => {
         await loadFolderSize();
       }
     } catch (e) {
-      alert("Something went wrong!");
+      alert(`Something went wrong! ${e}`);
     }
   };
 

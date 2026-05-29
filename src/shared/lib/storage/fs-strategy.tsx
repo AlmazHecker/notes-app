@@ -1,9 +1,9 @@
 import JSZip from "jszip";
-import { NoteStorageStrategy } from "./storage";
-import { Note, NoteEntry, RawNoteContent } from "@/entities/note/types";
-import { NoteZipTransfer } from "./note-zip-transfer";
-import { Entry } from "@/entities/entry/types";
-import { FolderEntry } from "@/entities/folder/types";
+import type { Entry } from "@/entities/entry/types";
+import type { FolderEntry } from "@/entities/folder/types";
+import type { Note, NoteEntry, RawNoteContent } from "@/entities/note/types";
+import { zipDirectory } from "./note-zip-transfer";
+import type { NoteStorageStrategy } from "./storage";
 
 const INDEX_FILE = "index.json";
 
@@ -24,7 +24,7 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
       try {
         const handle = await this.currentDir.getDirectoryHandle(id);
         this.directoryStack.push(handle);
-      } catch (e) {
+      } catch (_e) {
         break;
       }
     }
@@ -42,7 +42,7 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
       const file = await handle.getFile();
       const text = await file.text();
       this.index = text ? JSON.parse(text) : {};
-    } catch (e) {
+    } catch (_e) {
       this.index = {};
     }
   }
@@ -107,7 +107,7 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
   }
 
   public async clear() {
-    // @ts-ignore
+    // @ts-expect-error
     await this.root.remove({ recursive: true });
     await this.initialize([]);
   }
@@ -135,7 +135,7 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
       const zip = await JSZip.loadAsync(blob);
       await this.mergeImport(zip, this.root, "");
       await this.loadIndex();
-    } catch (e) {
+    } catch (_e) {
       try {
         const text = await blob.text();
         const noteData: Note = JSON.parse(text);
@@ -153,7 +153,7 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
     targetDir: FileSystemDirectoryHandle,
     zipPath: string,
   ) {
-    const prefix = zipPath ? zipPath + "/" : "";
+    const prefix = zipPath ? `${zipPath}/` : "";
     const entries = Object.keys(zip.files).filter((path) => {
       if (!path.startsWith(prefix)) return false;
       const relative = path.slice(prefix.length);
@@ -181,7 +181,7 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
           const file = await handle.getFile();
           const text = await file.text();
           localIndex = text ? JSON.parse(text) : {};
-        } catch (e) {}
+        } catch (_e) {}
 
         const mergedIndex = { ...localIndex, ...zipIndex };
         const handle = await targetDir.getFileHandle(INDEX_FILE, {
@@ -264,9 +264,9 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
     const targetDirHandle =
       await this.currentDir.getDirectoryHandle(targetFolderId);
 
-    // @ts-ignore
+    // @ts-expect-error
     if (typeof handle.move === "function") {
-      // @ts-ignore
+      // @ts-expect-error
       await handle.move(targetDirHandle);
     } else {
       throw new Error("Your browser does not support moving files in OPFS");
@@ -290,7 +290,7 @@ export class FileSystemNoteStrategy implements NoteStorageStrategy {
 
   async exportFull(): Promise<Blob> {
     const zip = new JSZip();
-    await NoteZipTransfer.zipDirectory(this.root, zip);
+    await zipDirectory(this.root, zip);
     return await zip.generateAsync({ type: "blob" });
   }
 }

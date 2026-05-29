@@ -1,6 +1,6 @@
+import type { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "./button";
-import { FC } from "react";
 
 type PermissionDeniedProps = {
   permissionTrigger: () => void; // callback to trigger permission request

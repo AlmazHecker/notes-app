@@ -1,24 +1,27 @@
-import { FC, useEffect, useState, useRef } from "react";
+import { useEditor } from "@tiptap/react";
+import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useEntryStore } from "@/entities/entry/api";
+import { noteService } from "@/entities/entry/service";
+import type { Note, NoteEntry } from "@/entities/note/types";
+import DraggableLayout from "@/features/draggable-layout/ui/draggable-layout";
+import {
+  decrypt,
+  encrypt,
+} from "@/features/note-encryption/lib/note-encryption";
+import { getEscapedHtml } from "@/shared/lib/utils";
+import { MenuBar } from "@/shared/ui/text-editor/MenuBar";
 import {
   EDITOR_EXTENSIONS,
   TextEditor,
 } from "@/shared/ui/text-editor/text-editor";
-import { useEditor } from "@tiptap/react";
-import { useEntryStore } from "@/entities/entry/api";
 import ExpandPane from "../features/draggable-layout/ui/expand-pane";
-import { SetPasswordModal } from "../features/note-encryption/ui/set-password-modal";
 import { EnterPasswordModal } from "../features/note-encryption/ui/enter-password-modal";
-import DraggableLayout from "@/features/draggable-layout/ui/draggable-layout";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { Note, NoteEntry } from "@/entities/note/types";
-import { NoteEncryption } from "../features/note-encryption/lib/note-encryption";
-import { EncryptedContent } from "../shared/ui/encrypted-content";
-import { noteService } from "@/entities/entry/service";
-import { useTranslation } from "react-i18next";
-import { MenuBar } from "@/shared/ui/text-editor/MenuBar";
-import { getEscapedHtml, isSmallScreen } from "@/shared/lib/utils";
-import { Title } from "../features/view-note/ui/note-title";
+import { SetPasswordModal } from "../features/note-encryption/ui/set-password-modal";
 import { Header } from "../features/view-note/ui/note-header";
+import { Title } from "../features/view-note/ui/note-title";
+import { EncryptedContent } from "../shared/ui/encrypted-content";
 
 const getDefaultNote = () =>
   ({
@@ -65,7 +68,7 @@ export const CurrentNote = () => {
     const password = passwordRef.current;
 
     if (note.isEncrypted) {
-      copy.content = await NoteEncryption.encrypt(noteContent, password);
+      copy.content = await encrypt(noteContent, password);
     } else {
       copy.snippet =
         getEscapedHtml(noteContent.slice(0, 100)) +
@@ -83,7 +86,7 @@ export const CurrentNote = () => {
 
   const deleteNote = async () => {
     if (!confirm(t("note.deleteNoteConfirm"))) return;
-    await noteService.delete(note?.id!);
+    await noteService.delete(note!.id);
     navigate({ search: "" });
     useEntryStore.getState().getEntries();
   };
@@ -107,7 +110,7 @@ export const CurrentNote = () => {
   const checkPassword = async (password: string) => {
     const noteContent = await noteService.getContent(noteId);
 
-    const decrypted = await NoteEncryption.decrypt(noteContent, password);
+    const decrypted = await decrypt(noteContent, password);
     editor!.commands.setContent(decrypted);
     setIsEncrypted(false);
     passwordRef.current = password;

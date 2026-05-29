@@ -1,3 +1,11 @@
+import { ArrowLeft } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import {
+  type FontSizeLevel,
+  type Theme,
+  useUserPreferences,
+} from "@/shared/hooks/use-user-preferences";
+import { THEMES } from "@/shared/model/theme/themes";
 import {
   Card,
   CardContent,
@@ -5,21 +13,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/shared/ui/card";
-import { ArrowLeft } from "lucide-react";
-import {
-  FontSizeLevel,
-  Theme,
-  useUserPreferences,
-} from "@/shared/hooks/use-user-preferences";
-import { THEMES } from "@/shared/model/theme/themes";
-import React from "react";
 import { Link } from "@/shared/ui/link";
-import { useTranslation } from "react-i18next";
-import { TFunction } from "i18next";
 
-type AppearanceSettingsProps = {};
-
-const AppearanceSettings: React.FC<AppearanceSettingsProps> = () => {
+const AppearanceSettings = () => {
   const userPreferences = useUserPreferences();
   const { t } = useTranslation();
 
@@ -47,7 +43,7 @@ const AppearanceSettings: React.FC<AppearanceSettingsProps> = () => {
             </h3>
             <div className="grid grid-cols-3 gap-4">
               {THEMES.map(({ label, id, icon, bg }) => (
-                <div
+                <button
                   key={id}
                   className={`relative cursor-pointer rounded-lg border-2 ${
                     userPreferences.theme === id
@@ -65,7 +61,7 @@ const AppearanceSettings: React.FC<AppearanceSettingsProps> = () => {
                   {userPreferences.theme === id && (
                     <div className="absolute top-2 right-2 w-4 h-4 bg-primary rounded-full"></div>
                   )}
-                </div>
+                </button>
               ))}
             </div>
           </div>
