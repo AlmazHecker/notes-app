@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEntryStore } from "@/entities/entry/api";
 import { entryService } from "@/entities/entry/service";
-import type { Note, NoteEntry } from "@/entities/note/types";
+import type { NoteEntry } from "@/entities/entry/types";
 import DraggableLayout from "@/features/draggable-layout/ui/draggable-layout";
 import {
   decrypt,
@@ -61,7 +61,7 @@ export const CurrentNote = () => {
   const saveNote = async () => {
     if (!note) return;
 
-    const copy: Note = { ...note, content: new Uint8Array() };
+    const copy: NoteEntry = { ...note, content: new Uint8Array() };
     const noteContent = editor?.getHTML() || "";
 
     setIsSaving(true);

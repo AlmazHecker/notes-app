@@ -1,7 +1,5 @@
 import JSZip from "jszip";
-import type { Entry } from "@/entities/entry/types";
-import type { FolderEntry } from "@/entities/folder/types";
-import type { Note, NoteEntry, RawNoteContent } from "@/entities/note/types";
+import type { Entry, FolderEntry, NoteEntry } from "@/entities/entry/types";
 import { zipDirectory } from "@/shared/lib/storage/note-zip-transfer";
 
 const INDEX_FILE = "index.json";
@@ -55,8 +53,10 @@ class EntryService {
     await writable.close();
   }
 
-  async create(newNote: Omit<Note, "createdAt" | "updatedAt">): Promise<Note> {
-    const note: Note = {
+  async create(
+    newNote: Omit<NoteEntry, "createdAt" | "updatedAt">,
+  ): Promise<NoteEntry> {
+    const note: NoteEntry = {
       ...newNote,
       createdAt: Date.now(),
       updatedAt: Date.now(),
@@ -65,7 +65,7 @@ class EntryService {
     return this.update(note);
   }
 
-  async update(updatedNote: Note) {
+  async update(updatedNote: NoteEntry) {
     const note = { ...updatedNote, updatedAt: Date.now() };
 
     const fileHandle = await this.currentDir.getFileHandle(note.id, {
@@ -85,7 +85,7 @@ class EntryService {
       updatedAt: note.updatedAt,
       snippet: note.snippet,
       type: "file",
-    };
+    } as Entry;
     await this.saveIndex();
     return note;
   }
@@ -113,7 +113,7 @@ class EntryService {
   async getMeta(noteId: string): Promise<Entry> {
     return this.index[noteId];
   }
-  async getContent(noteId: string): Promise<RawNoteContent> {
+  async getContent(noteId: string): Promise<NoteEntry["content"]> {
     const file = await (await this.currentDir.getFileHandle(noteId)).getFile();
     const content = await file.arrayBuffer();
 
@@ -136,7 +136,7 @@ class EntryService {
     } catch (_e) {
       try {
         const text = await blob.text();
-        const noteData: Note = JSON.parse(text);
+        const noteData: NoteEntry = JSON.parse(text);
         if (!noteData.id) throw new Error("Invalid note data");
         await this.update(noteData);
       } catch (legacyErr) {

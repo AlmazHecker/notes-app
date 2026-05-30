@@ -1,7 +1,7 @@
 import { Lock, MenuIcon, Search, Trash, Unlock } from "lucide-react";
 import type { FC } from "react";
 import { useTranslation } from "react-i18next";
-import type { NoteEntry } from "@/entities/note/types";
+import type { NoteEntry } from "@/entities/entry/types";
 import { Button } from "@/shared/ui/button";
 import {
   DropdownMenu,

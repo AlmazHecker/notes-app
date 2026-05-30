@@ -138,15 +138,11 @@ export type NoteEntry = BaseEntry & {
   type: "file";
   snippet: string;
   tags?: string[];
+  content: Uint8Array<ArrayBuffer>;
 };
 
 export type Entry = FolderEntry | NoteEntry;
 
-export type Note = NoteEntry & {
-  content: RawNoteContent;
-};
-
-export type RawNoteContent = Uint8Array<ArrayBuffer>;
 ```
 
 ## Future Features

@@ -1,6 +1,3 @@
-import type { FolderEntry } from "../folder/types";
-import type { NoteEntry } from "../note/types";
-
 export type BaseEntry = {
   id: string;
   label: string;
@@ -12,3 +9,14 @@ export type BaseEntry = {
 };
 
 export type Entry = FolderEntry | NoteEntry;
+
+export type NoteEntry = BaseEntry & {
+  type: "file";
+  snippet: string;
+  tags?: string[];
+  content: Uint8Array<ArrayBuffer>;
+};
+
+export type FolderEntry = BaseEntry & {
+  type: "folder";
+};

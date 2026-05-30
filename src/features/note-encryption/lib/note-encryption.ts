@@ -1,5 +1,5 @@
 import { argon2id } from "hash-wasm";
-import type { RawNoteContent } from "@/entities/note/types";
+import type { NoteEntry } from "@/entities/entry/types";
 
 const MAGIC_HEADER = "NOTE_APP_v1|";
 const encoder = new TextEncoder();
@@ -36,7 +36,7 @@ async function deriveKey(password: string, salt: Uint8Array) {
 export async function encrypt(
   content: string,
   password: string,
-): Promise<RawNoteContent> {
+): Promise<NoteEntry["content"]> {
   const salt = crypto.getRandomValues(new Uint8Array(16));
   const iv = crypto.getRandomValues(new Uint8Array(12));
   const key = await deriveKey(password, salt);
@@ -61,7 +61,7 @@ export async function encrypt(
 }
 
 export async function decrypt(
-  encrypted: RawNoteContent,
+  encrypted: NoteEntry["content"],
   password: string,
 ): Promise<string> {
   const salt = encrypted.slice(0, 16);
