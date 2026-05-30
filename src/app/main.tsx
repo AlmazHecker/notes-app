@@ -23,9 +23,7 @@ bootstrapApp().then(() =>
   root.render(
     <React.StrictMode>
       <UserPreferenceProvider />
-      {/* <Layout> */}
       <RouterProvider router={router} />
-      {/* </Layout> */}
     </React.StrictMode>,
   ),
 );

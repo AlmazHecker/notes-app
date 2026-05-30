@@ -1,6 +1,6 @@
 import JSZip from "jszip";
 import type { Entry, FolderEntry, NoteEntry } from "@/entities/entry/types";
-import { zipDirectory } from "@/shared/lib/storage/note-zip-transfer";
+import { zipDirectory } from "@/shared/lib/directory-zip";
 
 const INDEX_FILE = "index.json";
 
