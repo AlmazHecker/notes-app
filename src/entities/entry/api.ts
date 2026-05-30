@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { noteService } from "./service";
+import { entryService } from "./service";
 import type { Entry } from "./types";
 
 interface EntryState {
@@ -21,7 +21,7 @@ export const useEntryStore = create<EntryState>((set, get) => ({
   dir: "",
   async getEntries() {
     try {
-      const entries = await noteService.getAll();
+      const entries = await entryService.getAll();
       // folders first
       const sorted = [...entries].sort((a, b) => {
         if (a.type !== b.type) {
@@ -36,23 +36,23 @@ export const useEntryStore = create<EntryState>((set, get) => ({
     }
   },
   async deleteEntry(id: string) {
-    await noteService.delete(id);
+    await entryService.delete(id);
     await get().getEntries();
   },
   async renameEntry(id: string, newLabel: string) {
-    await noteService.rename(id, newLabel);
+    await entryService.rename(id, newLabel);
     await get().getEntries();
   },
   async createFolder(label: string) {
-    await noteService.createFolder(label);
+    await entryService.createFolder(label);
     await get().getEntries();
   },
   async setPath(ids: string[]) {
-    const currentDir = await noteService.initialize(ids);
+    const currentDir = await entryService.initialize(ids);
     set({ pathIds: ids, dir: currentDir });
   },
   async moveNote(noteId: string, targetFolderId: string) {
-    await noteService.move(noteId, targetFolderId);
+    await entryService.move(noteId, targetFolderId);
     await get().getEntries();
   },
 }));

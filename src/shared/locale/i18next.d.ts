@@ -1,6 +1,6 @@
-import enJSON from "./resources/en.json";
-import kgJSON from "./resources/kg.json";
-import ruJSON from "./resources/ru.json";
+import type enJSON from "./resources/en.json";
+import type kgJSON from "./resources/kg.json";
+import type ruJSON from "./resources/ru.json";
 
 import "i18next";
 

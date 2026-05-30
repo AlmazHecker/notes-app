@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useEntryStore } from "@/entities/entry/api";
-import { noteService } from "@/entities/entry/service";
+import { entryService } from "@/entities/entry/service";
 import { formatSize } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/button";
 import {
@@ -24,7 +24,7 @@ const StorageSettings = () => {
 
   async function loadFolderSize() {
     try {
-      const estimate = await noteService.getStorageEstimate();
+      const estimate = await entryService.getStorageEstimate();
       setStorage(estimate);
       entryStore.getEntries();
     } catch (err) {
@@ -34,7 +34,7 @@ const StorageSettings = () => {
 
   const handleExport = async () => {
     try {
-      const blob = await noteService.exportFull();
+      const blob = await entryService.exportFull();
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -52,7 +52,7 @@ const StorageSettings = () => {
   const deleteNotes = async () => {
     try {
       if (confirm("Are you sure bruh ?")) {
-        noteService.clear();
+        entryService.clear();
         alert("Successfully deleted all notes!");
         await loadFolderSize();
       }
@@ -72,7 +72,7 @@ const StorageSettings = () => {
         const file = target.files?.[0];
         if (!file) return;
 
-        await noteService.import(file);
+        await entryService.import(file);
 
         alert("Notes imported successfully!");
         loadFolderSize();
@@ -87,8 +87,6 @@ const StorageSettings = () => {
   useEffect(() => {
     loadFolderSize();
   }, []);
-
-  // const formattedSize = folderSize !== null && formatSize(folderSize);
 
   return (
     <div className="space-y-6">

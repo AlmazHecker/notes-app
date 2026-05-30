@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEntryStore } from "@/entities/entry/api";
-import { noteService } from "@/entities/entry/service";
+import { entryService } from "@/entities/entry/service";
 import type { Note, NoteEntry } from "@/entities/note/types";
 import DraggableLayout from "@/features/draggable-layout/ui/draggable-layout";
 import {
@@ -76,7 +76,7 @@ export const CurrentNote = () => {
       copy.content = new TextEncoder().encode(noteContent);
     }
 
-    await noteService.update(copy);
+    await entryService.update(copy);
 
     setLastSaved(new Date());
     useEntryStore.getState().getEntries();
@@ -86,7 +86,7 @@ export const CurrentNote = () => {
 
   const deleteNote = async () => {
     if (!confirm(t("note.deleteNoteConfirm"))) return;
-    await noteService.delete(note!.id);
+    await entryService.delete(note!.id);
     navigate({ search: "" });
     useEntryStore.getState().getEntries();
   };
@@ -108,7 +108,7 @@ export const CurrentNote = () => {
   };
 
   const checkPassword = async (password: string) => {
-    const noteContent = await noteService.getContent(noteId);
+    const noteContent = await entryService.getContent(noteId);
 
     const decrypted = await decrypt(noteContent, password);
     editor!.commands.setContent(decrypted);
@@ -126,9 +126,9 @@ export const CurrentNote = () => {
       let note: NoteEntry = getDefaultNote();
 
       if (noteId && noteId !== "new-note") {
-        note = (await noteService.getMeta(noteId)) as NoteEntry;
+        note = (await entryService.getMeta(noteId)) as NoteEntry;
         if (!note.isEncrypted) {
-          const noteContent = await noteService.getContent(noteId);
+          const noteContent = await entryService.getContent(noteId);
           editor?.commands.setContent(new TextDecoder().decode(noteContent));
         }
       }

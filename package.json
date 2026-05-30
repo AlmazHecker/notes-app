@@ -61,7 +61,6 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@types/wicg-file-system-access": "^2023.10.7",
-    "prettier": "^3.8.1",
     "typescript": "^6.0.2",
     "vite": "^8.0.9"
   }
