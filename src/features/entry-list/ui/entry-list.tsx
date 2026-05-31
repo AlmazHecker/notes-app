@@ -112,8 +112,9 @@ export const EntryList: FC<Props> = ({ entries, onCdInto }) => {
             const isDragOver = dragOverId === note.id;
 
             return (
-              <button
-                tabIndex={0}
+              // biome-ignore lint/a11y/noStaticElementInteractions: <focusable div>
+              // biome-ignore lint/a11y/useKeyWithClickEvents: <focusable div>
+              <div
                 key={note.id}
                 onClick={() => onCdInto(note.id)}
                 onDragOver={(e) => {
@@ -149,13 +150,14 @@ export const EntryList: FC<Props> = ({ entries, onCdInto }) => {
                   </p>
                 </div>
                 {actions}
-              </button>
+              </div>
             );
           }
 
           return (
-            <button
-              tabIndex={0}
+            // biome-ignore lint/a11y/noStaticElementInteractions: <focusable div>
+            // biome-ignore lint/a11y/useKeyWithClickEvents: <focusable div>
+            <div
               key={note.id}
               draggable
               onDragStart={() => {
@@ -178,7 +180,7 @@ export const EntryList: FC<Props> = ({ entries, onCdInto }) => {
                 </p>
               </div>
               {actions}
-            </button>
+            </div>
           );
         })}
       </div>

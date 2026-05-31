@@ -5,7 +5,10 @@
   "description": "Notes, stored locally",
   "start_url": "/",
   "display": "standalone",
-  "categories": ["productivity", "utilities"],
+  "categories": [
+    "productivity",
+    "utilities"
+  ],
   "scope": "/",
   "icons": [
     {

@@ -13,6 +13,7 @@ import { Button } from "@/shared/ui/button";
 import { Link } from "@/shared/ui/link";
 import { EntryList } from "../features/entry-list/ui/entry-list";
 import { SearchNotesModal } from "../features/search-notes/ui/search-notes-modal";
+import { SpeedDial } from "../shared/ui/speed-dial";
 
 export const Notes = () => {
   const { t } = useTranslation();
@@ -121,13 +122,11 @@ export const Notes = () => {
         onCdInto={handleCdInto}
       />
 
-      <Link
-        to="?noteId=new-note"
-        className="w-14 h-14 fixed bottom-6 right-6 md:hidden z-50 bg-primary text-primary-foreground rounded-full shadow-lg flex items-center justify-center hover:bg-primary/90 transition-all active:scale-95 border border-primary-foreground/10"
-        size="icon"
-      >
-        <Plus className="size-8" />
-      </Link>
+      <SpeedDial
+        isSearchModalOpen={isSearchModalOpen}
+        setIsSearchModalOpen={setIsSearchModalOpen}
+        handleCreateFolder={handleCreateFolder}
+      />
     </>
   );
 };
