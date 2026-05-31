@@ -19,6 +19,8 @@ type NoteActionsDropdownProps = {
   onEncryptionClick: () => void;
   onDeleteClick: () => void;
   onSearchClick: () => void;
+  onDropdownClick: () => void;
+  isOpen: boolean;
 };
 export const NoteActionsDropdown: FC<NoteActionsDropdownProps> = ({
   isEncrypted,
@@ -26,11 +28,13 @@ export const NoteActionsDropdown: FC<NoteActionsDropdownProps> = ({
   onEncryptionClick,
   onDeleteClick,
   onSearchClick,
+  onDropdownClick,
+  isOpen,
 }) => {
   const { t } = useTranslation();
 
   return (
-    <DropdownMenu modal={false}>
+    <DropdownMenu modal={false} open={isOpen} onOpenChange={onDropdownClick}>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="icon">
           <MenuIcon />

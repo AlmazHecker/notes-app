@@ -1,7 +1,7 @@
 import type { Editor } from "@tiptap/react";
 import { ArrowLeft, Check, SaveIcon } from "lucide-react";
-import { type FC, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import type { FC } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import type { NoteEntry } from "@/entities/entry/types";
 import { Button } from "@/shared/ui/button";
 import SearchInput from "@/shared/ui/text-editor/search-input";
@@ -31,7 +31,19 @@ export const Header: FC<Props> = ({
   note,
 }) => {
   const navigate = useNavigate();
-  const [toggleSearch, setToggleSearch] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const isSearchOpen = searchParams.get("search") === "true";
+  const isDropdownOpen = searchParams.get("dropdown") === "true";
+
+  const toggleSearch = () => {
+    searchParams.set("search", isSearchOpen ? "false" : "true");
+    setSearchParams(searchParams, { replace: true });
+  };
+  const toggleDropdown = () => {
+    searchParams.set("dropdown", isDropdownOpen ? "false" : "true");
+    setSearchParams(searchParams, { replace: true });
+  };
 
   const formatLastSaved = () => {
     if (!lastSaved) return "";
@@ -44,9 +56,7 @@ export const Header: FC<Props> = ({
   };
   return (
     <>
-      {toggleSearch && (
-        <SearchInput onClose={() => setToggleSearch(false)} editor={editor} />
-      )}
+      {isSearchOpen && <SearchInput onClose={toggleSearch} editor={editor} />}
       <div className="px-4 flex items-center justify-between">
         <div className="flex items-center gap-3 w-full">
           <Button
@@ -82,7 +92,9 @@ export const Header: FC<Props> = ({
             note={note}
             onEncryptionClick={toggleEncryption}
             onDeleteClick={deleteNote}
-            onSearchClick={() => setToggleSearch(!toggleSearch)}
+            onSearchClick={toggleSearch}
+            onDropdownClick={toggleDropdown}
+            isOpen={isDropdownOpen}
           />
         </div>
       </div>
