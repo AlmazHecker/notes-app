@@ -131,6 +131,8 @@ export const CurrentNote = () => {
           const noteContent = await entryService.getContent(noteId);
           editor?.commands.setContent(new TextDecoder().decode(noteContent));
         }
+      } else {
+        editor.commands.setContent("");
       }
 
       if (!note) return;

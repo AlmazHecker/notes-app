@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { type FC, useEffect, useState } from "react";
 import "./menubar.css";
+import { DrawTool } from "./tools/draw";
 
 export const MenuBar: FC<{ editor: Editor | null }> = ({ editor }) => {
   const [keyboardOffset, setKeyboardOffset] = useState(-100);
@@ -26,23 +27,17 @@ export const MenuBar: FC<{ editor: Editor | null }> = ({ editor }) => {
       let offset = -100;
       let height = 0;
 
-      // 1. Try VirtualKeyboard API (Modern Chromium)
       if (virtualKeyboard?.boundingRect) {
         height = virtualKeyboard.boundingRect.height;
-        if (height > 0) {
-          offset = height;
-        }
+        if (height > 0) offset = height;
       }
 
-      // 2. Fallback to VisualViewport (Safari iOS, older Chromium)
       if (offset === -100 && window.visualViewport) {
         height =
           window.innerHeight -
           window.visualViewport.offsetTop -
           window.visualViewport.height;
-        if (height > 0) {
-          offset = height - 45;
-        }
+        if (height > 0) offset = height - 45;
       }
 
       setKeyboardOffset(offset);
@@ -76,7 +71,6 @@ export const MenuBar: FC<{ editor: Editor | null }> = ({ editor }) => {
       <div className="menubar-group">
         <button
           onClick={() => editor.chain().focus().undo().run()}
-          disabled={!editor.can().undo()}
           className="menubar-btn"
           title="Undo"
         >
@@ -84,7 +78,6 @@ export const MenuBar: FC<{ editor: Editor | null }> = ({ editor }) => {
         </button>
         <button
           onClick={() => editor.chain().focus().redo().run()}
-          disabled={!editor.can().redo()}
           className="menubar-btn"
           title="Redo"
         >
@@ -188,6 +181,8 @@ export const MenuBar: FC<{ editor: Editor | null }> = ({ editor }) => {
         >
           <Minus size={16} />
         </button>
+
+        <DrawTool editor={editor} />
       </div>
     </div>
   );
