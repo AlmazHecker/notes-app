@@ -14,9 +14,10 @@ import {
   Undo,
 } from "lucide-react";
 import { type FC, useEffect, useState } from "react";
-import "./menubar.css";
+import "./toolbar.css";
+import { DrawTool } from "../tools/draw";
 
-export const MenuBar: FC<{ editor: Editor | null }> = ({ editor }) => {
+export const Toolbar: FC<{ editor: Editor | null }> = ({ editor }) => {
   const [keyboardOffset, setKeyboardOffset] = useState(-100);
 
   useEffect(() => {
@@ -26,23 +27,17 @@ export const MenuBar: FC<{ editor: Editor | null }> = ({ editor }) => {
       let offset = -100;
       let height = 0;
 
-      // 1. Try VirtualKeyboard API (Modern Chromium)
       if (virtualKeyboard?.boundingRect) {
         height = virtualKeyboard.boundingRect.height;
-        if (height > 0) {
-          offset = height;
-        }
+        if (height > 0) offset = height;
       }
 
-      // 2. Fallback to VisualViewport (Safari iOS, older Chromium)
       if (offset === -100 && window.visualViewport) {
         height =
           window.innerHeight -
           window.visualViewport.offsetTop -
           window.visualViewport.height;
-        if (height > 0) {
-          offset = height - 45;
-        }
+        if (height > 0) offset = height - 45;
       }
 
       setKeyboardOffset(offset);
@@ -72,53 +67,51 @@ export const MenuBar: FC<{ editor: Editor | null }> = ({ editor }) => {
   if (!editor) return null;
 
   return (
-    <div className="mt-4 py-2 px-4 menubar" style={{ bottom: keyboardOffset }}>
-      <div className="menubar-group">
+    <div className="mt-4 py-2 px-4 toolbar" style={{ bottom: keyboardOffset }}>
+      <div className="toolbar-group">
         <button
           onClick={() => editor.chain().focus().undo().run()}
-          disabled={!editor.can().undo()}
-          className="menubar-btn"
+          className="toolbar-btn"
           title="Undo"
         >
           <Undo size={16} />
         </button>
         <button
           onClick={() => editor.chain().focus().redo().run()}
-          disabled={!editor.can().redo()}
-          className="menubar-btn"
+          className="toolbar-btn"
           title="Redo"
         >
           <Redo size={16} />
         </button>
       </div>
 
-      <div className="menubar-divider" />
+      <div className="toolbar-divider" />
 
-      <div className="menubar-group">
+      <div className="toolbar-group">
         <button
           onClick={() => editor.chain().focus().toggleBold().run()}
-          className={"menubar-btn"}
+          className={"toolbar-btn"}
           title="Bold"
         >
           <Bold size={16} />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleItalic().run()}
-          className={"menubar-btn"}
+          className={"toolbar-btn"}
           title="Italic"
         >
           <Italic size={16} />
         </button>
       </div>
 
-      <div className="menubar-divider" />
+      <div className="toolbar-divider" />
 
-      <div className="menubar-group">
+      <div className="toolbar-group">
         <button
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 1 }).run()
           }
-          className={"menubar-btn"}
+          className={"toolbar-btn"}
           title="Heading 1"
         >
           <Heading1 size={20} />
@@ -127,7 +120,7 @@ export const MenuBar: FC<{ editor: Editor | null }> = ({ editor }) => {
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 2 }).run()
           }
-          className={"menubar-btn"}
+          className={"toolbar-btn"}
           title="Heading 2"
         >
           <Heading2 size={20} />
@@ -136,38 +129,38 @@ export const MenuBar: FC<{ editor: Editor | null }> = ({ editor }) => {
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 3 }).run()
           }
-          className={"menubar-btn"}
+          className={"toolbar-btn"}
           title="Heading 3"
         >
           <Heading3 size={20} />
         </button>
       </div>
 
-      <div className="menubar-divider" />
+      <div className="toolbar-divider" />
 
-      <div className="menubar-group">
+      <div className="toolbar-group">
         <button
           onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={"menubar-btn"}
+          className={"toolbar-btn"}
           title="Bullet List"
         >
           <List size={16} />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={"menubar-btn"}
+          className={"toolbar-btn"}
           title="Numbered List"
         >
           <ListOrdered size={16} />
         </button>
       </div>
 
-      <div className="menubar-divider" />
+      <div className="toolbar-divider" />
 
-      <div className="menubar-group">
+      <div className="toolbar-group">
         <button
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          className={"menubar-btn"}
+          className={"toolbar-btn"}
           title="Blockquote"
         >
           <Quote size={16} />
@@ -175,7 +168,7 @@ export const MenuBar: FC<{ editor: Editor | null }> = ({ editor }) => {
 
         <button
           onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-          className={"menubar-btn"}
+          className={"toolbar-btn"}
           title="Code Block"
         >
           <Code2 size={16} />
@@ -183,11 +176,13 @@ export const MenuBar: FC<{ editor: Editor | null }> = ({ editor }) => {
 
         <button
           onClick={() => editor.chain().focus().setHorizontalRule().run()}
-          className="menubar-btn"
+          className="toolbar-btn"
           title="Horizontal Rule"
         >
           <Minus size={16} />
         </button>
+        <div className="toolbar-divider" />
+        <DrawTool editor={editor} />
       </div>
     </div>
   );

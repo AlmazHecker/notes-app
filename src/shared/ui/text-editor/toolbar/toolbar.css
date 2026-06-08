@@ -1,4 +1,4 @@
-.menubar {
+.toolbar {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
@@ -6,18 +6,18 @@
   z-index: 9;
 }
 
-.menubar-group {
+.toolbar-group {
   display: flex;
   gap: 4px;
 }
 
-.menubar-divider {
+.toolbar-divider {
   width: 1px;
   background: var(--border);
   margin: 0 4px;
 }
 
-.menubar-btn {
+.toolbar-btn {
   aspect-ratio: 1 / 1;
   border: 1px solid #e2e8f0;
   background: white;
@@ -31,24 +31,24 @@
   justify-content: center;
 }
 
-.menubar-btn:hover:not(:disabled) {
+.toolbar-btn:hover:not(:disabled) {
   background: #f1f5f9;
   border-color: #cbd5e1;
 }
 
-.menubar-btn:active:not(:disabled) {
+.toolbar-btn:active:not(:disabled) {
   background: #e2e8f0;
   transform: scale(0.98);
 }
 
-.menubar-btn:disabled {
+.toolbar-btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
 
 /* Mobile optimizations */
 @media (max-width: 768px) {
-  .menubar {
+  .toolbar {
     position: fixed;
     left: 100%;
     bottom: 0;
@@ -68,22 +68,22 @@
     gap: 2px;
   }
 
-  .menubar::-webkit-scrollbar {
+  .toolbar::-webkit-scrollbar {
     display: none;
   }
 
-  .menubar-group {
+  .toolbar-group {
     gap: 2px;
   }
 
-  .menubar-divider {
+  .toolbar-divider {
     width: 0.5px;
     background: rgba(255, 255, 255, 0.15);
     margin: 0 6px;
     align-self: stretch;
   }
 
-  .menubar-btn {
+  .toolbar-btn {
     min-width: 36px;
     min-height: 36px;
     max-width: 36px;
@@ -95,20 +95,20 @@
     padding: 0;
   }
 
-  .menubar-btn:hover:not(:disabled) {
+  .toolbar-btn:hover:not(:disabled) {
     background: rgba(255, 255, 255, 0.1);
     border: none;
   }
 
-  .menubar-btn:active:not(:disabled) {
+  .toolbar-btn:active:not(:disabled) {
     background: rgba(255, 255, 255, 0.2);
   }
 
-  .menubar-btn:disabled {
+  .toolbar-btn:disabled {
     opacity: 0.3;
   }
 
-  .menubar-btn svg {
+  .toolbar-btn svg {
     width: 18px;
     height: 18px;
   }
@@ -116,7 +116,7 @@
 
 /* Improve touch targets */
 @media (hover: none) and (pointer: coarse) {
-  .menubar-btn {
+  .toolbar-btn {
     min-width: 44px;
     min-height: 44px;
   }
