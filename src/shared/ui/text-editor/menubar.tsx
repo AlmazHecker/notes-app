@@ -181,7 +181,7 @@ export const MenuBar: FC<{ editor: Editor | null }> = ({ editor }) => {
         >
           <Minus size={16} />
         </button>
-
+        <div className="menubar-divider" />
         <DrawTool editor={editor} />
       </div>
     </div>
