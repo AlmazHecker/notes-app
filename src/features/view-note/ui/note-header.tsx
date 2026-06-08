@@ -1,6 +1,6 @@
 import type { Editor } from "@tiptap/react";
 import { ArrowLeft, Check, SaveIcon } from "lucide-react";
-import type { FC } from "react";
+import { type FC, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import type { NoteEntry } from "@/entities/entry/types";
 import { Button } from "@/shared/ui/button";
@@ -32,16 +32,12 @@ export const Header: FC<Props> = ({
 }) => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const isSearchOpen = searchParams.get("search") === "true";
-  const isDropdownOpen = searchParams.get("dropdown") === "true";
 
   const toggleSearch = () => {
     searchParams.set("search", isSearchOpen ? "false" : "true");
-    setSearchParams(searchParams, { replace: true });
-  };
-  const toggleDropdown = () => {
-    searchParams.set("dropdown", isDropdownOpen ? "false" : "true");
     setSearchParams(searchParams, { replace: true });
   };
 
@@ -93,7 +89,7 @@ export const Header: FC<Props> = ({
             onEncryptionClick={toggleEncryption}
             onDeleteClick={deleteNote}
             onSearchClick={toggleSearch}
-            onDropdownClick={toggleDropdown}
+            onDropdownClick={setIsDropdownOpen}
             isOpen={isDropdownOpen}
           />
         </div>

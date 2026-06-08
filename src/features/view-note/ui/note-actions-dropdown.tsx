@@ -19,7 +19,7 @@ type NoteActionsDropdownProps = {
   onEncryptionClick: () => void;
   onDeleteClick: () => void;
   onSearchClick: () => void;
-  onDropdownClick: () => void;
+  onDropdownClick: (open: boolean) => void;
   isOpen: boolean;
 };
 export const NoteActionsDropdown: FC<NoteActionsDropdownProps> = ({
