@@ -55,7 +55,12 @@ export const SpeedDial = ({
         }`}
       />
 
-      <ul className="absolute bottom-20 right-1 flex flex-col items-center gap-4">
+      {/* FIXED: Added pointer-events-none / pointer-events-auto dynamic classes here */}
+      <ul 
+        className={`absolute bottom-20 right-1 flex flex-col items-center gap-4 transition-all ${
+          isOpen ? "pointer-events-auto" : "pointer-events-none"
+        }`}
+      >
         {actions.map(({ label, icon: Icon, action }, index) => (
           <li
             key={label}
