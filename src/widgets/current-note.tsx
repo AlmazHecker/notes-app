@@ -87,6 +87,14 @@ export const CurrentNote = () => {
   const deleteNote = async () => {
     if (!confirm(t("note.deleteNoteConfirm"))) return;
     await entryService.delete(note!.id);
+
+    // Reset drawing mode before navigating away so the editor
+    // becomes editable again and touch-action/pointer-events are cleared,
+    // otherwise the mobile slide-back transition gets stuck.
+    if (editor?.storage?.paper?.drawingActive) {
+      editor.commands.toggleDrawing();
+    }
+
     navigate({ search: "" });
     useEntryStore.getState().getEntries();
   };

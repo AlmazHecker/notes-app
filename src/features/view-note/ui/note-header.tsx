@@ -56,7 +56,12 @@ export const Header: FC<Props> = ({
       <div className="px-4 flex items-center justify-between">
         <div className="flex items-center gap-3 w-full">
           <Button
-            onClick={() => navigate({ search: "" })}
+            onClick={() => {
+              if (editor?.storage?.paper?.drawingActive) {
+                editor.commands.toggleDrawing();
+              }
+              navigate({ search: "" });
+            }}
             className="md:hidden flex"
             variant="outline"
             size="icon"
