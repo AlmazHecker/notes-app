@@ -35,13 +35,13 @@ export const DrawTool: FC<{ editor: Editor }> = ({ editor }) => {
   };
 
   return (
-    <div style={{ display: "flex", alignItems: "center" }}>
+    <>
       <button
         onClick={() => {
           editor.commands.toggleDrawing?.();
           setIsDrawing(!isDrawing);
         }}
-        className={`menubar-btn ${isDrawing ? "is-active" : ""}`}
+        className={`toolbar-btn ${isDrawing ? "is-active" : ""}`}
         title="Toggle drawing"
       >
         <Pencil size={16} />
@@ -89,13 +89,13 @@ export const DrawTool: FC<{ editor: Editor }> = ({ editor }) => {
           />
           <button
             onClick={() => editor.commands.clearAllPaper()}
-            className="menubar-btn"
+            className="toolbar-btn"
             title="Clear all drawings"
           >
             <Trash2 size={16} />
           </button>
         </div>
       )}
-    </div>
+    </>
   );
 };
