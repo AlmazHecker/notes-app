@@ -33,7 +33,7 @@ export const Paper = Node.create({
   name: "paper",
   group: "block",
   atom: true,
-  selectable: true,
+  selectable: false,
 
   addAttributes() {
     return {
@@ -268,7 +268,7 @@ export const Paper = Node.create({
   addProseMirrorPlugins() {
     return [
       new Plugin({
-        appendTransaction(_transactions, _oldState, newState) {
+        appendTransaction(_transactions, oldState, newState) {
           try {
             let found = false;
             newState.doc.descendants((n) => {
@@ -279,9 +279,17 @@ export const Paper = Node.create({
             });
 
             if (!found) {
+              let oldHtml = "";
+              oldState.doc.descendants((n) => {
+                if (n.type.name === "paper") {
+                  oldHtml = n.attrs.html || "";
+                  return false;
+                }
+              });
+
               return newState.tr.insert(
                 newState.doc.content.size,
-                newState.schema.nodes.paper.create({ html: "" }),
+                newState.schema.nodes.paper.create({ html: oldHtml }),
               );
             }
           } catch {}

@@ -157,6 +157,7 @@ pre {
   flex: 1;
   outline: none;
   padding-bottom: calc(var(--keyboard-height, 0px) + 60px);
+  position: relative;
 }
 
 .editor-content .ProseMirror blockquote {
@@ -173,16 +174,16 @@ pre {
 }
 
 .paper-node {
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  max-width: 100%;
   aspect-ratio: 562 / 1000;
   pointer-events: none;
   user-select: none;
   -webkit-user-select: none;
-  margin: 0 auto;
+  z-index: 10;
 }
-/* z-index: 40; */
 
 .paper-node .paper-svg {
   width: 100%;
