@@ -11,11 +11,11 @@ import {
   encrypt,
 } from "@/features/note-encryption/lib/note-encryption";
 import { getEscapedHtml } from "@/shared/lib/utils";
-import { MenuBar } from "@/shared/ui/text-editor/menubar";
 import {
   EDITOR_EXTENSIONS,
   TextEditor,
 } from "@/shared/ui/text-editor/text-editor";
+import { Toolbar } from "@/shared/ui/text-editor/toolbar/toolbar";
 import ExpandPane from "../features/draggable-layout/ui/expand-pane";
 import { EnterPasswordModal } from "../features/note-encryption/ui/enter-password-modal";
 import { SetPasswordModal } from "../features/note-encryption/ui/set-password-modal";
@@ -131,6 +131,8 @@ export const CurrentNote = () => {
           const noteContent = await entryService.getContent(noteId);
           editor?.commands.setContent(new TextDecoder().decode(noteContent));
         }
+      } else {
+        editor.commands.setContent("");
       }
 
       if (!note) return;
@@ -183,7 +185,7 @@ export const CurrentNote = () => {
           }}
         />
 
-        <MenuBar editor={editor} />
+        <Toolbar editor={editor} />
       </div>
       {isEncrypted ? (
         <EncryptedContent onDecrypt={() => setModal("enter")} />

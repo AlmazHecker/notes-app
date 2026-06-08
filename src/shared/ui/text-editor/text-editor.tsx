@@ -16,6 +16,7 @@ import Text from "@tiptap/extension-text";
 import { type Editor, EditorContent } from "@tiptap/react";
 import { all, createLowlight } from "lowlight";
 import type { FC } from "react";
+import Paper from "./extensions/paper";
 import SearchAndReplace from "./extensions/search-and-replace";
 
 const lowlight = createLowlight(all);
@@ -24,6 +25,7 @@ lowlight.register({});
 export const EDITOR_EXTENSIONS = [
   Heading,
   Document,
+  Paper,
   Text,
   OrderedList.configure({ keepMarks: true, keepAttributes: false }),
   ListItem,
