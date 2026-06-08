@@ -268,6 +268,25 @@ export const Paper = Node.create({
   addProseMirrorPlugins() {
     return [
       new Plugin({
+        appendTransaction(_transactions, _oldState, newState) {
+          try {
+            let found = false;
+            newState.doc.descendants((n) => {
+              if (n.type.name === "paper") {
+                found = true;
+                return false;
+              }
+            });
+
+            if (!found) {
+              return newState.tr.insert(
+                newState.doc.content.size,
+                newState.schema.nodes.paper.create({ html: "" }),
+              );
+            }
+          } catch {}
+          return null;
+        },
         view(view: EditorView) {
           const ensurePaper = () => {
             try {
