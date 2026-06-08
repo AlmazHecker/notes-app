@@ -176,6 +176,8 @@ export const Paper = Node.create({
           active = Boolean(drawing);
           dom.style.pointerEvents = active ? "auto" : "none";
           dom.style.cursor = active ? "crosshair" : "default";
+          dom.style.touchAction = active ? "none" : "";
+          dom.style.overscrollBehavior = active ? "contain" : "";
         } catch {}
       };
 
@@ -196,7 +198,13 @@ export const Paper = Node.create({
           return true;
         },
         stopEvent: (event: Event) => {
-          return active && event.type.startsWith("pointer");
+          if (!active) return false;
+          const t = event.type;
+          return (
+            t.startsWith("pointer") ||
+            t.startsWith("touch") ||
+            t === "dragstart"
+          );
         },
         destroy() {
           svg.removeEventListener("pointerdown", onPointerDown);
