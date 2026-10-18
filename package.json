@@ -8,7 +8,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "analyze-bundle": "npx vite-bundle-visualizer",
-    "deploy:gh-pages": "npm run build:gh-pages && npx gh-pages -d dist",
+    "deploy:gh-pages": "npm run build:gh-pages && npx --yes gh-pages -d dist",
     "build:gh-pages": "vite build --mode gh-pages",
     "lint": "oxlint . --fix",
     "format": "oxfmt . --write",
