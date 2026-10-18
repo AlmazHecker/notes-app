@@ -1,0 +1,23 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "printWidth": 80,
+  "tabWidth": 2,
+  "useTabs": false,
+  "singleQuote": false,
+  "jsxSingleQuote": false,
+  "semi": true,
+  "trailingComma": "all",
+  "arrowParens": "always",
+  "bracketSpacing": true,
+  "sortPackageJson": false,
+  "ignorePatterns": [
+    "dist/**",
+    ".astro/**",
+    "node_modules/**",
+    "public/manifest.json",
+    "package-lock.json",
+    "src/entities/entry/service.ts",
+    "pwa/service-worker.ts",
+    "vite-plugins/dynamic-manifest.ts"
+  ]
+}

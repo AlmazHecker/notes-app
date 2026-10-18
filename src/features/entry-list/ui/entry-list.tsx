@@ -112,8 +112,7 @@ export const EntryList: FC<Props> = ({ entries, onCdInto }) => {
             const isDragOver = dragOverId === note.id;
 
             return (
-              // biome-ignore lint/a11y/noStaticElementInteractions: <focusable div>
-              // biome-ignore lint/a11y/useKeyWithClickEvents: <focusable div>
+              // oxlint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events -- Existing clickable entry row.
               <div
                 key={note.id}
                 onClick={() => onCdInto(note.id)}
@@ -155,8 +154,7 @@ export const EntryList: FC<Props> = ({ entries, onCdInto }) => {
           }
 
           return (
-            // biome-ignore lint/a11y/noStaticElementInteractions: <focusable div>
-            // biome-ignore lint/a11y/useKeyWithClickEvents: <focusable div>
+            // oxlint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events -- Existing clickable entry row.
             <div
               key={note.id}
               draggable

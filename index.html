@@ -2,16 +2,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="theme-color"
-      content="oklch(0.147 0.004 49.25)"
-      media="(prefers-color-scheme: dark)"
-    />
-    <meta
-      name="theme-color"
-      content="oklch(1 0 0)"
-      media="(prefers-color-scheme: light)"
-    />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="oklch(1 0 0)" />
     <meta
       http-equiv="Content-Security-Policy"
       content="
@@ -26,10 +18,11 @@
     <title>Notes</title>
 
     <link rel="manifest" href="/manifest.json" />
+    <script src="/theme-init.js"></script>
     <link href="/src/styles/global.css" rel="stylesheet" />
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   </head>
-  <body class="dark antialiased geist-mono">
+  <body class="antialiased geist-mono">
     <div id="root"></div>
     <script src="/src/app/main.tsx" type="module"></script>
   </body>

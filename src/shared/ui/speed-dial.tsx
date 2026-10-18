@@ -44,8 +44,7 @@ export const SpeedDial = ({
   return (
     <div className="fixed bottom-20 right-10 z-50 md:hidden">
       {/* Backdrop */}
-      {/** biome-ignore lint/a11y/noStaticElementInteractions: <backdrop> */}
-      {/** biome-ignore lint/a11y/useKeyWithClickEvents: <backdrop> */}
+      {/* oxlint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events -- Backdrop dismisses the speed dial. */}
       <div
         onClick={() => setIsOpen(false)}
         className={`fixed inset-0 bg-black/40 transition-opacity duration-200 ${

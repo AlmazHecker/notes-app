@@ -1,0 +1,57 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "unicorn", "oxc", "react", "jsx-a11y"],
+  "categories": {
+    "correctness": "error"
+  },
+  "ignorePatterns": [
+    "dist/**",
+    ".astro/**",
+    "node_modules/**",
+    "public/manifest.json"
+  ],
+  "rules": {
+    "no-console": [
+      "warn",
+      {
+        "allow": ["error"]
+      }
+    ],
+    "typescript/no-explicit-any": "error",
+    "no-unused-vars": [
+      "warn",
+      {
+        "caughtErrorsIgnorePattern": "^_"
+      }
+    ],
+    "typescript/consistent-type-imports": "error",
+    "prefer-const": [
+      "error",
+      {
+        "destructuring": "all"
+      }
+    ],
+    "unicorn/filename-case": [
+      "error",
+      {
+        "case": "kebabCase"
+      }
+    ],
+    "react/jsx-no-useless-fragment": "error",
+    "react/exhaustive-deps": "off",
+    "react/button-has-type": "off",
+    "react/purity": "off",
+    "react/set-state-in-effect": "off",
+    "react/immutability": "off",
+    "react/incompatible-library": "off",
+    "jsx-a11y/no-autofocus": "off"
+  },
+  "overrides": [
+    {
+      "files": ["pwa/service-worker.ts"],
+      "rules": {
+        "no-console": "off"
+      }
+    }
+  ]
+}

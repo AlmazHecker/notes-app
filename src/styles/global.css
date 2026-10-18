@@ -1,8 +1,9 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "./fonts.css";
+@import "./themes.css";
 
-/* @custom-variant dark (&:is(.dark *)); */
+@custom-variant dark (&:where([data-theme="dark"] *, [data-theme="cyberpunk"] *));
 
 @theme inline {
   --color-background: var(--background);
@@ -33,6 +34,9 @@
 }
 
 :root {
+  color-scheme: light;
+  background-color: var(--background);
+  color: var(--foreground);
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.147 0.004 49.25);

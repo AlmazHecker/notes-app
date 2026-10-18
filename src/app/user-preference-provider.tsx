@@ -6,7 +6,6 @@ import {
   useUserPreferences,
 } from "@/shared/hooks/use-user-preferences";
 import { isCyrillic } from "@/shared/lib/utils";
-import { THEME_VARIABLE_KEYS } from "@/shared/model/theme/theme";
 import { THEMES } from "@/shared/model/theme/themes";
 
 const UserPreferenceProvider: React.FC = () => {
@@ -39,17 +38,7 @@ const UserPreferenceProvider: React.FC = () => {
 
       document.body.classList.add(effectiveThemeId);
 
-      const themeDef = THEMES.find((t) => t.id === effectiveThemeId);
-
-      THEME_VARIABLE_KEYS.forEach((v) =>
-        document.documentElement.style.removeProperty(v),
-      );
-
-      if (themeDef?.variables) {
-        Object.entries(themeDef.variables).forEach(([key, value]) => {
-          document.documentElement.style.setProperty(key, value);
-        });
-      }
+      document.documentElement.dataset.theme = effectiveThemeId;
 
       // smooth syncing
       requestAnimationFrame(() => {

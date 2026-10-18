@@ -32,6 +32,19 @@ Simple notes app based on OPFS(Origin Private File System) with optional end-to-
    npm run dev
    ```
 
+## Development checks
+
+- `npm run lint` — Run Oxlint with safe fixes.
+- `npm run lint:check` — Check lint rules without changing files.
+- `npm run format` — Format files with Oxfmt.
+- `npm run format:check` — Check formatting without changing files.
+- `npm run build` — Type-check and create a production build.
+
+Oxlint rules are configured in `.oxlintrc.json`; Oxfmt options are in
+`.oxfmtrc.json`. React Compiler-specific lint rules are disabled because the
+project does not use React Compiler. Protected engine and PWA files are excluded
+from automatic formatting.
+
 ## Usage
 
 1. **First Run**: When you first open the app, you'll be prompted to select a folder where notes will be stored.
@@ -142,7 +155,6 @@ export type NoteEntry = BaseEntry & {
 };
 
 export type Entry = FolderEntry | NoteEntry;
-
 ```
 
 ## Future Features
