@@ -77,16 +77,10 @@
   }
 }
 
+* {
+  scrollbar-width: none;
+}
+
 ::-webkit-scrollbar {
-  width: 12px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--secondary);
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: var(--border);
-  border-radius: 10px;
-  border: 3px solid var(--secondary);
+  display: none;
 }
