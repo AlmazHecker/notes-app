@@ -30,9 +30,7 @@
       "title": "Set Encryption Password",
       "description": "Set a password to encrypt this note. You'll need this password to view or edit the note in the future.",
       "lockNote": "Encrypt Note",
-
       "confirmPassword": "Confirm",
-
       "validation": {
         "noMatch": "Passwords do not match",
         "minLimit": "Password must be at least 4 characters",
@@ -99,6 +97,29 @@
       "deleteTitle": "Delete Your Data",
       "deleteDescription": "This will permanently delete your data and all associated data. This action cannot be undone.",
       "deleteButton": "Delete Data"
+    },
+    "telegram": {
+      "title": "Telegram backups",
+      "description": "Send ZIP backups using your own Telegram bot.",
+      "setup": "Create a bot with /newbot, then send your bot /start.",
+      "token": "Bot token",
+      "chatId": "Recipient chat ID",
+      "send": "Back up now",
+      "sending": "Sending…",
+      "remove": "Remove bot",
+      "lastBackup": "Last backup",
+      "never": "Never",
+      "notices": {
+        "saved": "Settings saved.",
+        "sent": "Backup sent.",
+        "removed": "Bot removed."
+      },
+      "errors": {
+        "credentials": "Enter a valid bot token and numeric chat ID.",
+        "tooLarge": "Backup exceeds 50 MB. Use Export Data instead.",
+        "failed": "Backup failed. Check your token, chat ID, and connection. The recipient must send /start to your bot. Check the chat before retrying.",
+        "storage": "Could not save settings. Check browser storage."
+      }
     }
   },
   "exportNotes": {

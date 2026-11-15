@@ -11,6 +11,7 @@ Simple notes app based on OPFS(Origin Private File System) with optional end-to-
 - **Rich Text Editing**: Powered by Tiptap editor for a great writing experience
 - **Simple Interface**: Clean, intuitive UI for managing files and folders
 - **Import & Export**: Backup or transfer your notes and folders with easy import/export support
+- **Telegram Backups**: Send a ZIP backup to your Telegram chat with your own bot
 
 ## Installation
 

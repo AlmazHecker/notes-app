@@ -1,6 +1,7 @@
 import AppearanceSettings from "@/features/settings/ui/appearance";
 import RegionalSettings from "@/features/settings/ui/regional";
 import StorageSettings from "@/features/settings/ui/storage";
+import { TelegramBackupSettings } from "@/features/telegram-backup/ui/telegram-backup-settings";
 
 const Settings = () => {
   return (
@@ -13,6 +14,8 @@ const Settings = () => {
           <RegionalSettings />
 
           <StorageSettings />
+          
+          <TelegramBackupSettings />
         </div>
       </div>
     </div>
